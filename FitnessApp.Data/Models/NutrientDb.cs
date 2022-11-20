@@ -11,6 +11,7 @@ namespace FitnessApp.Data.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public double DailyDose { get; set; }
+        public ProductNutrientDb ProductNutrient { get; set; }
         public int NutrientCategoryId { get; set; }
         public NutrientCategoryDb NutrientCategory { get; set; }
         public DateTime Created { get; set; }

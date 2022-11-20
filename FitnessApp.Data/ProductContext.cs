@@ -20,7 +20,7 @@ namespace FitnessApp.Data
         public DbSet<TreatingTypeDb> TreatingTypes { get; set; }
         public DbSet<ProductDb> Products { get; set; }
         public DbSet<ProductCategoryDb> ProductCategories { get; set; }
-        public DbSet<ProductSubCategoryDb> ProductSubCategorv { get; set; }
+        public DbSet<ProductSubCategoryDb> ProductSubCategory { get; set; }
         public DbSet<NutrientDb> Nutrients { get; set; }
         public DbSet<NutrientCategoryDb> NutrientCategories { get; set; }
 

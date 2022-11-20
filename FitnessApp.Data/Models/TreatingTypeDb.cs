@@ -10,6 +10,7 @@ namespace FitnessApp.Data.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public ProductNutrientDb ProductNutrient { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
     }

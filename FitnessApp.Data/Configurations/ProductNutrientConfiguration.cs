@@ -15,6 +15,9 @@ namespace FitnessApp.Data.Configurations
         {
             builder.ToTable("ProductsNutrients").HasKey(t => t.Id); // configure table name and set primary key
             builder.Property(_ => _.Id).ValueGeneratedOnAdd(); // auto creating id when entity is added
+            builder.HasOne(_ => _.Product).WithOne(_ => _.ProductNutrient);
+            builder.HasOne(_ => _.Nutrient).WithOne(_ => _.ProductNutrient);
+            builder.HasOne(_ => _.TreatingType).WithOne(_ => _.ProductNutrient);
         }
     }
 }
