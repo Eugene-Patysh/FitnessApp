@@ -13,11 +13,11 @@ namespace FitnessApp.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductNutrientDb> builder)
         {
-            builder.ToTable("ProductsNutrients").HasKey(t => t.Id); // configure table name and set primary key
+            builder.ToTable("ProductNutrients").HasKey(t => t.Id); // configure table name and set primary key
             builder.Property(_ => _.Id).ValueGeneratedOnAdd(); // auto creating id when entity is added
-            builder.HasOne(_ => _.Product).WithOne(_ => _.ProductNutrient);
-            builder.HasOne(_ => _.Nutrient).WithOne(_ => _.ProductNutrient);
-            builder.HasOne(_ => _.TreatingType).WithOne(_ => _.ProductNutrient);
+            builder.HasOne(_ => _.Product).WithMany(_ => _.ProductNutrients).HasForeignKey(_ => _.ProductId);
+            builder.HasOne(_ => _.TreatingType).WithMany(_ => _.ProductNutrients).HasForeignKey(_ => _.TreatingTypeId);
+            builder.HasOne(_ => _.Nutrient).WithMany(_ => _.ProductNutrients).HasForeignKey(_ => _.NutrientId);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FitnessApp.Data
 {
@@ -13,21 +14,23 @@ namespace FitnessApp.Data
         // Extension methods for ModelBuilder
         internal static void SeedData(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProductDb>()
-                .HasData(
-                    new ProductDb
-                    {
-                        Id = 1,
-                        Title = "Banana",
-                        ProductSubCategoryId = 1 // exotic
-                    },
-                    new ProductDb
-                    {
-                        Id = 2,
-                        Title = "Potato",
-                        ProductSubCategoryId = 2 // tuberous (клубневый)
-                    }
-                );
+            modelBuilder.Entity<ProductCategoryDb>()
+               .HasData(
+                   new ProductCategoryDb
+                   {
+                       Id = 1,
+                       Title = "Fruits",
+                       Created = DateTime.Now,
+                       Updated = DateTime.Now
+                   },
+                   new ProductCategoryDb
+                   {
+                       Id = 2,
+                       Title = "Vegetables",
+                       Created = DateTime.Now,
+                       Updated = DateTime.Now
+                   }
+               );
 
             modelBuilder.Entity<ProductSubCategoryDb>()
                 .HasData(
@@ -35,29 +38,57 @@ namespace FitnessApp.Data
                     {
                         Id = 1,
                         Title = "Exotic",
-                        ProductCategoryId = 1 // fruits
+                        ProductCategoryId = 1, // fruits
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     },
                     new ProductSubCategoryDb
                     {
                         Id = 2,
                         Title = "Tuberous",
-                        ProductCategoryId = 2 // vegetables
+                        ProductCategoryId = 2, // vegetables
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     }
                 );
 
-            modelBuilder.Entity<ProductCategoryDb>()
+            modelBuilder.Entity<ProductDb>()
                 .HasData(
-                    new ProductCategoryDb
+                    new ProductDb
                     {
                         Id = 1,
-                        Title = "Fruits"
+                        Title = "Banana",
+                        ProductSubCategoryId = 1, // exotic
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     },
-                    new ProductCategoryDb
+                    new ProductDb
                     {
                         Id = 2,
-                        Title = "Vegetables"
+                        Title = "Potato",
+                        ProductSubCategoryId = 2, // tuberous (клубневый)
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     }
                 );
+
+            modelBuilder.Entity<NutrientCategoryDb>()
+               .HasData(
+                   new NutrientCategoryDb
+                   {
+                       Id = 1,
+                       Title = "Macronutrients",
+                       Created = DateTime.Now,
+                       Updated = DateTime.Now
+                   },
+                   new NutrientCategoryDb
+                   {
+                       Id = 2,
+                       Title = "Minerals",
+                       Created = DateTime.Now,
+                       Updated = DateTime.Now
+                   }
+               );
 
             modelBuilder.Entity<NutrientDb>()
                 .HasData(
@@ -65,29 +96,19 @@ namespace FitnessApp.Data
                     {
                         Id = 1,
                         Title = "Protein",
-                        DailyDose = 0.75 , // in gramms at kilogram of weight
-                        NutrientCategoryId = 1 // Macronutrients
+                        DailyDose = 0.75, // in gramms at kilogram of weight
+                        NutrientCategoryId = 1, // Macronutrients
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     },
                     new NutrientDb
                     {
                         Id = 2,
                         Title = "Сalcium",
                         DailyDose = 0.9, //in gramms. Varies depending on age
-                        NutrientCategoryId = 2 // Minerals
-                    }
-                );
-
-            modelBuilder.Entity<NutrientCategoryDb>()
-                .HasData(
-                    new NutrientCategoryDb
-                    {
-                        Id = 1,
-                        Title = "Macronutrients"
-                    },
-                    new NutrientCategoryDb
-                    {
-                        Id = 2,
-                        Title = "Minerals"
+                        NutrientCategoryId = 2, // Minerals
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     }
                 );
 
@@ -97,11 +118,15 @@ namespace FitnessApp.Data
                     {
                         Id = 1,
                         Title = "Fresh",
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     },
                     new TreatingTypeDb
                     {
                         Id = 2,
                         Title = "Fried",
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now
                     }
                 );
 
@@ -109,11 +134,23 @@ namespace FitnessApp.Data
                .HasData(
                    new ProductNutrientDb
                    {
-                       Id = 1
+                       Id = 1,
+                       ProductId = 1,
+                       NutrientId = 1,
+                       TreatingTypeId = 1,
+                       Quality = 0.8,
+                       Created = DateTime.Now,
+                       Updated = DateTime.Now
                    },
                    new ProductNutrientDb
                    {
-                       Id = 2
+                       Id = 2,
+                       ProductId = 2,
+                       NutrientId = 2,
+                       TreatingTypeId = 2,
+                       Quality = 0.9,
+                       Created = DateTime.Now,
+                       Updated = DateTime.Now
                    }
                );
         }

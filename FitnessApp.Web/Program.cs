@@ -1,6 +1,8 @@
 using FitnessApp.Data;
 using Microsoft.EntityFrameworkCore;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Get ConnectionString from appsettings.json
