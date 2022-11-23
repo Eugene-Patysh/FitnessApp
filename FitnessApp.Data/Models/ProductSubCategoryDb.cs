@@ -13,7 +13,7 @@ namespace FitnessApp.Data.Models
         public string Title { get; set; }
         public int ProductCategoryId { get; set; }
         public ProductCategoryDb ProductCategory { get; set; }
-        public ICollection<ProductDb> Products { get; set; }
+        public virtual ICollection<ProductDb> Products { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
     }

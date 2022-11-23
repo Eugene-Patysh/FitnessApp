@@ -16,27 +16,29 @@ namespace FitnessApp.Data
         {
             Database.EnsureCreated();
         }
-        public DbSet<ProductNutrientDb> ProductNutrients { get; set; }
         public DbSet<TreatingTypeDb> TreatingTypes { get; set; }
-        public DbSet<ProductDb> Products { get; set; }
         public DbSet<ProductCategoryDb> ProductCategories { get; set; }
-        public DbSet<ProductSubCategoryDb> ProductSubCategory { get; set; }
-        public DbSet<NutrientDb> Nutrients { get; set; }
+        public DbSet<ProductSubCategoryDb> ProductSubCategories { get; set; }
+        public DbSet<ProductDb> Products { get; set; }
         public DbSet<NutrientCategoryDb> NutrientCategories { get; set; }
+        public DbSet<NutrientDb> Nutrients { get; set; }
+        public DbSet<ProductNutrientDb> ProductNutrients { get; set; }
+
 
         // Override OnModelCreating of DbContext for Custom Model Configuration
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new ProductNutrientConfiguration());
+            
             modelBuilder.ApplyConfiguration(new TreatingTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new NutrientConfiguration());
             modelBuilder.ApplyConfiguration(new NutrientCategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new NutrientConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductSubCategoryConfiguration());
-                  
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductNutrientConfiguration());
+
             modelBuilder.SeedData(); // add default data
         }
 
