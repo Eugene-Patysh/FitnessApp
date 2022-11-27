@@ -18,40 +18,37 @@ namespace FitnessApp.Logic.Services
         {
 
         }
+
         public async Task<ProductCategoryDto[]> GetAllAsync()
         {
             var categoryDbs = await _context.ProductCategories.ToArrayAsync().ConfigureAwait(false);
 
             return ProductCategoryBuilder.Build(categoryDbs);
         }
+
         public async Task<ProductCategoryDto> GetByIdAsync(int productCategoryDtoId)
         {
             var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
             return ProductCategoryBuilder.Build(categoryDb);
         }
+
         public async Task CreateAsync(ProductCategoryDto productCategoryDto)
         {
-            //var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDto.Id).ConfigureAwait(false);
-            //Не прокатит, т.к. нет Id.
-
-            var categoryDb = new ProductCategoryDb() //Если надо изменять все поля включая коллекции и ссылочные типы данных
-            {                                        //Тогда лучше сделать метод ReBuild во всех билдерах
-                Id = productCategoryDto.Id,
-                Title = productCategoryDto.Title,
-                Created = productCategoryDto.Created,
-                Updated = productCategoryDto.Updated
-            };
-            await _context.ProductCategories.AddAsync(categoryDb).ConfigureAwait(false);
+            await _context.ProductCategories.AddAsync(ProductCategoryBuilder.Build(productCategoryDto)).ConfigureAwait(false);
             _context.SaveChanges();
             return;
         }
+
         public async Task UpdateAsync(ProductCategoryDto productCategoryDto)
         {
             var categoryDb = await _context.ProductCategories.FirstOrDefaultAsync(_ => _.Id == productCategoryDto.Id).ConfigureAwait(false);
             if (categoryDb != null)
             {
-                categoryDb.Title = productCategoryDto.Title; //Надо ли изменять все поля включая коллекции и ссылочные типы данных
-            }                                               // Как меняется дата?
+                categoryDb.Title = productCategoryDto.Title;
+                categoryDb.ProductSubCategories = ProductSubCategoryBuilder.Build(productCategoryDto.ProductSubCategories);
+                categoryDb.Created = productCategoryDto.Created;
+                categoryDb.Updated = productCategoryDto.Updated;
+            }                                               
             _context.SaveChanges();
             return;
         }
@@ -65,25 +62,5 @@ namespace FitnessApp.Logic.Services
             _context.SaveChanges();
             return;
         }
-        //public async void DeleteAsync(int productCategoryDtoId)
-        //{
-        //    var categoryDb = await _context.ProductCategories.FirstOrDefaultAsync(_ => _.Id == productCategoryDtoId);
-        //    if (categoryDb != null)
-        //    {
-        //        _context.ProductCategories.Remove(categoryDb);
-        //    }
-        //    _context.SaveChanges();
-        //}
-
-        //public async Task<ProductCategoryDto> DeleteAsync(int productCategoryDtoId)
-        //{
-        //    var categoryDb = await _context.ProductCategories.FirstOrDefaultAsync(_ => _.Id == productCategoryDtoId);
-        //    if (categoryDb != null)
-        //    {
-        //        _context.ProductCategories.Remove(categoryDb);
-        //    }
-        //    _context.SaveChanges();
-        //    return ProductCategoryBuilder.Build(categoryDb);
-        //}
     }
 }

@@ -14,7 +14,5 @@ namespace FitnessApp.Logic.Services
         Task CreateAsync(ProductCategoryDto productCategoryDto);
         Task UpdateAsync(ProductCategoryDto productCategoryDto);
         Task DeleteAsync(int productCategoryDtoId);
-        //public void DeleteAsync(int productCategoryDtoId);
-        //public Task<ProductCategoryDto> DeleteAsync(int productCategoryDtoId)
     }
 }

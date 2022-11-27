@@ -12,7 +12,6 @@ namespace FitnessApp.Logic.Builders
     {
         public static TreatingTypeDto Build(TreatingTypeDb db)
         {
-
             return new TreatingTypeDto()
             {
                 Id = db.Id,
@@ -22,7 +21,25 @@ namespace FitnessApp.Logic.Builders
                 Updated = db.Updated
             };
         }
+
         public static TreatingTypeDto[] Build(TreatingTypeDb[] dbs)
+        {
+            return dbs.Select(db => Build(db)).ToArray();
+        }
+
+        public static TreatingTypeDb Build(TreatingTypeDto db)
+        {
+            return new TreatingTypeDb()
+            {
+                Id = db.Id,
+                Title = db.Title,
+                ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
+                Created = db.Created,
+                Updated = db.Updated
+            };
+        }
+
+        public static TreatingTypeDb[] Build(TreatingTypeDto[] dbs)
         {
             return dbs.Select(db => Build(db)).ToArray();
         }

@@ -12,7 +12,6 @@ namespace FitnessApp.Logic.Builders
     {
         public static ProductNutrientDto Build(ProductNutrientDb db)
         {
-
             return new ProductNutrientDto()
             {
                 Id = db.Id,
@@ -27,11 +26,40 @@ namespace FitnessApp.Logic.Builders
                 Updated = db.Updated
             };
         }
+
         public static ProductNutrientDto[] Build(ProductNutrientDb[] dbs)
         {
             return dbs.Select(db => Build(db)).ToArray();
         }
+
         public static ICollection<ProductNutrientDto> Build(ICollection<ProductNutrientDb> col)
+        {
+            return col.Select(a => Build(a)).ToArray();
+        }
+
+        public static ProductNutrientDb Build(ProductNutrientDto db)
+        {
+            return new ProductNutrientDb()
+            {
+                Id = db.Id,
+                Quality = db.Quality,
+                Product = ProductBuilder.Build(db.Product),
+                ProductId = db.ProductId,
+                Nutrient = NutrientBuilder.Build(db.Nutrient),
+                NutrientId = db.NutrientId,
+                TreatingType = TreatingTypeBuilder.Build(db.TreatingType),
+                TreatingTypeId = db.TreatingTypeId,
+                Created = db.Created,
+                Updated = db.Updated
+            };
+        }
+
+        public static ProductNutrientDb[] Build(ProductNutrientDto[] dbs)
+        {
+            return dbs.Select(db => Build(db)).ToArray();
+        }
+
+        public static ICollection<ProductNutrientDb> Build(ICollection<ProductNutrientDto> col)
         {
             return col.Select(a => Build(a)).ToArray();
         }
