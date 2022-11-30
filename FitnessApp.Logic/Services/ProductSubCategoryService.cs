@@ -18,9 +18,9 @@ namespace FitnessApp.Logic.Services
         }
         public async Task<ProductSubCategoryDto[]> GetAllAsync()
         {
-            var SubCategoryDbs = await _context.ProductSubCategories.ToArrayAsync();
+            var subCategoryDbs = await _context.ProductSubCategories.ToArrayAsync();
 
-            return ProductSubCategoryBuilder.Build(SubCategoryDbs);
+            return ProductSubCategoryBuilder.Build(subCategoryDbs);
         }
         public Task<ProductSubCategoryDto> GetByIdAsync(int productSubCategoryDtoId)
         {

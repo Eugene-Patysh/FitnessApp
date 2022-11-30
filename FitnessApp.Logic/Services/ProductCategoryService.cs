@@ -19,7 +19,17 @@ namespace FitnessApp.Logic.Services
 
         }
 
-        public async Task<ProductCategoryDto[]> GetAllAsync()
+        //public ProductCategoryDto[] GetWithCondition(int pageNumber, int objectsNumber) //новый метод по страничный + с сортировкой по названию GetWith
+        //{
+        //    if (pageNumber <= 0 || objectsNumber <= 0)
+        //    {
+        //        return null;
+        //    }
+        //    var categoryDbs = _context.ProductCategories.OrderBy(_ => _.Title).Skip((pageNumber - 1 ) * objectsNumber).Take(objectsNumber).ToArray();
+        //    return ProductCategoryBuilder.Build(categoryDbs);
+        //}
+
+        public async Task<ProductCategoryDto[]> GetAllAsync() 
         {
             var categoryDbs = await _context.ProductCategories.ToArrayAsync().ConfigureAwait(false);
 
@@ -35,32 +45,36 @@ namespace FitnessApp.Logic.Services
         public async Task CreateAsync(ProductCategoryDto productCategoryDto)
         {
             await _context.ProductCategories.AddAsync(ProductCategoryBuilder.Build(productCategoryDto)).ConfigureAwait(false);
-            _context.SaveChanges();
-            return;
+            productCategoryDto.Created = DateTime.UtcNow;
+            productCategoryDto.Updated = DateTime.UtcNow;
+            try { await _context.SaveChangesAsync().ConfigureAwait(false); }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
         public async Task UpdateAsync(ProductCategoryDto productCategoryDto)
         {
-            var categoryDb = await _context.ProductCategories.FirstOrDefaultAsync(_ => _.Id == productCategoryDto.Id).ConfigureAwait(false);
-            if (categoryDb != null)
-            {
-                categoryDb.Title = productCategoryDto.Title;
-                categoryDb.ProductSubCategories = ProductSubCategoryBuilder.Build(productCategoryDto.ProductSubCategories);
-                categoryDb.Created = productCategoryDto.Created;
-                categoryDb.Updated = productCategoryDto.Updated;
-            }                                               
-            _context.SaveChanges();
-            return;
+            if (productCategoryDto.Id <= 0 || string.IsNullOrEmpty(productCategoryDto.Title) || productCategoryDto.ProductSubCategories != null)
+                {
+                var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDto.Id).ConfigureAwait(false);
+                if (categoryDb != null)
+                {
+                    categoryDb.Title = productCategoryDto.Title;
+                    categoryDb.ProductSubCategories = ProductSubCategoryBuilder.Build(productCategoryDto.ProductSubCategories);
+                    categoryDb.Updated = DateTime.UtcNow;
+                }
+            }
+            try { await _context.SaveChangesAsync().ConfigureAwait(false); }
+            catch (Exception ex) { throw; } //DbUpdateException DbUpdateConcurrencyException DbEntityValidationException NotSupportedException ObjectDisposedException InvalidOperationException
         }
+
         public async Task DeleteAsync(int productCategoryDtoId)
         {
-            var categoryDb = await _context.ProductCategories.FirstOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
+            var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
             if (categoryDb != null)
             {
                 _context.ProductCategories.Remove(categoryDb);
             }
-            _context.SaveChanges();
-            return;
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }
