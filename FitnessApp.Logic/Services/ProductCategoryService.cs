@@ -19,15 +19,15 @@ namespace FitnessApp.Logic.Services
 
         }
 
-        //public ProductCategoryDto[] GetWithCondition(int pageNumber, int objectsNumber) //новый метод по страничный + с сортировкой по названию GetWith
-        //{
-        //    if (pageNumber <= 0 || objectsNumber <= 0)
-        //    {
-        //        return null;
-        //    }
-        //    var categoryDbs = _context.ProductCategories.OrderBy(_ => _.Title).Skip((pageNumber - 1 ) * objectsNumber).Take(objectsNumber).ToArray();
-        //    return ProductCategoryBuilder.Build(categoryDbs);
-        //}
+        public ProductCategoryDto[] GetWithCondition(int pageNumber, int objectsNumber)
+        {
+            if (pageNumber <= 0 || objectsNumber <= 0)
+            {
+                return null;
+            }
+            var categoryDbs = _context.ProductCategories.OrderBy(_ => _.Title).Skip((pageNumber - 1) * objectsNumber).Take(objectsNumber).ToArray();
+            return ProductCategoryBuilder.Build(categoryDbs);
+        }
 
         public async Task<ProductCategoryDto[]> GetAllAsync() 
         {
@@ -48,7 +48,7 @@ namespace FitnessApp.Logic.Services
             productCategoryDto.Created = DateTime.UtcNow;
             productCategoryDto.Updated = DateTime.UtcNow;
             try { await _context.SaveChangesAsync().ConfigureAwait(false); }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception) { throw; }
         }
 
         public async Task UpdateAsync(ProductCategoryDto productCategoryDto)
@@ -59,12 +59,11 @@ namespace FitnessApp.Logic.Services
                 if (categoryDb != null)
                 {
                     categoryDb.Title = productCategoryDto.Title;
-                    categoryDb.ProductSubCategories = ProductSubCategoryBuilder.Build(productCategoryDto.ProductSubCategories);
                     categoryDb.Updated = DateTime.UtcNow;
                 }
             }
             try { await _context.SaveChangesAsync().ConfigureAwait(false); }
-            catch (Exception ex) { throw; } //DbUpdateException DbUpdateConcurrencyException DbEntityValidationException NotSupportedException ObjectDisposedException InvalidOperationException
+            catch (Exception) { throw; } //DbUpdateException DbUpdateConcurrencyException DbEntityValidationException NotSupportedException ObjectDisposedException InvalidOperationException
         }
 
         public async Task DeleteAsync(int productCategoryDtoId)
