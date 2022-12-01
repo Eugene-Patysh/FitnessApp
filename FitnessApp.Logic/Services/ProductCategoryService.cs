@@ -2,78 +2,130 @@
 using FitnessApp.Data.Models;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Services
 {
     public class ProductCategoryService : BaseService, IProductCategoryService
     {
-        public ProductCategoryService(ProductContext context) : base(context)
-        {
+        private readonly IValidator<ProductCategoryDto> _validator;
 
+        public ProductCategoryService(ProductContext context, IValidator<ProductCategoryDto> validator) : base(context)
+        {
+            _validator = validator;
         }
 
-        public ProductCategoryDto[] GetWithCondition(int pageNumber, int objectsNumber)
-        {
-            if (pageNumber <= 0 || objectsNumber <= 0)
-            {
-                return null;
-            }
-            var categoryDbs = _context.ProductCategories.OrderBy(_ => _.Title).Skip((pageNumber - 1) * objectsNumber).Take(objectsNumber).ToArray();
-            return ProductCategoryBuilder.Build(categoryDbs);
-        }
+        //public ProductCategoryDto[] GetWithCondition(int pageNumber, int objectsNumber)
+        //{
+        //    if (pageNumber <= 0 || objectsNumber <= 0)
+        //    {
+        //        return null;
+        //    }
+        //    var categoryDbs = _context.ProductCategories.OrderBy(_ => _.Title).Skip((pageNumber - 1) * objectsNumber).Take(objectsNumber).ToArray();
+        //    return ProductCategoryBuilder.Build(categoryDbs);
+        //}
 
         public async Task<ProductCategoryDto[]> GetAllAsync() 
         {
-            var categoryDbs = await _context.ProductCategories.ToArrayAsync().ConfigureAwait(false);
+            var categoryDbs = await _context.ProductCategories.Include(c => c.ProductSubCategories).ToArrayAsync().ConfigureAwait(false);
 
             return ProductCategoryBuilder.Build(categoryDbs);
         }
 
-        public async Task<ProductCategoryDto> GetByIdAsync(int productCategoryDtoId)
+        public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryDtoId)
         {
-            var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
+            if (productCategoryDtoId != null)
+            {
+                throw new ValidationException("Product Category Id cann't be null.");
+            }
+            var categoryDb = await _context.ProductCategories.Include(c => c.ProductSubCategories).SingleOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
             return ProductCategoryBuilder.Build(categoryDb);
         }
 
         public async Task CreateAsync(ProductCategoryDto productCategoryDto)
         {
-            await _context.ProductCategories.AddAsync(ProductCategoryBuilder.Build(productCategoryDto)).ConfigureAwait(false);
+            //if (productCategoryDto.Id != null || string.IsNullOrEmpty(productCategoryDto.Title))
+            //{
+            //    throw new ValidationException("Invalid model.");
+            //}
+
+            var validationResult = _validator.Validate(productCategoryDto, v => v.IncludeRuleSets("AddProductCategory"));
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.ToString());
+
             productCategoryDto.Created = DateTime.UtcNow;
             productCategoryDto.Updated = DateTime.UtcNow;
-            try { await _context.SaveChangesAsync().ConfigureAwait(false); }
-            catch (Exception) { throw; }
+            
+            await _context.ProductCategories.AddAsync(ProductCategoryBuilder.Build(productCategoryDto)).ConfigureAwait(false);
+            
+            try 
+            { 
+                await _context.SaveChangesAsync().ConfigureAwait(false); 
+            }
+            catch (Exception ex) 
+            { 
+                throw new Exception($"Product category hasn't created. {ex.Message}."); 
+            }
         }
 
         public async Task UpdateAsync(ProductCategoryDto productCategoryDto)
         {
-            if (productCategoryDto.Id <= 0 || string.IsNullOrEmpty(productCategoryDto.Title) || productCategoryDto.ProductSubCategories != null)
+            //if (productCategoryDto.Id == null || string.IsNullOrEmpty(productCategoryDto.Title))
+            //{
+            //    throw new ValidationException("Invalid model.");
+            //}
+            var validationResult = _validator.Validate(productCategoryDto, v => v.IncludeRuleSets("UpdateProductCategory"));
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.ToString());
+
+            var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDto.Id).ConfigureAwait(false);
+            if (categoryDb != null)
+            {
+                categoryDb.Title = productCategoryDto.Title;
+                categoryDb.Updated = DateTime.UtcNow;
+
+                try
                 {
-                var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDto.Id).ConfigureAwait(false);
-                if (categoryDb != null)
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
                 {
-                    categoryDb.Title = productCategoryDto.Title;
-                    categoryDb.Updated = DateTime.UtcNow;
+                    throw new Exception($"Product category hasn't updated. {ex.Message}.");
                 }
             }
-            try { await _context.SaveChangesAsync().ConfigureAwait(false); }
-            catch (Exception) { throw; } //DbUpdateException DbUpdateConcurrencyException DbEntityValidationException NotSupportedException ObjectDisposedException InvalidOperationException
+            else
+            {
+                // throw new ValidationException();
+            }
         }
 
-        public async Task DeleteAsync(int productCategoryDtoId)
+        public async Task DeleteAsync(int? productCategoryDtoId)
         {
+            if (productCategoryDtoId == null)
+            {
+                throw new ValidationException("Invalid Product category Id.");
+            }
+            
             var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
+            
             if (categoryDb != null)
             {
                 _context.ProductCategories.Remove(categoryDb);
+
+                try
+                {
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Product category hasn't deleted. {ex.Message}.");
+                }
             }
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+            else
+            {
+                // throw new ValidationException();
+            }
         }
     }
 }

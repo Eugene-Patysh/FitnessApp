@@ -29,10 +29,10 @@ namespace FitnessApp.Logic.Builders
             return dbs.Select(db => Build(db)).ToArray();
         }
 
-        public static ICollection<ProductSubCategoryDto> Build(ICollection<ProductSubCategoryDb> col)
-        {
-            return col.Select(a => Build(a)).ToArray();
-        }
+        //public static ICollection<ProductSubCategoryDto> Build(ICollection<ProductSubCategoryDb> col)
+        //{
+        //    return col.Select(a => Build(a)).ToArray();
+        //}
 
         public static ProductSubCategoryDb Build(ProductSubCategoryDto db)
         {
