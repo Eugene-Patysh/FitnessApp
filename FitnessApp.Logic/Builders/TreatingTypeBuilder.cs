@@ -1,7 +1,6 @@
 ﻿using FitnessApp.Data.Models;
 using FitnessApp.Logic.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,37 +8,38 @@ using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Builders
 {
-    public static class ProductCategoryBuilder
+    public static class TreatingTypeBuilder
     {
-        public static ProductCategoryDto Build(ProductCategoryDb db)
+        public static TreatingTypeDto Build(TreatingTypeDb db)
         {
-            return new ProductCategoryDto()
+            return new TreatingTypeDto()
             {
                 Id = db.Id,
                 Title = db.Title,
-                ProductSubCategories = ProductSubCategoryBuilder.Build(db.ProductSubCategories),
+                ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
                 Created = db.Created,
                 Updated = db.Updated
             };
         }
 
-        public static ProductCategoryDto[] Build(ProductCategoryDb[] dbs)
+        public static TreatingTypeDto[] Build(TreatingTypeDb[] dbs)
         {
             return dbs.Select(db => Build(db)).ToArray();
         }
 
-        public static ProductCategoryDb Build(ProductCategoryDto db)
+        public static TreatingTypeDb Build(TreatingTypeDto db)
         {
-            return new ProductCategoryDb()
+            return new TreatingTypeDb()
             {
                 Id = db.Id,
                 Title = db.Title,
-                ProductSubCategories = ProductSubCategoryBuilder.Build(db.ProductSubCategories),
+                ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
                 Created = db.Created,
                 Updated = db.Updated
             };
         }
-        public static ProductCategoryDb[] Build(ProductCategoryDto[] dbs)
+
+        public static TreatingTypeDb[] Build(TreatingTypeDto[] dbs)
         {
             return dbs.Select(db => Build(db)).ToArray();
         }
