@@ -12,50 +12,54 @@ namespace FitnessApp.Logic.Builders
     {
         public static ProductSubCategoryDto Build(ProductSubCategoryDb db)
         {
-            return new ProductSubCategoryDto()
-            {
-                Id = db.Id,
-                Title = db.Title,
-                ProductCategoryId = db.Id,
-                ProductCategory = ProductCategoryBuilder.Build(db.ProductCategory),
-                Products = ProductBuilder.Build(db.Products),
-                Created = db.Created,
-                Updated = db.Updated
-            };
+            return db!=null 
+                ? new ProductSubCategoryDto()
+                {
+                    Id = db.Id,
+                    Title = db.Title,
+                    ProductCategoryId = db.Id,
+                    ProductCategory = ProductCategoryBuilder.Build(db.ProductCategory),
+                    Products = ProductBuilder.Build(db.Products),
+                    Created = db.Created,
+                    Updated = db.Updated
+                }
+                : null;
         }
 
         public static ProductSubCategoryDto[] Build(ProductSubCategoryDb[] dbs)
         {
-            return dbs.Select(db => Build(db)).ToArray();
+            return dbs?.Select(db => Build(db))?.ToArray();
         }
 
         public static ICollection<ProductSubCategoryDto> Build(ICollection<ProductSubCategoryDb> col)
         {
-            return col.Select(a => Build(a)).ToArray();
+            return col?.Select(a => Build(a))?.ToArray();
         }
 
         public static ProductSubCategoryDb Build(ProductSubCategoryDto db)
         {
-            return new ProductSubCategoryDb()
-            {
-                Id = db.Id,
-                Title = db.Title,
-                ProductCategoryId = db.Id,
-                ProductCategory = ProductCategoryBuilder.Build(db.ProductCategory),
-                Products = ProductBuilder.Build(db.Products),
-                Created = db.Created,
-                Updated = db.Updated
-            };
+            return db!=null 
+                ? new ProductSubCategoryDb()
+                {
+                    Id = db.Id,
+                    Title = db.Title,
+                    ProductCategoryId = db.Id,
+                    ProductCategory = ProductCategoryBuilder.Build(db.ProductCategory),
+                    Products = ProductBuilder.Build(db.Products),
+                    Created = db.Created,
+                    Updated = db.Updated
+                }
+                : null;
         }
 
         public static ProductSubCategoryDb[] Build(ProductSubCategoryDto[] dbs)
         {
-            return dbs.Select(db => Build(db)).ToArray();
+            return dbs?.Select(db => Build(db))?.ToArray();
         }
 
         public static ICollection<ProductSubCategoryDb> Build(ICollection<ProductSubCategoryDto> col)
         {
-            return col.Select(a => Build(a)).ToArray();
+            return col?.Select(a => Build(a))?.ToArray();
         }
     }
 }
