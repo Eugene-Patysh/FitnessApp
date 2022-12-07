@@ -14,6 +14,8 @@ namespace FitnessApp.Logic.Validators
         {
             ClassLevelCascadeMode = CascadeMode.Stop;
 
+            RuleFor(o => o).NotNull().WithMessage("Nutrient category can't be null.");
+
             RuleSet("AddNutrientCategory", () =>
             {
                 RuleFor(o => o.Id).Null().WithMessage("Nutrient category Id must be null.");

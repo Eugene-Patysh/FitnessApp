@@ -12,7 +12,7 @@ namespace FitnessApp.Logic.Builders
     {
         public static TreatingTypeDto Build(TreatingTypeDb db)
         {
-            return db!=null 
+            return db!= null 
                 ? new TreatingTypeDto()
                 {
                     Id = db.Id,
@@ -31,7 +31,7 @@ namespace FitnessApp.Logic.Builders
 
         public static TreatingTypeDb Build(TreatingTypeDto db)
         {
-            return db!=null 
+            return db!= null 
                 ? new TreatingTypeDb()
                 {
                     Id = db.Id,

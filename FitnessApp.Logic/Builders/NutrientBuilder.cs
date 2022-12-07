@@ -12,7 +12,7 @@ namespace FitnessApp.Logic.Builders
     {
         public static NutrientDto Build(NutrientDb db)
         {
-            return db !=null 
+            return db != null 
                 ? new NutrientDto()
                 {
                     Id = db.Id,
@@ -40,7 +40,7 @@ namespace FitnessApp.Logic.Builders
         public static NutrientDb Build(NutrientDto db)
         {
 
-            return db !=null 
+            return db != null 
                 ? new NutrientDb()
                 {
                     Id = db.Id,

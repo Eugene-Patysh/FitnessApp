@@ -12,7 +12,7 @@ namespace FitnessApp.Logic.Builders
     {
         public static ProductSubCategoryDto Build(ProductSubCategoryDb db)
         {
-            return db!=null 
+            return db!= null 
                 ? new ProductSubCategoryDto()
                 {
                     Id = db.Id,
@@ -38,7 +38,7 @@ namespace FitnessApp.Logic.Builders
 
         public static ProductSubCategoryDb Build(ProductSubCategoryDto db)
         {
-            return db!=null 
+            return db!= null 
                 ? new ProductSubCategoryDb()
                 {
                     Id = db.Id,

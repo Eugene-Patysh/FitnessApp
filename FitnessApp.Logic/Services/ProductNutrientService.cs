@@ -72,6 +72,9 @@ namespace FitnessApp.Logic.Services
             {
                 productNutrientDb.Updated = DateTime.UtcNow;
                 productNutrientDb.Quality = productNutrientDto.Quality;
+                productNutrientDb.ProductId = productNutrientDto.ProductId;
+                productNutrientDb.NutrientId = productNutrientDto.NutrientId;
+                productNutrientDb.TreatingTypeId = productNutrientDto.TreatingTypeId;
 
                 try
                 {

@@ -14,21 +14,24 @@ namespace FitnessApp.Logic.Validators
         {
             ClassLevelCascadeMode = CascadeMode.Stop;
 
+            RuleFor(o => o).NotNull().WithMessage("Product subcategory can't be null.");
+
             RuleSet("AddProductSubCategory", () =>
             {
                 RuleFor(o => o.Id).Null().WithMessage("Product subcategory Id must be null.");
-                RuleFor(o => o.ProductCategoryId).Null().WithMessage("Id of product category must be null.");
+
             });
 
             RuleSet("UpdateProductSubCategory", () =>
             {
                 RuleFor(o => o.Id).NotNull().WithMessage("Product subcategory Id can't be null.");
-                RuleFor(o => o.ProductCategoryId).NotNull().WithMessage("Id of product category can't be null.");
             });
 
             RuleFor(o => o.Title)
                 .Must(t => !string.IsNullOrEmpty(t)).WithMessage("Product subcategory title can't be null.")
                 .MaximumLength(30).WithMessage("Length of product subcategory title can't be more than 30 symbols.");
+
+            RuleFor(o => o.ProductCategoryId).NotNull().WithMessage("Id of product category can't be null.");
         }
     }
 }

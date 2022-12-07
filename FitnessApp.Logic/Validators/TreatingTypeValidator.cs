@@ -14,6 +14,8 @@ namespace FitnessApp.Logic.Validators
         {
             ClassLevelCascadeMode = CascadeMode.Stop;
 
+            RuleFor(o => o).NotNull().WithMessage("Treating type can't be null.");
+
             RuleSet("AddTreatingType", () =>
             {
                 RuleFor(o => o.Id).Null().WithMessage("Treating type Id must be null.");

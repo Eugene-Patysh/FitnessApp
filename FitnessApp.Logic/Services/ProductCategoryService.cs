@@ -27,7 +27,7 @@ namespace FitnessApp.Logic.Services
         //    return ProductCategoryBuilder.Build(categoryDbs);
         //}
 
-        public async Task<ProductCategoryDto[]> GetAllAsync() //Если база пустая?
+        public async Task<ProductCategoryDto[]> GetAllAsync()
         {
             var categoryDbs = await _context.ProductCategories.ToArrayAsync().ConfigureAwait(false);
 
@@ -36,7 +36,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryDtoId)
         {
-            if (productCategoryDtoId == null) // Почему было не равно нулю?
+            if (productCategoryDtoId == null)
             {
                 throw new ValidationException("Product Category Id can't be null.");
             }
@@ -46,13 +46,8 @@ namespace FitnessApp.Logic.Services
             return ProductCategoryBuilder.Build(categoryDb);
         }
 
-        public async Task CreateAsync(ProductCategoryDto productCategoryDto) //Если сам объект null?
+        public async Task CreateAsync(ProductCategoryDto productCategoryDto)
         {
-            //if (productCategoryDto.Id != null || string.IsNullOrEmpty(productCategoryDto.Title))
-            //{
-            //    throw new ValidationException("Invalid model.");
-            //}
-
             var validationResult = _validator.Validate(productCategoryDto, v => v.IncludeRuleSets("AddProductCategory"));
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.ToString());
@@ -74,11 +69,6 @@ namespace FitnessApp.Logic.Services
 
         public async Task UpdateAsync(ProductCategoryDto productCategoryDto)
         {
-            //if (productCategoryDto.Id == null || string.IsNullOrEmpty(productCategoryDto.Title))
-            //{
-            //    throw new ValidationException("Invalid model.");
-            //}
-
             var validationResult = _validator.Validate(productCategoryDto, v => v.IncludeRuleSets("UpdateProductCategory"));
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.ToString());
@@ -107,7 +97,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task DeleteAsync(int? productCategoryDtoId)
         {
-            if (productCategoryDtoId == null) //Почему все таки проверяем только на null, но не на ноль?
+            if (productCategoryDtoId == null)
             {
                 throw new ValidationException("Invalid product category Id.");
             }
