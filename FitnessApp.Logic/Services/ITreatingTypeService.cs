@@ -10,9 +10,9 @@ namespace FitnessApp.Logic.Services
     public interface ITreatingTypeService
     {
         Task<TreatingTypeDto[]> GetAllAsync();
-        Task<TreatingTypeDto> GetByIdAsync(int treatingTypeDtoId);
+        Task<TreatingTypeDto> GetByIdAsync(int? treatingTypeDtoId);
         Task CreateAsync(TreatingTypeDto treatingTypeDto);
         Task UpdateAsync(TreatingTypeDto treatingTypeDto);
-        Task DeleteAsync(int treatingTypeDtoId);
+        Task DeleteAsync(int? treatingTypeDtoId);
     }
 }

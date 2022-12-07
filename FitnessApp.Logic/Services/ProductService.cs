@@ -1,42 +1,115 @@
 ﻿using FitnessApp.Data;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace FitnessApp.Logic.Services
 {
     public class ProductService : BaseService, IProductService
     {
-        public ProductService(ProductContext context) : base(context)
-        {
+        private readonly IValidator<ProductDto> _validator;
 
+        public ProductService(ProductContext context, IValidator<ProductDto> validator) : base(context)
+        {
+            _validator = validator;
         }
+
         public async Task<ProductDto[]> GetAllAsync()
         {
-            var productDbs = await _context.Products.ToArrayAsync();
+            var productDbs = await _context.Products.ToArrayAsync().ConfigureAwait(false);
 
             return ProductBuilder.Build(productDbs);
         }
-        public Task<ProductDto> GetByIdAsync(int productDtoId)
+
+        public async Task<ProductDto> GetByIdAsync(int? productDtoId)
         {
-            throw new NotImplementedException();
+            if (productDtoId == null)
+            {
+                throw new ValidationException("Product Id can't be null.");
+            }
+
+            var productDb = await _context.Products.SingleOrDefaultAsync(_ => _.Id == productDtoId).ConfigureAwait(false);
+
+            return ProductBuilder.Build(productDb);
         }
-        public Task CreateAsync(ProductDto productDto)
+
+        public async Task CreateAsync(ProductDto productDto)
         {
-            throw new NotImplementedException();
+            var validationResult = _validator.Validate(productDto, v => v.IncludeRuleSets("AddProduct"));
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.ToString());
+
+            productDto.Created = DateTime.UtcNow;
+            productDto.Updated = DateTime.UtcNow;
+
+            await _context.Products.AddAsync(ProductBuilder.Build(productDto)).ConfigureAwait(false);
+
+            try
+            {
+                await _context.SaveChangesAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Product has not been created. {ex.Message}.");
+            }
         }
-        public Task UpdateAsync(ProductDto productDto)
+
+        public async Task UpdateAsync(ProductDto productDto)
         {
-            throw new NotImplementedException();
+            var validationResult = _validator.Validate(productDto, v => v.IncludeRuleSets("UpdateProduct"));
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.ToString());
+
+            var productDb = await _context.Products.SingleOrDefaultAsync(_ => _.Id == productDto.Id).ConfigureAwait(false);
+
+            if (productDb != null)
+            {
+                productDb.Title = productDto.Title;
+                productDb.ProductSubCategoryId = productDto.ProductSubCategoryId;
+                productDb.Updated = DateTime.UtcNow;
+
+                try
+                {
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Product has not been updated. {ex.Message}.");
+                }
+            }
+            else
+            {
+                throw new ValidationException($"There is not exist object, that you trying to update.");
+            }
         }
-        public Task DeleteAsync(int productDtoId)
+        public async Task DeleteAsync(int? productDtoId)
         {
-            throw new NotImplementedException();
+            if (productDtoId == null)
+            {
+                throw new ValidationException("Invalid product Id.");
+            }
+
+            var productDb = await _context.Products.SingleOrDefaultAsync(_ => _.Id == productDtoId).ConfigureAwait(false);
+
+            if (productDb != null)
+            {
+                _context.Products.Remove(productDb);
+
+                try
+                {
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Product has not been deleted. {ex.Message}.");
+                }
+            }
+            else
+            {
+                throw new ValidationException($"There is not exist object, that you trying to delete.");
+            }
         }
     }
 }
