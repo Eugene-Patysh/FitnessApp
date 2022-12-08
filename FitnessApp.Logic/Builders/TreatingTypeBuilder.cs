@@ -12,36 +12,40 @@ namespace FitnessApp.Logic.Builders
     {
         public static TreatingTypeDto Build(TreatingTypeDb db)
         {
-            return new TreatingTypeDto()
-            {
-                Id = db.Id,
-                Title = db.Title,
-                ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
-                Created = db.Created,
-                Updated = db.Updated
-            };
+            return db!= null 
+                ? new TreatingTypeDto()
+                {
+                    Id = db.Id,
+                    Title = db.Title,
+                    ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
+                    Created = db.Created,
+                    Updated = db.Updated
+                }
+                : null;
         }
 
         public static TreatingTypeDto[] Build(TreatingTypeDb[] dbs)
         {
-            return dbs.Select(db => Build(db)).ToArray();
+            return dbs?.Select(db => Build(db))?.ToArray();
         }
 
         public static TreatingTypeDb Build(TreatingTypeDto db)
         {
-            return new TreatingTypeDb()
-            {
-                Id = db.Id,
-                Title = db.Title,
-                ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
-                Created = db.Created,
-                Updated = db.Updated
-            };
+            return db!= null 
+                ? new TreatingTypeDb()
+                {
+                    Id = db.Id,
+                    Title = db.Title,
+                    ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
+                    Created = db.Created,
+                    Updated = db.Updated
+                }
+                : null;
         }
 
         public static TreatingTypeDb[] Build(TreatingTypeDto[] dbs)
         {
-            return dbs.Select(db => Build(db)).ToArray();
+            return dbs?.Select(db => Build(db))?.ToArray();
         }
     }
 }

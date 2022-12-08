@@ -13,12 +13,12 @@ namespace FitnessApp.Logic.Builders
     {
         public static ProductCategoryDto Build(ProductCategoryDb db)
         {
-            return db != null
+            return db != null 
                 ? new ProductCategoryDto()
                 {
                     Id = db.Id,
                     Title = db.Title,
-                    ProductSubCategories = ProductSubCategoryBuilder.Build(db.ProductSubCategories?.ToArray()),
+                    ProductSubCategories = ProductSubCategoryBuilder.Build(db.ProductSubCategories),
                     Created = db.Created,
                     Updated = db.Updated
                 }
@@ -32,18 +32,20 @@ namespace FitnessApp.Logic.Builders
 
         public static ProductCategoryDb Build(ProductCategoryDto db)
         {
-            return new ProductCategoryDb()
-            {
-                Id = db.Id,
-                Title = db.Title,
-                //ProductSubCategories = ProductSubCategoryBuilder.Build(db.ProductSubCategories),
-                Created = db.Created,
-                Updated = db.Updated
-            };
+            return db != null 
+                ? new ProductCategoryDb()
+                {
+                    Id = db.Id,
+                    Title = db.Title,
+                    ProductSubCategories = ProductSubCategoryBuilder.Build(db.ProductSubCategories),
+                    Created = db.Created,
+                    Updated = db.Updated
+                }
+                : null ;
         }
         public static ProductCategoryDb[] Build(ProductCategoryDto[] dbs)
         {
-            return dbs.Select(db => Build(db)).ToArray();
+            return dbs?.Select(db => Build(db))?.ToArray();
         }
     }
 }

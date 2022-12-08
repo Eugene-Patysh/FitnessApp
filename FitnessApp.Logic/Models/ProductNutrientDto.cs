@@ -9,14 +9,14 @@ namespace FitnessApp.Logic.Models
 {
     public class ProductNutrientDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public double Quality { get; set; }
         public ProductDto Product { get; set; }
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         public NutrientDto Nutrient { get; set; }
-        public int NutrientId { get; set; }
+        public int? NutrientId { get; set; }
         public TreatingTypeDto TreatingType { get; set; }
-        public int TreatingTypeId { get; set; }
+        public int? TreatingTypeId { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
     }

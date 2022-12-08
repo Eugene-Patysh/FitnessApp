@@ -10,9 +10,9 @@ namespace FitnessApp.Logic.Services
     public interface IProductService
     {
         Task<ProductDto[]> GetAllAsync();
-        Task<ProductDto> GetByIdAsync(int productDtoId);
+        Task<ProductDto> GetByIdAsync(int? productDtoId);
         Task CreateAsync(ProductDto productDto);
         Task UpdateAsync(ProductDto productDto);
-        Task DeleteAsync(int productDtoId);
+        Task DeleteAsync(int? productDtoId);
     }
 }
