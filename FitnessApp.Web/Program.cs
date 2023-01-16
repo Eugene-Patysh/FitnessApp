@@ -15,6 +15,23 @@ builder.Services.AddDbContext<ProductContext>(options => {
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseDeveloperExceptionPage();
+//}
+
+app.UseCors("CorsAllowAll");
+
+app.UseSwagger();
+
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1.0/swagger.json", "FithessApp API V1.0");
+});
+
+app.UseHttpsRedirection();
+app.MapControllers();
+
+app.MapGet("/", () => "I am coding like a boss");
 
 app.Run();
