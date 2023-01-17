@@ -4,7 +4,6 @@ using FitnessApp.Logic.Models;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace FitnessApp.Logic.Services
 {
     public class ProductService : BaseService, IProductService
@@ -16,7 +15,7 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
-        public async Task<ProductDto[]> GetAllAsync()
+        public async Task<ICollection<ProductDto>> GetAllAsync()
         {
             var productDbs = await _context.Products.ToArrayAsync().ConfigureAwait(false);
 

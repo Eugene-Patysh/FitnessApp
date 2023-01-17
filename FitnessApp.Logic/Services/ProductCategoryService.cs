@@ -15,19 +15,7 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
-        //public ProductCategoryDto[] GetWithCondition(int pageNumber, int objectsNumber)
-        //{
-        //    if (pageNumber <= 0 || objectsNumber <= 0)
-        //    {
-        //        return null;
-        //    }
-        //
-        //    var categoryDbs = _context.ProductCategories.OrderBy(_ => _.Title).Skip((pageNumber - 1) * objectsNumber).Take(objectsNumber).ToArray();
-        //
-        //    return ProductCategoryBuilder.Build(categoryDbs);
-        //}
-
-        public async Task<ProductCategoryDto[]> GetAllAsync()
+        public async Task<ICollection<ProductCategoryDto>> GetAllAsync()
         {
             var categoryDbs = await _context.ProductCategories.ToArrayAsync().ConfigureAwait(false);
 

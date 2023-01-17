@@ -1,10 +1,5 @@
 ﻿using FitnessApp.Data.Models;
 using FitnessApp.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Builders
 {
@@ -29,14 +24,9 @@ namespace FitnessApp.Logic.Builders
                 : null;
         }
 
-        public static ProductNutrientDto[] Build(ProductNutrientDb[] dbs)
-        {
-            return dbs?.Select(db => Build(db))?.ToArray();
-        }
-
         public static ICollection<ProductNutrientDto> Build(ICollection<ProductNutrientDb> col)
         {
-            return col?.Select(a => Build(a))?.ToArray();
+            return col?.Select(a => Build(a))?.ToList();
         }
 
         public static ProductNutrientDb Build(ProductNutrientDto db)
@@ -58,14 +48,9 @@ namespace FitnessApp.Logic.Builders
                 : null;
         }
 
-        public static ProductNutrientDb[] Build(ProductNutrientDto[] dbs)
-        {
-            return dbs?.Select(db => Build(db))?.ToArray();
-        }
-
         public static ICollection<ProductNutrientDb> Build(ICollection<ProductNutrientDto> col)
         {
-            return col?.Select(a => Build(a))?.ToArray();
+            return col?.Select(a => Build(a))?.ToList();
         }
     }
 }

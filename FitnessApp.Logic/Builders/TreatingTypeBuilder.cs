@@ -1,10 +1,5 @@
 ﻿using FitnessApp.Data.Models;
 using FitnessApp.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Builders
 {
@@ -17,16 +12,16 @@ namespace FitnessApp.Logic.Builders
                 {
                     Id = db.Id,
                     Title = db.Title,
-                    ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
+                    //ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
                     Created = db.Created,
                     Updated = db.Updated
                 }
                 : null;
         }
 
-        public static TreatingTypeDto[] Build(TreatingTypeDb[] dbs)
+        public static ICollection<TreatingTypeDto> Build(ICollection<TreatingTypeDb> dbs)
         {
-            return dbs?.Select(db => Build(db))?.ToArray();
+            return dbs?.Select(db => Build(db))?.ToList();
         }
 
         public static TreatingTypeDb Build(TreatingTypeDto db)
@@ -36,16 +31,16 @@ namespace FitnessApp.Logic.Builders
                 {
                     Id = db.Id,
                     Title = db.Title,
-                    ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
+                    //ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
                     Created = db.Created,
                     Updated = db.Updated
                 }
                 : null;
         }
 
-        public static TreatingTypeDb[] Build(TreatingTypeDto[] dbs)
+        public static ICollection<TreatingTypeDb> Build(ICollection<TreatingTypeDto> dbs)
         {
-            return dbs?.Select(db => Build(db))?.ToArray();
+            return dbs?.Select(db => Build(db))?.ToList();
         }
     }
 }

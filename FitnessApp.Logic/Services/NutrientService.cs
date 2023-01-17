@@ -1,5 +1,4 @@
 ﻿using FitnessApp.Data;
-using FitnessApp.Data.Models;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
 using FluentValidation;
@@ -16,7 +15,7 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
-        public async Task<NutrientDto[]> GetAllAsync()
+        public async Task<ICollection<NutrientDto>> GetAllAsync()
         {
             var nutrientDbs = await _context.Nutrients.ToArrayAsync().ConfigureAwait(false);
 

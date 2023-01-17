@@ -3,11 +3,6 @@ using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Services
 {
@@ -20,7 +15,7 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
-        public async Task<ProductNutrientDto[]> GetAllAsync()
+        public async Task<ICollection<ProductNutrientDto>> GetAllAsync()
         {
             var productNutrientDbs = await _context.ProductNutrients.ToArrayAsync().ConfigureAwait(false);
 
