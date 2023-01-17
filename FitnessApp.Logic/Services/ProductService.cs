@@ -1,4 +1,5 @@
 ﻿using FitnessApp.Data;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Validators;
@@ -18,9 +19,42 @@ namespace FitnessApp.Logic.Services
 
         public async Task<ICollection<ProductDto>> GetAllAsync()
         {
-            var productDbs = await _context.Products.ToArrayAsync().ConfigureAwait(false);
+            var productDbs = await _context.Products.ToListAsync().ConfigureAwait(false);
 
             return ProductBuilder.Build(productDbs);
+        }
+
+
+        /// <summary> Outputs paginated products from DB, depending on the selected conditions.</summary>
+        /// <param name="request"></param>
+        /// <returns> Returns a PaginationResponse object containing a sorted collection of products. </returns>
+        public async Task<PaginationResponse<ProductDto>> GetPaginationAsync(PaginationRequest request)
+        {
+            var query = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Query))
+            {
+                query = query.Where(c => c.Title.Contains(request.Query, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                switch (request.SortBy)
+                {
+                    case "title": query = request.Ascending ? query.OrderBy(c => c.Title) : query.OrderByDescending(c => c.Title); break;
+                }
+            }
+
+            var categoryDbs = await query.ToListAsync().ConfigureAwait(false);
+
+            var total = categoryDbs.Count;
+            var categoryDtos = ProductBuilder.Build(categoryDbs.Skip(request.Skip ?? 0).Take(request.Take ?? 10)?.ToList());
+
+            return new PaginationResponse<ProductDto>
+            {
+                Total = total,
+                Values = categoryDtos
+            };
         }
 
         public async Task<ProductDto> GetByIdAsync(int? productDtoId)

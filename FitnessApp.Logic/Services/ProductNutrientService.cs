@@ -1,4 +1,5 @@
 ﻿using FitnessApp.Data;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Validators;
@@ -18,9 +19,46 @@ namespace FitnessApp.Logic.Services
 
         public async Task<ICollection<ProductNutrientDto>> GetAllAsync()
         {
-            var productNutrientDbs = await _context.ProductNutrients.ToArrayAsync().ConfigureAwait(false);
+            var productNutrientDbs = await _context.ProductNutrients.ToListAsync().ConfigureAwait(false);
 
             return ProductNutrientBuilder.Build(productNutrientDbs);
+        }
+
+        /// <summary> Outputs paginated Product-Nutrients from DB, depending on the selected conditions.</summary>
+        /// <param name="request"></param>
+        /// <returns> Returns a PaginationResponse object containing a sorted collection of Product-Nutrients. </returns>
+        public async Task<PaginationResponse<ProductNutrientDto>> GetPaginationAsync(PaginationRequest request)
+        {
+            var query = _context.ProductNutrients.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Query))
+            {
+                query = query.Where(c => c.Product.Title.Contains(request.Query, StringComparison.OrdinalIgnoreCase)
+                || c.Nutrient.Title.Contains(request.Query, StringComparison.OrdinalIgnoreCase)
+                || c.TreatingType.Title.Contains(request.Query, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                switch (request.SortBy)
+                {
+                    case "productTitle": query = request.Ascending ? query.OrderBy(c => c.Product.Title) : query.OrderByDescending(c => c.Product.Title); break;
+                    case "nutrientTitle": query = request.Ascending ? query.OrderBy(c => c.Nutrient.Title) : query.OrderByDescending(c => c.Nutrient.Title); break;
+                    case "treatingTypeTitle": query = request.Ascending ? query.OrderBy(c => c.TreatingType.Title) : query.OrderByDescending(c => c.TreatingType.Title); break;
+                    case "quality": query = request.Ascending ? query.OrderBy(c => c.Quality) : query.OrderByDescending(c => c.Quality); break;
+                }
+            }
+
+            var categoryDbs = await query.ToListAsync().ConfigureAwait(false);
+
+            var total = categoryDbs.Count;
+            var categoryDtos = ProductNutrientBuilder.Build(categoryDbs.Skip(request.Skip ?? 0).Take(request.Take ?? 10)?.ToList());
+
+            return new PaginationResponse<ProductNutrientDto>
+            {
+                Total = total,
+                Values = categoryDtos
+            };
         }
 
         public async Task<ProductNutrientDto> GetByIdAsync(int? productNutrientDtoId)
