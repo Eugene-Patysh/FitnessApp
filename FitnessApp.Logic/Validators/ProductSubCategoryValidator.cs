@@ -1,10 +1,5 @@
 ﻿using FitnessApp.Logic.Models;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Validators
 {
@@ -16,22 +11,22 @@ namespace FitnessApp.Logic.Validators
 
             RuleFor(o => o).NotNull().WithMessage("Product subcategory can't be null.");
 
+            RuleFor(o => o.Title)
+                .Must(t => !string.IsNullOrEmpty(t)).WithMessage("Product subcategory title can't be null.")
+                .Must(t => t.All(char.IsLetter)).WithMessage("Product subcategory title must contains only letters.")
+                .MaximumLength(30).WithMessage("Length of product subcategory title can't be more than 30 symbols.");
+
+            RuleFor(o => o.ProductCategoryId).NotNull().GreaterThan(0).WithMessage("Id of product category can't be null and must be greather than zero.");
+
             RuleSet("AddProductSubCategory", () =>
             {
                 RuleFor(o => o.Id).Null().WithMessage("Product subcategory Id must be null.");
-
             });
 
             RuleSet("UpdateProductSubCategory", () =>
             {
-                RuleFor(o => o.Id).NotNull().WithMessage("Product subcategory Id can't be null.");
+                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage("Product subcategory Id can't be null and must be greather than zero.");
             });
-
-            RuleFor(o => o.Title)
-                .Must(t => !string.IsNullOrEmpty(t)).WithMessage("Product subcategory title can't be null.")
-                .MaximumLength(30).WithMessage("Length of product subcategory title can't be more than 30 symbols.");
-
-            RuleFor(o => o.ProductCategoryId).NotNull().WithMessage("Id of product category can't be null.");
         }
     }
 }

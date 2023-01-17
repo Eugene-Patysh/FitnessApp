@@ -1,11 +1,5 @@
-﻿using FitnessApp.Data.Models;
-using FitnessApp.Logic.Models;
+﻿using FitnessApp.Logic.Models;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Validators
 {
@@ -17,6 +11,11 @@ namespace FitnessApp.Logic.Validators
 
             RuleFor(o => o).NotNull().WithMessage("Product category can't be null.");
 
+            RuleFor(o => o.Title)
+                .Must(t => !string.IsNullOrEmpty(t)).WithMessage("Product category title can't be null.")
+                .Must(t => t.All(char.IsLetter)).WithMessage("Product category title must contains only letters.")
+                .MaximumLength(30).WithMessage("Length of product category title can't be more than 30 symbols.");
+
             RuleSet("AddProductCategory", () =>
             {
                 RuleFor(o => o.Id).Null().WithMessage("Product category Id must be null.");
@@ -24,12 +23,8 @@ namespace FitnessApp.Logic.Validators
 
             RuleSet("UpdateProductCategory", () =>
             {
-                RuleFor(o => o.Id).NotNull().WithMessage("Product category Id can't be null.");
+                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage("Product category Id can't be null and must be greather than zero.");
             });
-
-            RuleFor(o => o.Title)
-                .Must(t => !string.IsNullOrEmpty(t)).WithMessage("Product category title can't be null.")
-                .MaximumLength(30).WithMessage("Length of product category title can't be more than 30 symbols.");
         }
     }
 }
