@@ -1,6 +1,7 @@
 ﻿using FitnessApp.Data;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
+using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,9 @@ namespace FitnessApp.Logic.Services
 {
     public class ProductCategoryService : BaseService, IProductCategoryService
     {
-        private readonly IValidator<ProductCategoryDto> _validator;
+        private readonly ICustomValidator<ProductCategoryDto> _validator;
 
-        public ProductCategoryService(ProductContext context, IValidator<ProductCategoryDto> validator) : base(context)
+        public ProductCategoryService(ProductContext context, ICustomValidator<ProductCategoryDto> validator) : base(context)
         {
             _validator = validator;
         }
@@ -36,9 +37,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task CreateAsync(ProductCategoryDto productCategoryDto)
         {
-            var validationResult = _validator.Validate(productCategoryDto, v => v.IncludeRuleSets("AddProductCategory"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productCategoryDto, "AddProductCategory");
 
             productCategoryDto.Created = DateTime.UtcNow;
             productCategoryDto.Updated = DateTime.UtcNow;
@@ -57,9 +56,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task UpdateAsync(ProductCategoryDto productCategoryDto)
         {
-            var validationResult = _validator.Validate(productCategoryDto, v => v.IncludeRuleSets("UpdateProductCategory"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productCategoryDto, "UpdateProductCategory");
 
             var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDto.Id).ConfigureAwait(false);
             

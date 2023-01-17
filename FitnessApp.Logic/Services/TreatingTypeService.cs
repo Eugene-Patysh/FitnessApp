@@ -1,6 +1,7 @@
 ﻿using FitnessApp.Data;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
+using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,9 @@ namespace FitnessApp.Logic.Services
 {
     public class TreatingTypeService : BaseService, ITreatingTypeService
     {
-        private readonly IValidator<TreatingTypeDto> _validator;
+        private readonly ICustomValidator<TreatingTypeDto> _validator;
 
-        public TreatingTypeService(ProductContext context, IValidator<TreatingTypeDto> validator) : base(context)
+        public TreatingTypeService(ProductContext context, ICustomValidator<TreatingTypeDto> validator) : base(context)
         {
             _validator = validator;
         }
@@ -36,9 +37,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task CreateAsync(TreatingTypeDto treatingTypeDto)
         {
-            var validationResult = _validator.Validate(treatingTypeDto, v => v.IncludeRuleSets("AddTreatingType"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(treatingTypeDto, "AddTreatingType");
 
             treatingTypeDto.Created = DateTime.UtcNow;
             treatingTypeDto.Updated = DateTime.UtcNow;
@@ -55,11 +54,9 @@ namespace FitnessApp.Logic.Services
             }
         }
 
-        public async Task UpdateAsync(TreatingTypeDto treatingTypeDto)
+        public async Task UpdateAsync(TreatingTypeDto treatingTypeDto) 
         {
-            var validationResult = _validator.Validate(treatingTypeDto, v => v.IncludeRuleSets("UpdateTreatingType"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(treatingTypeDto, "UpdateTreatingType");
 
             var treatingTypeDb = await _context.TreatingTypes.SingleOrDefaultAsync(_ => _.Id == treatingTypeDto.Id).ConfigureAwait(false);
 

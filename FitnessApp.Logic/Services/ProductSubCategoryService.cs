@@ -1,6 +1,7 @@
 ﻿using FitnessApp.Data;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
+using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,9 @@ namespace FitnessApp.Logic.Services
 {
     public class ProductSubCategoryService : BaseService, IProductSubCategoryService
     {
-        private readonly IValidator<ProductSubCategoryDto> _validator;
+        private readonly ICustomValidator<ProductSubCategoryDto> _validator;
 
-        public ProductSubCategoryService(ProductContext context, IValidator<ProductSubCategoryDto> validator) : base(context)
+        public ProductSubCategoryService(ProductContext context, ICustomValidator<ProductSubCategoryDto> validator) : base(context)
         {
             _validator = validator;
         }
@@ -36,9 +37,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task CreateAsync(ProductSubCategoryDto productSubCategoryDto)
         {
-            var validationResult = _validator.Validate(productSubCategoryDto, v => v.IncludeRuleSets("AddProductSubCategory"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productSubCategoryDto, "AddProductSubCategory");
 
             productSubCategoryDto.Created = DateTime.UtcNow;
             productSubCategoryDto.Updated = DateTime.UtcNow;
@@ -55,11 +54,9 @@ namespace FitnessApp.Logic.Services
             }
         }
 
-        public async Task UpdateAsync(ProductSubCategoryDto productSubCategoryDto)
+        public async Task UpdateAsync(ProductSubCategoryDto productSubCategoryDto) 
         {
-            var validationResult = _validator.Validate(productSubCategoryDto, v => v.IncludeRuleSets("UpdateProductSubCategory"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productSubCategoryDto, "UpdateProductSubCategory");
 
             var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryDto.Id).ConfigureAwait(false);
 

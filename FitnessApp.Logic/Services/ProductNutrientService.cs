@@ -1,6 +1,7 @@
 ﻿using FitnessApp.Data;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
+using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,9 @@ namespace FitnessApp.Logic.Services
 {
     public class ProductNutrientService : BaseService, IProductNutrientService
     {
-        private readonly IValidator<ProductNutrientDto> _validator;
+        private readonly ICustomValidator<ProductNutrientDto> _validator;
 
-        public ProductNutrientService(ProductContext context, IValidator<ProductNutrientDto> validator) : base(context)
+        public ProductNutrientService(ProductContext context, ICustomValidator<ProductNutrientDto> validator) : base(context)
         {
             _validator = validator;
         }
@@ -36,9 +37,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task CreateAsync(ProductNutrientDto productNutrientDto)
         {
-            var validationResult = _validator.Validate(productNutrientDto, v => v.IncludeRuleSets("AddProductNutrient"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productNutrientDto, "AddProductNutrient");
 
             productNutrientDto.Created = DateTime.UtcNow;
             productNutrientDto.Updated = DateTime.UtcNow;
@@ -57,9 +56,7 @@ namespace FitnessApp.Logic.Services
 
         public async Task UpdateAsync(ProductNutrientDto productNutrientDto)
         {
-            var validationResult = _validator.Validate(productNutrientDto, v => v.IncludeRuleSets("UpdateProductNutrient"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productNutrientDto, "UpdateProductNutrient");
 
             var productNutrientDb = await _context.ProductNutrients.SingleOrDefaultAsync(_ => _.Id == productNutrientDto.Id).ConfigureAwait(false);
 
