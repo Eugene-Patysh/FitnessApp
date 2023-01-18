@@ -17,11 +17,14 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
+        /// <summary> Gets all nutirent categories from DB. </summary>
+        /// <returns> Returns collection of nutirent categories. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ICollection<NutrientCategoryDto>> GetAllAsync()
         {
             var nutrientCategoryDbs = await _context.NutrientCategories.ToListAsync().ConfigureAwait(false);
 
-            return NutrientCategoryBuilder.Build(nutrientCategoryDbs);
+            return NutrientCategoryBuilder.Build(nutrientCategoryDbs) ?? throw new Exception($"There are not objects of nutrient categories."); ;
         }
 
         /// <summary> Outputs paginated nutrient categories from DB, depending on the selected conditions.</summary>
@@ -56,11 +59,16 @@ namespace FitnessApp.Logic.Services
             };
         }
 
+        /// <summary> Gets nutirent category from DB by Id. </summary>
+        /// <param name="nutrientCategoryDtoId"></param>
+        /// <returns> Returns object of nutirent category with Id: <paramref name="nutrientCategoryDtoId"/>. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<NutrientCategoryDto> GetByIdAsync(int? nutrientCategoryDtoId)
         {
             if (nutrientCategoryDtoId == null)
             {
-                throw new ValidationException("Nutrient category Id can't be null.");
+                throw new ValidationException("Nutrient category Id can't be null");
             }
 
             var nutrientCategoryDb = await _context.NutrientCategories.SingleOrDefaultAsync(_ => _.Id == nutrientCategoryDtoId).ConfigureAwait(false);
@@ -68,6 +76,10 @@ namespace FitnessApp.Logic.Services
             return NutrientCategoryBuilder.Build(nutrientCategoryDb);
         }
 
+        /// <summary> Creates new nutrient category. </summary>
+        /// <param name="nutrientCategoryDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateAsync(NutrientCategoryDto nutrientCategoryDto)
         {
             _validator.Validate(nutrientCategoryDto, "AddNutrientCategory"); 
@@ -87,6 +99,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Updates nutrient category in DB. </summary>
+        /// <param name="nutrientCategoryDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ValidationException"></exception>
         public async Task UpdateAsync(NutrientCategoryDto nutrientCategoryDto)
         {
             _validator.Validate(nutrientCategoryDto, "UpdateNutrientCategory");
@@ -113,6 +130,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Deletes nutrient category from DB. </summary>
+        /// <param name="nutrientCategoryDtoId"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAsync(int? nutrientCategoryDtoId)
         {
             if (nutrientCategoryDtoId == null)

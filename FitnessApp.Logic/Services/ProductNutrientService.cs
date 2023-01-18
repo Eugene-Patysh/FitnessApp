@@ -17,11 +17,14 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
+        /// <summary> Gets all Product-Nutrients from DB. </summary>
+        /// <returns> Returns collection of Product-Nutrients. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ICollection<ProductNutrientDto>> GetAllAsync()
         {
             var productNutrientDbs = await _context.ProductNutrients.ToListAsync().ConfigureAwait(false);
 
-            return ProductNutrientBuilder.Build(productNutrientDbs);
+            return ProductNutrientBuilder.Build(productNutrientDbs) ?? throw new Exception($"There are not objects of Product-Nutrients.");
         }
 
         /// <summary> Outputs paginated Product-Nutrients from DB, depending on the selected conditions.</summary>
@@ -61,6 +64,11 @@ namespace FitnessApp.Logic.Services
             };
         }
 
+
+        /// <summary> Gets Product-Nutrient from DB by Id. </summary>
+        /// <param name="productNutrientDtoId" example="666">The Product-Nutrient Id. </param>
+        /// <returns> Returns object of Product-Nutrient with Id: <paramref name="productNutrientId"/>. </returns>
+        /// <exception cref="ValidationException"></exception>
         public async Task<ProductNutrientDto> GetByIdAsync(int? productNutrientDtoId)
         {
             if (productNutrientDtoId == null)
@@ -73,6 +81,10 @@ namespace FitnessApp.Logic.Services
             return ProductNutrientBuilder.Build(productNutrientDb);
         }
 
+        /// <summary> Creates new Product-Nutrient. </summary>
+        /// <param name="productNutrientDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateAsync(ProductNutrientDto productNutrientDto)
         {
             _validator.Validate(productNutrientDto, "AddProductNutrient");
@@ -92,6 +104,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Updates Product-Nutrient in DB. </summary>
+        /// <param name="productNutrientDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ValidationException"></exception>
         public async Task UpdateAsync(ProductNutrientDto productNutrientDto)
         {
             _validator.Validate(productNutrientDto, "UpdateProductNutrient");
@@ -121,6 +138,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Deletes Product-Nutrient from DB. </summary>
+        /// <param name="productNutrientDtoId"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAsync(int? productNutrientDtoId)
         {
             if (productNutrientDtoId == null)

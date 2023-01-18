@@ -17,11 +17,14 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
+        /// <summary> Gets all nutrients from DB. </summary>
+        /// <returns> Returns collection of nutrients. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ICollection<NutrientDto>> GetAllAsync()
         {
             var nutrientDbs = await _context.Nutrients.ToListAsync().ConfigureAwait(false);
 
-            return NutrientBuilder.Build(nutrientDbs);
+            return NutrientBuilder.Build(nutrientDbs) ?? throw new Exception($"There are not objects of nutrients.");
         }
 
         /// <summary> Outputs paginated nutrients from DB, depending on the selected conditions.</summary>
@@ -56,6 +59,10 @@ namespace FitnessApp.Logic.Services
             };
         }
 
+        /// <summary> Gets nutrient from DB by Id. </summary>
+        /// <param name="nutrientDtoId"></param>
+        /// <returns> Returns object of nutrient with Id: <paramref name="nutrientDtoId"/>. </returns>
+        /// <exception cref="ValidationException"></exception>
         public async Task<NutrientDto> GetByIdAsync(int? nutrientDtoId)
         {
             if (nutrientDtoId == null)
@@ -68,6 +75,10 @@ namespace FitnessApp.Logic.Services
             return NutrientBuilder.Build(nutrientDb);
         }
 
+        /// <summary> Creates new nutrient. </summary>
+        /// <param name="nutrientDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateAsync(NutrientDto nutrientDto)
         {
             _validator.Validate(nutrientDto, "AddNutrient");
@@ -87,6 +98,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Updates nutrient in DB. </summary>
+        /// <param name="nutrientDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ValidationException"></exception>
         public async Task UpdateAsync(NutrientDto nutrientDto)
         {
             _validator.Validate(nutrientDto, "UpdateNutrient");
@@ -114,6 +130,12 @@ namespace FitnessApp.Logic.Services
                 throw new ValidationException($"There is not exist object, that you trying to update.");
             }
         }
+
+        /// <summary> Deletes nutrient from DB. </summary>
+        /// <param name="nutrientDtoId"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAsync(int? nutrientDtoId)
         {
             if (nutrientDtoId == null)

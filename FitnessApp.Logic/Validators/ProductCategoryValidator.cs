@@ -12,8 +12,7 @@ namespace FitnessApp.Logic.Validators
             RuleFor(o => o).NotNull().WithMessage("Product category can't be null.");
 
             RuleFor(o => o.Title)
-                .Must(t => !string.IsNullOrEmpty(t)).WithMessage("Product category title can't be null.")
-                .Must(t => t.All(char.IsLetter)).WithMessage("Product category title must contains only letters.")
+                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage("Product category title can't be null and must contains only letters.")
                 .MaximumLength(30).WithMessage("Length of product category title can't be more than 30 symbols.");
 
             RuleSet("AddProductCategory", () =>

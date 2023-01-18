@@ -25,9 +25,10 @@ namespace FitnessApp.Web.Controllers
 
         /// <summary> Gets all treating types from DB. </summary>
         /// <returns> Returns collection of treating types. </returns>
+        /// <exception cref="Exception"></exception>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Not found collection of objects. </response>
-        /// <response code="500"> Something wrong on the Server. </response>
+        /// <response code="500"> Something wrong on the Server. </response> 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -41,6 +42,9 @@ namespace FitnessApp.Web.Controllers
         /// <param name="request"></param>
         /// <returns> Returns a PaginationResponse object containing a sorted collection of treating types. </returns>
         /// <exception cref="Exception"></exception>
+        /// <response code="200"> Sucsess. </response>
+        /// <response code="404"> Not found collection of objects. </response>
+        /// <response code="500"> Something wrong on the Server. </response> 
         [HttpPost("pagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -51,22 +55,24 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets treating type from DB by Id. </summary>
-        /// <param name="treatingTypeId" example="666">The treating type Id. </param>
-        /// <returns> Returns object of treating type with Id: <paramref name="treatingTypeId"/>. </returns>
+        /// <param name="treatingTypeDtoId" example="666">The treating type Id. </param>
+        /// <returns> Returns object of treating type with Id: <paramref name="treatingTypeDtoId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
-        /// <response code="500"> Something wrong on the Server. </response>
+        /// <response code="500"> Something wrong on the Server. </response> 
         [HttpGet("{treatingTypeId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<TreatingTypeDto> GetByIdAsync(int? treatingTypeId)
+        public async Task<TreatingTypeDto> GetByIdAsync(int? treatingTypeDtoId)
         {
-            if (treatingTypeId == null)
+            if (treatingTypeDtoId == null)
                 throw new ValidationException($"Treating type Id can't be null or equals zero and less.");
 
-            return await _treatingTypeService.GetByIdAsync(treatingTypeId) ?? throw new Exception($"Object treating type with this Id not exist.");
+            return await _treatingTypeService.GetByIdAsync(treatingTypeDtoId) ?? throw new Exception($"Object treating type with this Id not exist.");
         }
 
         /// <summary> Creates new treating type. </summary>
@@ -108,22 +114,23 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Deletes treating type from DB. </summary>
-        /// <param name="treatingTypeId" example="666"> The treating type Id. </param>
+        /// <param name="treatingTypeDtoId" example="666"> The treating type Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
+        /// <exception cref="ValidationException"></exception>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
-        /// <response code="500"> Something wrong on the Server. </response>
+        /// <response code="500"> Something wrong on the Server. </response> 
         [HttpDelete("{treatingTypeId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAsync(int? treatingTypeId)
+        public async Task DeleteAsync(int? treatingTypeDtoId)
         {
-            if (treatingTypeId == null)
+            if (treatingTypeDtoId == null)
                 throw new ValidationException($"Treating type Id can't be null or equals zero and less.");
 
-            await _treatingTypeService.DeleteAsync(treatingTypeId);
+            await _treatingTypeService.DeleteAsync(treatingTypeDtoId);
         }
     }
 }

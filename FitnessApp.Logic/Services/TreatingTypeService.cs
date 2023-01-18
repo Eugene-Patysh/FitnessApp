@@ -17,11 +17,14 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
+        /// <summary> Gets all treating types from DB. </summary>
+        /// <returns> Returns collection of treating types. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ICollection<TreatingTypeDto>> GetAllAsync()
         {
             var treatingTypeDbs = await _context.TreatingTypes.ToListAsync().ConfigureAwait(false);
 
-            return TreatingTypeBuilder.Build(treatingTypeDbs);
+            return TreatingTypeBuilder.Build(treatingTypeDbs) ?? throw new Exception($"There are not objects of treating types.");
         }
 
         /// <summary> Outputs paginated treating types from DB, depending on the selected conditions.</summary>
@@ -56,6 +59,10 @@ namespace FitnessApp.Logic.Services
             };
         }
 
+        /// <summary> Gets treating type from DB by Id. </summary>
+        /// <param name="treatingTypeDtoId"></param>
+        /// <returns> Returns object of treating type with Id: <paramref name="treatingTypeDtoId"/>. </returns>
+        /// <exception cref="ValidationException"></exception>
         public async Task<TreatingTypeDto> GetByIdAsync(int? treatingTypeDtoId)
         {
             if (treatingTypeDtoId == null)
@@ -68,6 +75,10 @@ namespace FitnessApp.Logic.Services
             return TreatingTypeBuilder.Build(treatingTypeDb);
         }
 
+        /// <summary> Creates new treating type. </summary>
+        /// <param name="treatingTypeDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateAsync(TreatingTypeDto treatingTypeDto)
         {
             _validator.Validate(treatingTypeDto, "AddTreatingType");
@@ -87,6 +98,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Updates treating type in DB. </summary>
+        /// <param name="treatingTypeDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ValidationException"></exception>
         public async Task UpdateAsync(TreatingTypeDto treatingTypeDto) 
         {
             _validator.Validate(treatingTypeDto, "UpdateTreatingType");
@@ -113,6 +129,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Deletes treating type from DB. </summary>
+        /// <param name="treatingTypeDtoId"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAsync(int? treatingTypeDtoId)
         {
             if (treatingTypeDtoId == null)

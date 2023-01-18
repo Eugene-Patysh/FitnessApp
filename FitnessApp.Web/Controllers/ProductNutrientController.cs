@@ -1,5 +1,4 @@
-﻿using FitnessApp.Data.Models;
-using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
@@ -41,6 +40,9 @@ namespace FitnessApp.Web.Controllers
         /// <param name="request"></param>
         /// <returns> Returns a PaginationResponse object containing a sorted collection of Product-Nutrients. </returns>
         /// <exception cref="Exception"></exception>
+        ///  <response code="200"> Sucsess. </response>
+        /// <response code="404"> Not found collection of objects. </response>
+        /// <response code="500"> Something wrong on the Server. </response>
         [HttpPost("pagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -51,9 +53,11 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets Product-Nutrient from DB by Id. </summary>
-        /// <param name="productNutrientId" example="666">The Product-Nutrient Id. </param>
-        /// <returns> Returns object of Product-Nutrient with Id: <paramref name="productNutrientId"/>. </returns>
+        /// <param name="productNutrientDtoId" example="666">The Product-Nutrient Id. </param>
+        /// <returns> Returns object of Product-Nutrient with Id: <paramref name="productNutrientDtoId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
         /// <response code="500"> Something wrong on the Server. </response>
@@ -61,12 +65,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ProductNutrientDto> GetByIdAsync(int? productNutrientId)
+        public async Task<ProductNutrientDto> GetByIdAsync(int? productNutrientDtoId)
         {
-            if (productNutrientId == null)
+            if (productNutrientDtoId == null)
                 throw new ValidationException($"Product-Nutrient Id can't be null or equals zero and less.");
 
-            return await _productNutrientService.GetByIdAsync(productNutrientId) ?? throw new Exception($"Object Product-Nutrient with this Id not exist.");
+            return await _productNutrientService.GetByIdAsync(productNutrientDtoId) ?? throw new Exception($"Object Product-Nutrient with this Id not exist.");
         }
 
         /// <summary> Creates new Product-Nutrient. </summary>
@@ -108,22 +112,23 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Deletes Product-Nutrient from DB. </summary>
-        /// <param name="productNutrientId" example="666"> The Product-Nutrient Id. </param>
+        /// <param name="productNutrientDtoId" example="666"> The Product-Nutrient Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
+        /// <exception cref="ValidationException"></exception>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
-        /// <response code="500"> Something wrong on the Server. </response>
+        /// <response code="500"> Something wrong on the Server. </response> 
         [HttpDelete("{productNutrientId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAsync(int? productNutrientId)
+        public async Task DeleteAsync(int? productNutrientDtoId)
         {
-            if (productNutrientId == null)
+            if (productNutrientDtoId == null)
                 throw new ValidationException($"Product-Nutrient Id can't be null or equals zero and less.");
 
-            await _productNutrientService.DeleteAsync(productNutrientId);
+            await _productNutrientService.DeleteAsync(productNutrientDtoId);
         }
     }
 }

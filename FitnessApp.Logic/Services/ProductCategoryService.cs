@@ -17,11 +17,14 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
+        /// <summary> Gets all product categories from DB. </summary>
+        /// <returns> Returns collection of product categories. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ICollection<ProductCategoryDto>> GetAllAsync()
         {
             var categoryDbs = await _context.ProductCategories.ToListAsync().ConfigureAwait(false);
 
-            return ProductCategoryBuilder.Build(categoryDbs);
+            return ProductCategoryBuilder.Build(categoryDbs) ?? throw new Exception($"There are not objects of product categories.");
         }
 
         /// <summary> Outputs paginated product categories from DB, depending on the selected conditions.</summary>
@@ -56,6 +59,10 @@ namespace FitnessApp.Logic.Services
             };
         }
 
+        /// <summary> Gets product category from DB by Id. </summary>
+        /// <param name="productCategoryDtoId"></param>
+        /// <returns> Returns object of product category with Id: <paramref name="productCategoryDtoId"/>. </returns>
+        /// <exception cref="ValidationException"></exception>
         public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryDtoId)
         {
             if (productCategoryDtoId == null)
@@ -68,6 +75,10 @@ namespace FitnessApp.Logic.Services
             return ProductCategoryBuilder.Build(categoryDb);
         }
 
+        /// <summary> Creates new product category. </summary>
+        /// <param name="productCategoryDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateAsync(ProductCategoryDto productCategoryDto)
         {
             _validator.Validate(productCategoryDto, "AddProductCategory");
@@ -87,6 +98,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Updates product category in DB. </summary>
+        /// <param name="productCategoryDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ValidationException"></exception>
         public async Task UpdateAsync(ProductCategoryDto productCategoryDto)
         {
             _validator.Validate(productCategoryDto, "UpdateProductCategory");
@@ -113,6 +129,11 @@ namespace FitnessApp.Logic.Services
             }   
         }
 
+        /// <summary> Deletes product category from DB. </summary>
+        /// <param name="productCategoryDtoId"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAsync(int? productCategoryDtoId)
         {
             if (productCategoryDtoId == null)

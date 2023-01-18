@@ -17,13 +17,15 @@ namespace FitnessApp.Logic.Services
             _validator = validator;
         }
 
+        /// <summary> Gets all products from DB. </summary>
+        /// <returns> Returns collection of products. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ICollection<ProductDto>> GetAllAsync()
         {
             var productDbs = await _context.Products.ToListAsync().ConfigureAwait(false);
 
-            return ProductBuilder.Build(productDbs);
+            return ProductBuilder.Build(productDbs) ?? throw new Exception($"There are not objects of products.");
         }
-
 
         /// <summary> Outputs paginated products from DB, depending on the selected conditions.</summary>
         /// <param name="request"></param>
@@ -57,6 +59,10 @@ namespace FitnessApp.Logic.Services
             };
         }
 
+        /// <summary> Gets product from DB by Id. </summary>
+        /// <param name="productDtoId"></param>
+        /// <returns> Returns object of product with Id: <paramref name="productDtoId"/>. </returns>
+        /// <exception cref="ValidationException"></exception>
         public async Task<ProductDto> GetByIdAsync(int? productDtoId)
         {
             if (productDtoId == null)
@@ -69,6 +75,10 @@ namespace FitnessApp.Logic.Services
             return ProductBuilder.Build(productDb);
         }
 
+        /// <summary> Creates new product. </summary>
+        /// <param name="productDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateAsync(ProductDto productDto)
         {
             _validator.Validate(productDto,"AddProduct");
@@ -88,6 +98,11 @@ namespace FitnessApp.Logic.Services
             }
         }
 
+        /// <summary> Updates product in DB. </summary>
+        /// <param name="productDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ValidationException"></exception>
         public async Task UpdateAsync(ProductDto productDto)
         {
             _validator.Validate(productDto, "UpdateProduct");
@@ -114,6 +129,12 @@ namespace FitnessApp.Logic.Services
                 throw new ValidationException($"There is not exist object, that you trying to update.");
             }
         }
+
+        /// <summary> Deletes product from DB. </summary>
+        /// <param name="productDtoId"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteAsync(int? productDtoId)
         {
             if (productDtoId == null)

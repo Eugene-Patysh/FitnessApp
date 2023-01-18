@@ -12,8 +12,7 @@ namespace FitnessApp.Logic.Validators
             RuleFor(o => o).NotNull().WithMessage("Nutrient can't be null.");
 
             RuleFor(o => o.Title)
-                .Must(p => !string.IsNullOrEmpty(p)).WithMessage("Nutrient title can't be null.")
-                .Must(t => t.All(char.IsLetter)).WithMessage("Nutrient title must contains only letters.")
+                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage("Nutrient title can't be null and must contains only letters.")
                 .MaximumLength(30).WithMessage("Length of nutrient title can't be more than 30 symbols.");
 
             RuleFor(o => o.NutrientCategoryId).NotNull().GreaterThan(0).WithMessage("Id of nutrient category can't be null and must be greather than zero.");
