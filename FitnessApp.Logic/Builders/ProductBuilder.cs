@@ -39,7 +39,7 @@ namespace FitnessApp.Logic.Builders
                     Created = db.Created,
                     Updated = db.Updated
                 }
-                :null ;
+                :null;
         }
 
         public static ICollection<ProductDb> Build(ICollection<ProductDto> col)

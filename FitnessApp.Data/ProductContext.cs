@@ -25,7 +25,6 @@ namespace FitnessApp.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            
             modelBuilder.ApplyConfiguration(new TreatingTypeConfiguration());
             modelBuilder.ApplyConfiguration(new NutrientCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new NutrientConfiguration());

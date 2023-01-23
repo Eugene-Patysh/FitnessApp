@@ -35,7 +35,7 @@ namespace FitnessApp.Logic.Builders
                     Created = db.Created,
                     Updated = db.Updated
                 }
-                : null ;
+                : null;
         }
         public static ICollection<ProductCategoryDb> Build(ICollection<ProductCategoryDto> dbs)
         {
