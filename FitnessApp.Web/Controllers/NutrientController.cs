@@ -54,8 +54,8 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets nutrient from DB by Id. </summary>
-        /// <param name="nutrientDtoId" example="666">The nutrient Id. </param>
-        /// <returns> Returns object of nutrient with Id: <paramref name="nutrientDtoId"/>. </returns>
+        /// <param name="nutrientId" example="666">The nutrient Id. </param>
+        /// <returns> Returns object of nutrient with Id: <paramref name="nutrientId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
@@ -66,12 +66,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<NutrientDto> GetByIdAsync(int? nutrientDtoId)
+        public async Task<NutrientDto> GetByIdAsync(int? nutrientId)
         {
-            if (nutrientDtoId == null)
+            if (nutrientId == null)
                 throw new ValidationException($"Nutrient Id can't be null");
 
-            return await _nutrientService.GetByIdAsync(nutrientDtoId) ?? throw new Exception($"Object of nutrient with this Id not exist.");
+            return await _nutrientService.GetByIdAsync(nutrientId) ?? throw new Exception($"Object of nutrient with this Id not exist.");
         }
 
         /// <summary> Creates new nutrient. </summary>
@@ -113,7 +113,7 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Deletes nutrient from DB. </summary>
-        /// <param name="nutrientDtoId" example="666"> The nutrient Id. </param>
+        /// <param name="nutrientId" example="666"> The nutrient Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
         /// <exception cref="ValidationException"></exception>
@@ -124,12 +124,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAsync(int? nutrientDtoId)
+        public async Task DeleteAsync(int? nutrientId)
         {
-            if (nutrientDtoId == null)
+            if (nutrientId == null)
                 throw new ValidationException($"Nutrient Id can't be null");
 
-            await _nutrientService.DeleteAsync(nutrientDtoId);
+            await _nutrientService.DeleteAsync(nutrientId);
         }
     }
 }

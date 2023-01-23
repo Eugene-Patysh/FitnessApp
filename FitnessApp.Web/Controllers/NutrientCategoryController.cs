@@ -54,8 +54,8 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets nutirent category from DB by Id. </summary>
-        /// <param name="nutrientCategoryDtoId" example="666"> The nutirent category Id. </param>
-        /// <returns> Returns object of nutirent category with Id: <paramref name="nutrientCategoryDtoId"/>. </returns>
+        /// <param name="nutrientCategoryId" example="666"> The nutirent category Id. </param>
+        /// <returns> Returns object of nutirent category with Id: <paramref name="nutrientCategoryId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks> 
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
@@ -66,12 +66,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<NutrientCategoryDto> GetByIdAsync(int? nutrientCategoryDtoId)
+        public async Task<NutrientCategoryDto> GetByIdAsync(int? nutrientCategoryId)
         {
-            if (nutrientCategoryDtoId == null)
+            if (nutrientCategoryId == null)
                 throw new ValidationException($"Nutrient category Id can't be null");
 
-            return await _nutrientCategoryService.GetByIdAsync(nutrientCategoryDtoId) ?? throw new Exception($"Object of nutrient category with this Id not exist.");
+            return await _nutrientCategoryService.GetByIdAsync(nutrientCategoryId) ?? throw new Exception($"Object of nutrient category with this Id not exist.");
         }
 
         /// <summary> Creates new nutrient category. </summary>

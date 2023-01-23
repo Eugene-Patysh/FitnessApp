@@ -54,8 +54,8 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets product from DB by Id. </summary>
-        /// <param name="productDtoId" example="666">The product Id. </param>
-        /// <returns> Returns object of product with Id: <paramref name="productDtoId"/>. </returns>
+        /// <param name="productId" example="666">The product Id. </param>
+        /// <returns> Returns object of product with Id: <paramref name="productId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
@@ -66,12 +66,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ProductDto> GetByIdAsync(int? productDtoId)
+        public async Task<ProductDto> GetByIdAsync(int? productId)
         {
-            if (productDtoId == null)
+            if (productId == null)
                 throw new ValidationException($"Product Id can't be null or equals zero and less.");
 
-            return await _productService.GetByIdAsync(productDtoId) ?? throw new Exception($"Object of product with this Id not exist.");
+            return await _productService.GetByIdAsync(productId) ?? throw new Exception($"Object of product with this Id not exist.");
         }
 
         /// <summary> Creates new product. </summary>
@@ -113,7 +113,7 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Deletes product from DB. </summary>
-        /// <param name="productDtoId" example="666"> The product Id. </param>
+        /// <param name="productId" example="666"> The product Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
         /// <response code="200"> Sucsess. </response>
@@ -124,12 +124,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAsync(int? productDtoId)
+        public async Task DeleteAsync(int? productId)
         {
-            if (productDtoId == null)
+            if (productId == null)
                 throw new ValidationException($"Product Id can't be null or equals zero and less.");
 
-            await _productService.DeleteAsync(productDtoId);
+            await _productService.DeleteAsync(productId);
         }
     }
 }

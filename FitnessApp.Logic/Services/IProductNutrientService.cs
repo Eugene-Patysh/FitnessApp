@@ -7,9 +7,9 @@ namespace FitnessApp.Logic.Services
     {
         Task<ICollection<ProductNutrientDto>> GetAllAsync();
         Task<PaginationResponse<ProductNutrientDto>> GetPaginationAsync(PaginationRequest request);
-        Task<ProductNutrientDto> GetByIdAsync(int? productNutrientDtoId);
+        Task<ProductNutrientDto> GetByIdAsync(int? productNutrientId);
         Task CreateAsync(ProductNutrientDto productNutrientDto);
         Task UpdateAsync(ProductNutrientDto productNutrientDto);
-        Task DeleteAsync(int? productNutrientDtoId);
+        Task DeleteAsync(int? productNutrientId);
     }
 }

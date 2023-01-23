@@ -60,17 +60,17 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Gets treating type from DB by Id. </summary>
-        /// <param name="treatingTypeDtoId"></param>
-        /// <returns> Returns object of treating type with Id: <paramref name="treatingTypeDtoId"/>. </returns>
+        /// <param name="treatingTypeId"></param>
+        /// <returns> Returns object of treating type with Id: <paramref name="treatingTypeId"/>. </returns>
         /// <exception cref="ValidationException"></exception>
-        public async Task<TreatingTypeDto> GetByIdAsync(int? treatingTypeDtoId)
+        public async Task<TreatingTypeDto> GetByIdAsync(int? treatingTypeId)
         {
-            if (treatingTypeDtoId == null)
+            if (treatingTypeId == null)
             {
                 throw new ValidationException("Treating type Id can't be null.");
             }
 
-            var treatingTypeDb = await _context.TreatingTypes.SingleOrDefaultAsync(_ => _.Id == treatingTypeDtoId).ConfigureAwait(false);
+            var treatingTypeDb = await _context.TreatingTypes.SingleOrDefaultAsync(_ => _.Id == treatingTypeId).ConfigureAwait(false);
 
             return TreatingTypeBuilder.Build(treatingTypeDb);
         }
@@ -130,18 +130,18 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Deletes treating type from DB. </summary>
-        /// <param name="treatingTypeDtoId"></param>
+        /// <param name="treatingTypeId"></param>
         /// <returns> Returns operation status code. </returns>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAsync(int? treatingTypeDtoId)
+        public async Task DeleteAsync(int? treatingTypeId)
         {
-            if (treatingTypeDtoId == null)
+            if (treatingTypeId == null)
             {
                 throw new ValidationException("Invalid Treating type Id.");
             }
 
-            var treatingTypeDb = await _context.TreatingTypes.SingleOrDefaultAsync(_ => _.Id == treatingTypeDtoId).ConfigureAwait(false);
+            var treatingTypeDb = await _context.TreatingTypes.SingleOrDefaultAsync(_ => _.Id == treatingTypeId).ConfigureAwait(false);
 
             if (treatingTypeDb != null)
             {

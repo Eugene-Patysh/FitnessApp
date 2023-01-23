@@ -60,17 +60,17 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Gets nutrient from DB by Id. </summary>
-        /// <param name="nutrientDtoId"></param>
-        /// <returns> Returns object of nutrient with Id: <paramref name="nutrientDtoId"/>. </returns>
+        /// <param name="nutrientId"></param>
+        /// <returns> Returns object of nutrient with Id: <paramref name="nutrientId"/>. </returns>
         /// <exception cref="ValidationException"></exception>
-        public async Task<NutrientDto> GetByIdAsync(int? nutrientDtoId)
+        public async Task<NutrientDto> GetByIdAsync(int? nutrientId)
         {
-            if (nutrientDtoId == null)
+            if (nutrientId == null)
             {
                 throw new ValidationException("Nutrient Id can't be null.");
             }
 
-            var nutrientDb = await _context.Nutrients.SingleOrDefaultAsync(_ => _.Id == nutrientDtoId).ConfigureAwait(false);
+            var nutrientDb = await _context.Nutrients.SingleOrDefaultAsync(_ => _.Id == nutrientId).ConfigureAwait(false);
 
             return NutrientBuilder.Build(nutrientDb);
         }
@@ -132,18 +132,18 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Deletes nutrient from DB. </summary>
-        /// <param name="nutrientDtoId"></param>
+        /// <param name="nutrientId"></param>
         /// <returns> Returns operation status code. </returns>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAsync(int? nutrientDtoId)
+        public async Task DeleteAsync(int? nutrientId)
         {
-            if (nutrientDtoId == null)
+            if (nutrientId == null)
             {
                 throw new ValidationException("Invalid nutrient Id.");
             }
 
-            var nutrientDb = await _context.Nutrients.SingleOrDefaultAsync(_ => _.Id == nutrientDtoId).ConfigureAwait(false);
+            var nutrientDb = await _context.Nutrients.SingleOrDefaultAsync(_ => _.Id == nutrientId).ConfigureAwait(false);
 
             if (nutrientDb != null)
             {

@@ -55,8 +55,8 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets product category from DB by Id. </summary>
-        /// <param name="productCategoryDtoId" example="666">The product category Id. </param>
-        /// <returns> Returns object of product category with Id: <paramref name="productCategoryDtoId"/>. </returns>
+        /// <param name="productCategoryId" example="666">The product category Id. </param>
+        /// <returns> Returns object of product category with Id: <paramref name="productCategoryId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
@@ -67,12 +67,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryDtoId)
+        public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryId)
         {
-            if (productCategoryDtoId == null)
+            if (productCategoryId == null)
                 throw new ValidationException($"Product category Id can't be null");
 
-            return await _productCategoryService.GetByIdAsync(productCategoryDtoId) ?? throw new Exception($"Object of product category with this Id not exist.");
+            return await _productCategoryService.GetByIdAsync(productCategoryId) ?? throw new Exception($"Object of product category with this Id not exist.");
         }
 
         /// <summary> Creates new product category. </summary>
@@ -115,7 +115,7 @@ namespace FitnessApp.Web.Controllers
 
 
         /// <summary> Deletes product category from DB. </summary>
-        /// <param name="productCategoryDtoId" example="666"> The product category Id. </param>
+        /// <param name="productCategoryId" example="666"> The product category Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
         /// <exception cref="ValidationException"></exception>
@@ -126,12 +126,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAsync (int? productCategoryDtoId)
+        public async Task DeleteAsync (int? productCategoryId)
         {
-            if (productCategoryDtoId == null)
+            if (productCategoryId == null)
                 throw new ValidationException($"Product category Id can't be null");
 
-            await _productCategoryService.DeleteAsync(productCategoryDtoId);
+            await _productCategoryService.DeleteAsync(productCategoryId);
         }
     }
 }

@@ -60,18 +60,18 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Gets nutirent category from DB by Id. </summary>
-        /// <param name="nutrientCategoryDtoId"></param>
-        /// <returns> Returns object of nutirent category with Id: <paramref name="nutrientCategoryDtoId"/>. </returns>
+        /// <param name="nutrientCategoryId"></param>
+        /// <returns> Returns object of nutirent category with Id: <paramref name="nutrientCategoryId"/>. </returns>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<NutrientCategoryDto> GetByIdAsync(int? nutrientCategoryDtoId)
+        public async Task<NutrientCategoryDto> GetByIdAsync(int? nutrientCategoryId)
         {
-            if (nutrientCategoryDtoId == null)
+            if (nutrientCategoryId == null)
             {
                 throw new ValidationException("Nutrient category Id can't be null");
             }
 
-            var nutrientCategoryDb = await _context.NutrientCategories.SingleOrDefaultAsync(_ => _.Id == nutrientCategoryDtoId).ConfigureAwait(false);
+            var nutrientCategoryDb = await _context.NutrientCategories.SingleOrDefaultAsync(_ => _.Id == nutrientCategoryId).ConfigureAwait(false);
 
             return NutrientCategoryBuilder.Build(nutrientCategoryDb);
         }
@@ -131,18 +131,18 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Deletes nutrient category from DB. </summary>
-        /// <param name="nutrientCategoryDtoId"></param>
+        /// <param name="nutrientCategoryId"></param>
         /// <returns> Returns operation status code. </returns>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAsync(int? nutrientCategoryDtoId)
+        public async Task DeleteAsync(int? nutrientCategoryId)
         {
-            if (nutrientCategoryDtoId == null)
+            if (nutrientCategoryId == null)
             {
                 throw new ValidationException("Invalid nutrient category Id.");
             }
 
-            var nutrientCategoryDb = await _context.NutrientCategories.SingleOrDefaultAsync(_ => _.Id == nutrientCategoryDtoId).ConfigureAwait(false);
+            var nutrientCategoryDb = await _context.NutrientCategories.SingleOrDefaultAsync(_ => _.Id == nutrientCategoryId).ConfigureAwait(false);
 
             if (nutrientCategoryDb != null)
             {

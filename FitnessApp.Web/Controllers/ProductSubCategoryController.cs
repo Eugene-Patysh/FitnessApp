@@ -53,8 +53,8 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets product subcategory from DB by Id. </summary>
-        /// <param name="productSubCategoryDtoId" example="666">The product subcategory Id. </param>
-        /// <returns> Returns object of product subcategory with Id: <paramref name="productSubCategoryDtoId"/>. </returns>
+        /// <param name="productSubCategoryId" example="666">The product subcategory Id. </param>
+        /// <returns> Returns object of product subcategory with Id: <paramref name="productSubCategoryId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
@@ -63,12 +63,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryDtoId)
+        public async Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryId)
         {
-            if (productSubCategoryDtoId == null)
+            if (productSubCategoryId == null)
                 throw new ValidationException($"Product subcategory Id can't be null or equals zero and less.");
 
-            return await _productSubCategoryService.GetByIdAsync(productSubCategoryDtoId) ?? throw new Exception($"Object of product subcategory with this Id not exist.");
+            return await _productSubCategoryService.GetByIdAsync(productSubCategoryId) ?? throw new Exception($"Object of product subcategory with this Id not exist.");
         }
 
         /// <summary> Creates new product subcategory. </summary>
@@ -110,7 +110,7 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Deletes product subcategory from DB. </summary>
-        /// <param name="productSubCategoryDtoId" example="666"> The product subcategory Id. </param>
+        /// <param name="productSubCategoryId" example="666"> The product subcategory Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
         /// <exception cref="ValidationException"></exception>
@@ -121,12 +121,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAsync(int? productSubCategoryDtoId)
+        public async Task DeleteAsync(int? productSubCategoryId)
         {
-            if (productSubCategoryDtoId == null)
+            if (productSubCategoryId == null)
                 throw new ValidationException($"Product subcategory Id can't be null or equals zero and less.");
 
-            await _productSubCategoryService.DeleteAsync(productSubCategoryDtoId);
+            await _productSubCategoryService.DeleteAsync(productSubCategoryId);
         }
     }
 }

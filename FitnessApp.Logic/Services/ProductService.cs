@@ -60,17 +60,17 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Gets product from DB by Id. </summary>
-        /// <param name="productDtoId"></param>
-        /// <returns> Returns object of product with Id: <paramref name="productDtoId"/>. </returns>
+        /// <param name="productId"></param>
+        /// <returns> Returns object of product with Id: <paramref name="productId"/>. </returns>
         /// <exception cref="ValidationException"></exception>
-        public async Task<ProductDto> GetByIdAsync(int? productDtoId)
+        public async Task<ProductDto> GetByIdAsync(int? productId)
         {
-            if (productDtoId == null)
+            if (productId == null)
             {
                 throw new ValidationException("Product Id can't be null.");
             }
 
-            var productDb = await _context.Products.SingleOrDefaultAsync(_ => _.Id == productDtoId).ConfigureAwait(false);
+            var productDb = await _context.Products.SingleOrDefaultAsync(_ => _.Id == productId).ConfigureAwait(false);
 
             return ProductBuilder.Build(productDb);
         }
@@ -131,18 +131,18 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Deletes product from DB. </summary>
-        /// <param name="productDtoId"></param>
+        /// <param name="productId"></param>
         /// <returns> Returns operation status code. </returns>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAsync(int? productDtoId)
+        public async Task DeleteAsync(int? productId)
         {
-            if (productDtoId == null)
+            if (productId == null)
             {
                 throw new ValidationException("Invalid product Id.");
             }
 
-            var productDb = await _context.Products.SingleOrDefaultAsync(_ => _.Id == productDtoId).ConfigureAwait(false);
+            var productDb = await _context.Products.SingleOrDefaultAsync(_ => _.Id == productId).ConfigureAwait(false);
 
             if (productDb != null)
             {

@@ -60,17 +60,17 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Gets product subcategory from DB by Id. </summary>
-        /// <param name="productSubCategoryDtoId"></param>
-        /// <returns> Returns object of product subcategory with Id: <paramref name="productSubCategoryDtoId"/>. </returns>
+        /// <param name="productSubCategoryId"></param>
+        /// <returns> Returns object of product subcategory with Id: <paramref name="productSubCategoryId"/>. </returns>
         /// <exception cref="ValidationException"></exception>
-        public async Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryDtoId)
+        public async Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryId)
         {
-            if (productSubCategoryDtoId == null)
+            if (productSubCategoryId == null)
             {
                 throw new ValidationException("Product subcategory Id can't be null.");
             }
 
-            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryDtoId).ConfigureAwait(false);
+            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryId).ConfigureAwait(false);
 
             return ProductSubCategoryBuilder.Build(subCategoryDb);
         }
@@ -131,18 +131,18 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Deletes product subcategory from DB. </summary>
-        /// <param name="productSubCategoryDtoId"></param>
+        /// <param name="productSubCategoryId"></param>
         /// <returns> Returns operation status code. </returns>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAsync(int? productSubCategoryDtoId)
+        public async Task DeleteAsync(int? productSubCategoryId)
         {
-            if (productSubCategoryDtoId == null)
+            if (productSubCategoryId == null)
             {
                 throw new ValidationException("Invalid product subcategory Id.");
             }
 
-            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryDtoId).ConfigureAwait(false);
+            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryId).ConfigureAwait(false);
 
             if (subCategoryDb != null)
             {

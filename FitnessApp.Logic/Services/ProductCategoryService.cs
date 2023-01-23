@@ -60,17 +60,17 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Gets product category from DB by Id. </summary>
-        /// <param name="productCategoryDtoId"></param>
-        /// <returns> Returns object of product category with Id: <paramref name="productCategoryDtoId"/>. </returns>
+        /// <param name="productCategoryId"></param>
+        /// <returns> Returns object of product category with Id: <paramref name="productCategoryId"/>. </returns>
         /// <exception cref="ValidationException"></exception>
-        public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryDtoId)
+        public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryId)
         {
-            if (productCategoryDtoId == null)
+            if (productCategoryId == null)
             {
                 throw new ValidationException("Product Category Id can't be null.");
             }
 
-            var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
+            var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryId).ConfigureAwait(false);
             
             return ProductCategoryBuilder.Build(categoryDb);
         }
@@ -130,18 +130,18 @@ namespace FitnessApp.Logic.Services
         }
 
         /// <summary> Deletes product category from DB. </summary>
-        /// <param name="productCategoryDtoId"></param>
+        /// <param name="productCategoryId"></param>
         /// <returns> Returns operation status code. </returns>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteAsync(int? productCategoryDtoId)
+        public async Task DeleteAsync(int? productCategoryId)
         {
-            if (productCategoryDtoId == null)
+            if (productCategoryId == null)
             {
                 throw new ValidationException("Invalid product category Id.");
             }
 
-            var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryDtoId).ConfigureAwait(false);
+            var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryId).ConfigureAwait(false);
 
             if (categoryDb != null)
             {

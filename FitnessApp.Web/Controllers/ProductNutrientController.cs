@@ -53,8 +53,8 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Gets Product-Nutrient from DB by Id. </summary>
-        /// <param name="productNutrientDtoId" example="666">The Product-Nutrient Id. </param>
-        /// <returns> Returns object of Product-Nutrient with Id: <paramref name="productNutrientDtoId"/>. </returns>
+        /// <param name="productNutrientId" example="666">The Product-Nutrient Id. </param>
+        /// <returns> Returns object of Product-Nutrient with Id: <paramref name="productNutrientId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
         /// <exception cref="ValidationException"></exception>
         /// <exception cref="Exception"></exception>
@@ -65,12 +65,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ProductNutrientDto> GetByIdAsync(int? productNutrientDtoId)
+        public async Task<ProductNutrientDto> GetByIdAsync(int? productNutrientId)
         {
-            if (productNutrientDtoId == null)
+            if (productNutrientId == null)
                 throw new ValidationException($"Product-Nutrient Id can't be null or equals zero and less.");
 
-            return await _productNutrientService.GetByIdAsync(productNutrientDtoId) ?? throw new Exception($"Object Product-Nutrient with this Id not exist.");
+            return await _productNutrientService.GetByIdAsync(productNutrientId) ?? throw new Exception($"Object Product-Nutrient with this Id not exist.");
         }
 
         /// <summary> Creates new Product-Nutrient. </summary>
@@ -112,7 +112,7 @@ namespace FitnessApp.Web.Controllers
         }
 
         /// <summary> Deletes Product-Nutrient from DB. </summary>
-        /// <param name="productNutrientDtoId" example="666"> The Product-Nutrient Id. </param>
+        /// <param name="productNutrientId" example="666"> The Product-Nutrient Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
         /// <exception cref="ValidationException"></exception>
@@ -123,12 +123,12 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAsync(int? productNutrientDtoId)
+        public async Task DeleteAsync(int? productNutrientId)
         {
-            if (productNutrientDtoId == null)
+            if (productNutrientId == null)
                 throw new ValidationException($"Product-Nutrient Id can't be null or equals zero and less.");
 
-            await _productNutrientService.DeleteAsync(productNutrientDtoId);
+            await _productNutrientService.DeleteAsync(productNutrientId);
         }
     }
 }
