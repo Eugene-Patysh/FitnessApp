@@ -1,45 +1,87 @@
 ﻿using FitnessApp.Data;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
+using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace FitnessApp.Logic.Services 
 {
     public class ProductSubCategoryService : BaseService, IProductSubCategoryService
     {
-        private readonly IValidator<ProductSubCategoryDto> _validator;
+        private readonly ICustomValidator<ProductSubCategoryDto> _validator;
 
-        public ProductSubCategoryService(ProductContext context, IValidator<ProductSubCategoryDto> validator) : base(context)
+        public ProductSubCategoryService(ProductContext context, ICustomValidator<ProductSubCategoryDto> validator) : base(context)
         {
             _validator = validator;
         }
 
-        public async Task<ProductSubCategoryDto[]> GetAllAsync()
+        /// <summary> Gets all product subcategories from DB. </summary>
+        /// <returns> Returns collection of product subcategories. </returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<ICollection<ProductSubCategoryDto>> GetAllAsync()
         {
-            var subCategoryDbs = await _context.ProductSubCategories.ToArrayAsync().ConfigureAwait(false);
+            var subCategoryDbs = await _context.ProductSubCategories.ToListAsync().ConfigureAwait(false);
 
-            return ProductSubCategoryBuilder.Build(subCategoryDbs);
+            return ProductSubCategoryBuilder.Build(subCategoryDbs) ?? throw new Exception($"There are not objects of product subcategories.");
         }
 
-        public async Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryDtoId)
+        /// <summary> Outputs paginated product subcategories from DB, depending on the selected conditions.</summary>
+        /// <param name="request"></param>
+        /// <returns> Returns a PaginationResponse object containing a sorted collection of product subcategories. </returns>
+        public async Task<PaginationResponse<ProductSubCategoryDto>> GetPaginationAsync(PaginationRequest request)
         {
-            if (productSubCategoryDtoId == null)
+            var query = _context.ProductSubCategories.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Query))
+            {
+                query = query.Where(c => c.Title.Contains(request.Query, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                switch (request.SortBy)
+                {
+                    case "title": query = request.Ascending ? query.OrderBy(c => c.Title) : query.OrderByDescending(c => c.Title); break;
+                }
+            }
+
+            var categoryDbs = await query.ToListAsync().ConfigureAwait(false);
+
+            var total = categoryDbs.Count;
+            var categoryDtos = ProductSubCategoryBuilder.Build(categoryDbs.Skip(request.Skip ?? 0).Take(request.Take ?? 10)?.ToList());
+
+            return new PaginationResponse<ProductSubCategoryDto>
+            {
+                Total = total,
+                Values = categoryDtos
+            };
+        }
+
+        /// <summary> Gets product subcategory from DB by Id. </summary>
+        /// <param name="productSubCategoryId"></param>
+        /// <returns> Returns object of product subcategory with Id: <paramref name="productSubCategoryId"/>. </returns>
+        /// <exception cref="ValidationException"></exception>
+        public async Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryId)
+        {
+            if (productSubCategoryId == null)
             {
                 throw new ValidationException("Product subcategory Id can't be null.");
             }
 
-            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryDtoId).ConfigureAwait(false);
+            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryId).ConfigureAwait(false);
 
             return ProductSubCategoryBuilder.Build(subCategoryDb);
         }
 
+        /// <summary> Creates new product subcategory. </summary>
+        /// <param name="productSubCategoryDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateAsync(ProductSubCategoryDto productSubCategoryDto)
         {
-            var validationResult = _validator.Validate(productSubCategoryDto, v => v.IncludeRuleSets("AddProductSubCategory"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productSubCategoryDto, "AddProductSubCategory");
 
             productSubCategoryDto.Created = DateTime.UtcNow;
             productSubCategoryDto.Updated = DateTime.UtcNow;
@@ -56,11 +98,14 @@ namespace FitnessApp.Logic.Services
             }
         }
 
-        public async Task UpdateAsync(ProductSubCategoryDto productSubCategoryDto)
+        /// <summary> Updates product subcategory in DB. </summary>
+        /// <param name="productSubCategoryDto"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ValidationException"></exception>
+        public async Task UpdateAsync(ProductSubCategoryDto productSubCategoryDto) 
         {
-            var validationResult = _validator.Validate(productSubCategoryDto, v => v.IncludeRuleSets("UpdateProductSubCategory"));
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+            _validator.Validate(productSubCategoryDto, "UpdateProductSubCategory");
 
             var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryDto.Id).ConfigureAwait(false);
 
@@ -85,14 +130,19 @@ namespace FitnessApp.Logic.Services
             }
         }
 
-        public async Task DeleteAsync(int? productSubCategoryDtoId)
+        /// <summary> Deletes product subcategory from DB. </summary>
+        /// <param name="productSubCategoryId"></param>
+        /// <returns> Returns operation status code. </returns>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task DeleteAsync(int? productSubCategoryId)
         {
-            if (productSubCategoryDtoId == null)
+            if (productSubCategoryId == null)
             {
                 throw new ValidationException("Invalid product subcategory Id.");
             }
 
-            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryDtoId).ConfigureAwait(false);
+            var subCategoryDb = await _context.ProductSubCategories.SingleOrDefaultAsync(_ => _.Id == productSubCategoryId).ConfigureAwait(false);
 
             if (subCategoryDb != null)
             {

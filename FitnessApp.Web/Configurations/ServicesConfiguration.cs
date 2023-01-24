@@ -28,13 +28,13 @@ namespace FitnessApp.Web.Configurations
             builder.Services.AddTransient<ITreatingTypeService, TreatingTypeService>();
             builder.Services.AddTransient<IProductNutrientService, ProductNutrientService>();
 
-            builder.Services.AddScoped<IValidator<ProductCategoryDto>, ProductCategoryValidator>();
-            builder.Services.AddScoped<IValidator<ProductSubCategoryDto>, ProductSubCategoryValidator>();
-            builder.Services.AddScoped<IValidator<ProductDto>, ProductValidator>();
-            builder.Services.AddScoped<IValidator<NutrientCategoryDto>, NutrientCategoryValidator>();
-            builder.Services.AddScoped<IValidator<NutrientDto>, NutrientValidator>();
-            builder.Services.AddScoped<IValidator<TreatingTypeDto>, TreatingTypeValidator>();
-            builder.Services.AddScoped<IValidator<ProductNutrientDto>, ProductNutrientValidator>();
+            builder.Services.AddTransient<IValidator<ProductCategoryDto>, ProductCategoryValidator>();
+            builder.Services.AddTransient<IValidator<ProductSubCategoryDto>, ProductSubCategoryValidator>();
+            builder.Services.AddTransient<IValidator<ProductDto>, ProductValidator>();
+            builder.Services.AddTransient<IValidator<NutrientCategoryDto>, NutrientCategoryValidator>();
+            builder.Services.AddTransient<IValidator<NutrientDto>, NutrientValidator>();
+            builder.Services.AddTransient<IValidator<TreatingTypeDto>, TreatingTypeValidator>();
+            builder.Services.AddTransient<IValidator<ProductNutrientDto>, ProductNutrientValidator>();
         }
     }
 }

@@ -27,6 +27,7 @@ namespace FitnessApp.Web.Controllers
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Not found collection of objects. </response>
         /// <response code="500"> Something wrong on the Server. </response>
+        /// <exception cref="Exception"></exception>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -39,6 +40,9 @@ namespace FitnessApp.Web.Controllers
         /// <summary> Outputs paginated products from DB, depending on the selected conditions.</summary>
         /// <param name="request"></param>
         /// <returns> Returns a PaginationResponse object containing a sorted collection of products. </returns>
+        /// <response code="200"> Sucsess. </response>
+        /// <response code="404"> Not found collection of objects. </response>
+        /// <response code="500"> Something wrong on the Server. </response>
         /// <exception cref="Exception"></exception>
         [HttpPost("pagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -53,6 +57,8 @@ namespace FitnessApp.Web.Controllers
         /// <param name="productId" example="666">The product Id. </param>
         /// <returns> Returns object of product with Id: <paramref name="productId"/>. </returns>
         /// <remarks> Field "id" must be only positive number </remarks>
+        /// <exception cref="ValidationException"></exception>
+        /// <exception cref="Exception"></exception>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
         /// <response code="500"> Something wrong on the Server. </response>
@@ -113,6 +119,7 @@ namespace FitnessApp.Web.Controllers
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
         /// <response code="500"> Something wrong on the Server. </response>
+        /// <exception cref="ValidationException"></exception>
         [HttpDelete("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

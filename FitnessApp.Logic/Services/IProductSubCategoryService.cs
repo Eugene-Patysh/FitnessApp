@@ -1,18 +1,15 @@
-﻿using FitnessApp.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FitnessApp.Logic.ApiModels;
+using FitnessApp.Logic.Models;
 
 namespace FitnessApp.Logic.Services
 {
     public interface IProductSubCategoryService
     {
-        Task<ProductSubCategoryDto[]> GetAllAsync();
-        Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryDtoId);
+        Task<ICollection<ProductSubCategoryDto>> GetAllAsync();
+        Task<PaginationResponse<ProductSubCategoryDto>> GetPaginationAsync(PaginationRequest request);
+        Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryId);
         Task CreateAsync(ProductSubCategoryDto productSubCategoryDto);
         Task UpdateAsync(ProductSubCategoryDto productSubCategoryDto);
-        Task DeleteAsync(int? productSubCategoryDtoId);
+        Task DeleteAsync(int? productSubCategoryId);
     }
 }

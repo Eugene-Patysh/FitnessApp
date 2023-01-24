@@ -1,10 +1,5 @@
 ﻿using FitnessApp.Logic.Models;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Validators
 {
@@ -16,6 +11,14 @@ namespace FitnessApp.Logic.Validators
 
             RuleFor(o => o).NotNull().WithMessage("Nutrient can't be null.");
 
+            RuleFor(o => o.Title)
+                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage("Nutrient title can't be null and must contains only letters.")
+                .MaximumLength(30).WithMessage("Length of nutrient title can't be more than 30 symbols.");
+
+            RuleFor(o => o.NutrientCategoryId).NotNull().GreaterThan(0).WithMessage("Id of nutrient category can't be null and must be greather than zero.");
+
+            RuleFor(o => o.DailyDose).GreaterThan(0).WithMessage("DailyDose must be greather than zero.");
+
             RuleSet("AddNutrient", () =>
             {
                 RuleFor(o => o.Id).Null().WithMessage("Nutrient Id must be null.");  
@@ -23,16 +26,8 @@ namespace FitnessApp.Logic.Validators
 
             RuleSet("UpdateNutrient", () =>
             {
-                RuleFor(o => o.Id).NotNull().WithMessage("Nutrient Id can't be null.");
+                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage("Nutrient Id can't be null and must be greather than zero.");
             });
-
-            RuleFor(o => o.Title)
-                .Must(p => !string.IsNullOrEmpty(p)).WithMessage("Nutrient title can't be null.")
-                .MaximumLength(30).WithMessage("Length of nutrient title can't be more than 30 symbols.");
-
-            RuleFor(o => o.NutrientCategoryId).NotNull().WithMessage("Id of nutrient category can't be null.");
-
-            RuleFor(o => o.DailyDose).Must(p => p > 0).WithMessage("DailyDose must be more than zero");
         }
     }
 }

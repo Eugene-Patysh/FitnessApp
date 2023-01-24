@@ -40,6 +40,9 @@ namespace FitnessApp.Web.Controllers
         /// <param name="request"></param>
         /// <returns> Returns a PaginationResponse object containing a sorted collection of product subcategories. </returns>
         /// <exception cref="Exception"></exception>
+        /// <response code="200"> Sucsess. </response>
+        /// <response code="404"> Not found collection of objects. </response>
+        /// <response code="500"> Something wrong on the Server. </response>
         [HttpPost("pagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -110,6 +113,7 @@ namespace FitnessApp.Web.Controllers
         /// <param name="productSubCategoryId" example="666"> The product subcategory Id. </param>
         /// <returns> Returns operation status code. </returns>
         /// <remarks> Field "id" must be only positive number. </remarks>
+        /// <exception cref="ValidationException"></exception>
         /// <response code="200"> Sucsess. </response>
         /// <response code="404"> Object with this Id not found. </response>
         /// <response code="500"> Something wrong on the Server. </response>

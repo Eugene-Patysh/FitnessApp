@@ -1,10 +1,5 @@
 ﻿using FitnessApp.Data.Models;
 using FitnessApp.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Logic.Builders
 {
@@ -20,21 +15,16 @@ namespace FitnessApp.Logic.Builders
                     DailyDose = db.DailyDose,
                     NutrientCategory = NutrientCategoryBuilder.Build(db.NutrientCategory),
                     NutrientCategoryId = db.NutrientCategoryId,
-                    ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
+                    //ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
                     Created = db.Created,
                     Updated = db.Updated
                 }
                 : null;
         }
 
-        public static NutrientDto[] Build(NutrientDb[] dbs)
-        {
-            return dbs?.Select(db => Build(db))?.ToArray();
-        }
-
         public static ICollection<NutrientDto> Build(ICollection<NutrientDb> col)
         {
-            return col?.Select(a => Build(a))?.ToArray();
+            return col?.Select(a => Build(a))?.ToList();
         }
 
         public static NutrientDb Build(NutrientDto db)
@@ -48,21 +38,16 @@ namespace FitnessApp.Logic.Builders
                     DailyDose = db.DailyDose,
                     NutrientCategory = NutrientCategoryBuilder.Build(db.NutrientCategory),
                     NutrientCategoryId = db.NutrientCategoryId,
-                    ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
+                    //ProductNutrients = ProductNutrientBuilder.Build(db.ProductNutrients),
                     Created = db.Created,
                     Updated = db.Updated
                 }
                 : null;
         }
 
-        public static NutrientDb[] Build(NutrientDto[] dbs)
-        {
-            return dbs?.Select(db => Build(db))?.ToArray();
-        }
-
         public static ICollection<NutrientDb> Build(ICollection<NutrientDto> col)
         {
-            return col?.Select(a => Build(a))?.ToArray();
+            return col?.Select(a => Build(a))?.ToList();
         }
     }
 }

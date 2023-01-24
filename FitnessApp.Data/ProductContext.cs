@@ -1,11 +1,6 @@
 ﻿using FitnessApp.Data.Configurations;
 using FitnessApp.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessApp.Data
 {
@@ -30,7 +25,6 @@ namespace FitnessApp.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            
             modelBuilder.ApplyConfiguration(new TreatingTypeConfiguration());
             modelBuilder.ApplyConfiguration(new NutrientCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new NutrientConfiguration());

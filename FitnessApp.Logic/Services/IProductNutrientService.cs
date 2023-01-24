@@ -1,18 +1,15 @@
-﻿using FitnessApp.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FitnessApp.Logic.ApiModels;
+using FitnessApp.Logic.Models;
 
 namespace FitnessApp.Logic.Services
 {
     public interface IProductNutrientService
     {
-        Task<ProductNutrientDto[]> GetAllAsync();
-        Task<ProductNutrientDto> GetByIdAsync(int? productNutrientDtoId);
+        Task<ICollection<ProductNutrientDto>> GetAllAsync();
+        Task<PaginationResponse<ProductNutrientDto>> GetPaginationAsync(PaginationRequest request);
+        Task<ProductNutrientDto> GetByIdAsync(int? productNutrientId);
         Task CreateAsync(ProductNutrientDto productNutrientDto);
         Task UpdateAsync(ProductNutrientDto productNutrientDto);
-        Task DeleteAsync(int? productNutrientDtoId);
+        Task DeleteAsync(int? productNutrientId);
     }
 }
