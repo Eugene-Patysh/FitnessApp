@@ -24,7 +24,7 @@ namespace FitnessApp.Logic.Services
         {
             var productDbs = await _context.Products.ToListAsync().ConfigureAwait(false);
 
-            return ProductBuilder.Build(productDbs) ?? throw new Exception($"There are not objects of products.");
+            return ProductBuilder.Build(productDbs);
         }
 
         /// <summary> Outputs paginated products from DB, depending on the selected conditions.</summary>

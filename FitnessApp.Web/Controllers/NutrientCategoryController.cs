@@ -34,7 +34,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<NutrientCategoryDto>> GetAllAsync()
         {
-            return await _nutrientCategoryService.GetAllAsync() ?? throw new Exception($"There are not objects of nutrient categories.");
+            return await _nutrientCategoryService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated nutrient categories from DB, depending on the selected conditions.</summary>

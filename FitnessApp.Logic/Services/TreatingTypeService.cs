@@ -24,7 +24,7 @@ namespace FitnessApp.Logic.Services
         {
             var treatingTypeDbs = await _context.TreatingTypes.ToListAsync().ConfigureAwait(false);
 
-            return TreatingTypeBuilder.Build(treatingTypeDbs) ?? throw new Exception($"There are not objects of treating types.");
+            return TreatingTypeBuilder.Build(treatingTypeDbs);
         }
 
         /// <summary> Outputs paginated treating types from DB, depending on the selected conditions.</summary>

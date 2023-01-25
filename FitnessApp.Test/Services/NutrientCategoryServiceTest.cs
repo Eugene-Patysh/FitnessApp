@@ -10,11 +10,12 @@ namespace FitnessApp.Tests.Services
 {
     public class NutrientCategoryServiceTest
     {
-        private readonly NutrientCategoryValidator validator = new();
+        private readonly NutrientCategoryValidator validator;
         private readonly INutrientCategoryService nutrientCategoryService;
 
         public NutrientCategoryServiceTest()
         {
+            validator = new();
             var _validator = new CustomValidator<NutrientCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
             nutrientCategoryService = new NutrientCategoryService(dbContext, _validator);

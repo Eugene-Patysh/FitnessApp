@@ -11,11 +11,12 @@ namespace FitnessApp.Tests.Controllers
 {
     public class TreatingTypeControllerTest
     {
-        private readonly TreatingTypeValidator validator = new();
+        private readonly TreatingTypeValidator validator;
         private readonly TreatingTypeController treatingTypeController;
 
         public TreatingTypeControllerTest()
         {
+            validator = new();
             var _validator = new CustomValidator<TreatingTypeDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
             var _treatingTypeService = new TreatingTypeService(dbContext, _validator);

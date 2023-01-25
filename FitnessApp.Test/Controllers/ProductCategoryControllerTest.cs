@@ -11,11 +11,12 @@ namespace FitnessApp.Tests.Controllers
 {
     public class ProductCategoryControllerTest
     {
-        private readonly ProductCategoryValidator validator = new();
+        private readonly ProductCategoryValidator validator;
         private readonly ProductCategoryController productCategoryController;
 
         public ProductCategoryControllerTest()
         {
+            validator = new();
             var _validator = new CustomValidator<ProductCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
             var _productCategoryService = new ProductCategoryService(dbContext, _validator);

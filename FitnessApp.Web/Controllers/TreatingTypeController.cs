@@ -35,7 +35,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<TreatingTypeDto>> GetAllAsync()
         {
-            return await _treatingTypeService.GetAllAsync() ?? throw new Exception($"There are not objects of treating types.");
+            return await _treatingTypeService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated treating types from DB, depending on the selected conditions.</summary>

@@ -35,7 +35,7 @@ namespace FitnessApp.Web.Controllers
         //[SwaggerResponseExample(StatusCodes.Status200OK), typeof(ProductCategoryCommonExample))]
         public async Task<ICollection<ProductCategoryDto>> GetAllAsync()
         {
-            return await _productCategoryService.GetAllAsync() ?? throw new Exception($"There are not objects of product categories.");
+            return await _productCategoryService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated product categories from DB, depending on the selected conditions.</summary>

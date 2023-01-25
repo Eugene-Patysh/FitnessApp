@@ -33,7 +33,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<ProductSubCategoryDto>> GetAllAsync()
         {
-            return await _productSubCategoryService.GetAllAsync() ?? throw new Exception($"There are not objects of product subcategories.");
+            return await _productSubCategoryService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated product subcategories from DB, depending on the selected conditions.</summary>

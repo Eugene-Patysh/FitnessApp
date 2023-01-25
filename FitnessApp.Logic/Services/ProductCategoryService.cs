@@ -24,7 +24,7 @@ namespace FitnessApp.Logic.Services
         {
             var categoryDbs = await _context.ProductCategories.ToListAsync().ConfigureAwait(false);
 
-            return ProductCategoryBuilder.Build(categoryDbs) ?? throw new Exception($"There are not objects of product categories.");
+            return ProductCategoryBuilder.Build(categoryDbs);
         }
 
         /// <summary> Outputs paginated product categories from DB, depending on the selected conditions.</summary>

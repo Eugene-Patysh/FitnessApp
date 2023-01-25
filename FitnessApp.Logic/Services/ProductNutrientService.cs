@@ -24,7 +24,7 @@ namespace FitnessApp.Logic.Services
         {
             var productNutrientDbs = await _context.ProductNutrients.ToListAsync().ConfigureAwait(false);
 
-            return ProductNutrientBuilder.Build(productNutrientDbs) ?? throw new Exception($"There are not objects of Product-Nutrients.");
+            return ProductNutrientBuilder.Build(productNutrientDbs);
         }
 
         /// <summary> Outputs paginated Product-Nutrients from DB, depending on the selected conditions.</summary>

@@ -34,7 +34,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<ProductDto>> GetAllAsync()
         {
-            return await _productService.GetAllAsync() ?? throw new Exception($"There are not objects of products.");
+            return await _productService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated products from DB, depending on the selected conditions.</summary>
