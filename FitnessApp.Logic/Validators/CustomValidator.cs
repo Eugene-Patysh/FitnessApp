@@ -13,7 +13,7 @@ namespace FitnessApp.Logic.Validators
         {
             var validationResult = _validator.Validate(objectDto, v => v.IncludeRulesNotInRuleSet().IncludeRuleSets(ruleSetName)); //IncludeAllRuleSets IncludeRuleSets("*")
             if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.ToString());
+                throw new Exception(validationResult.ToString());
         }
     }
 }

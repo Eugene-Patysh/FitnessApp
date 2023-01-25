@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FitnessApp.Data\FitnessApp.Data.csproj" />
+    <ProjectReference Include="..\FitnessApp.Localization\FitnessApp.Localization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

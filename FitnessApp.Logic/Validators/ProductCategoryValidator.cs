@@ -1,28 +1,30 @@
-﻿using FitnessApp.Logic.Models;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.Models;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace FitnessApp.Logic.Validators
 {
     public class ProductCategoryValidator : AbstractValidator<ProductCategoryDto>
     {
-        public ProductCategoryValidator()
+        public ProductCategoryValidator(IStringLocalizer<SharedResource> sharedLocalizer)
         {
             ClassLevelCascadeMode = CascadeMode.Stop;
 
-            RuleFor(o => o).NotNull().WithMessage("Product category can't be null.");
+            RuleFor(o => o).NotNull().WithMessage(x => String.Format(sharedLocalizer["ObjectIdCantBeNull"])); 
 
             RuleFor(o => o.Title)
-                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage("Product category title can't be null and must contains only letters.")
-                .MaximumLength(30).WithMessage("Length of product category title can't be more than 30 symbols.");
+                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage(x => String.Format(sharedLocalizer["TitleNotNullOnlyLetters"]))
+                .MaximumLength(30).WithMessage(x => String.Format(sharedLocalizer["LenghtNoMore30Symbols"]));
 
             RuleSet("AddProductCategory", () =>
             {
-                RuleFor(o => o.Id).Null().WithMessage("Product category Id must be null.");
+                RuleFor(o => o.Id).Null().WithMessage(x => String.Format(sharedLocalizer["WhenCreatingIdMustBeNull"])); 
             });
 
             RuleSet("UpdateProductCategory", () =>
             {
-                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage("Product category Id can't be null and must be greather than zero.");
+                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage(x => String.Format(sharedLocalizer["WhenUpdatingIdNotNullGreatherZero"])); 
             });
         }
     }

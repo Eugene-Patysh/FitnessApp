@@ -1,10 +1,11 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
 using FitnessApp.Web.Controllers;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
 using Xunit;
 
 namespace FitnessApp.Tests.Controllers
@@ -13,14 +14,15 @@ namespace FitnessApp.Tests.Controllers
     {
         private readonly ProductCategoryValidator validator;
         private readonly ProductCategoryController productCategoryController;
+        private readonly IStringLocalizer<SharedResource> sharedLocalizer;
 
         public ProductCategoryControllerTest()
         {
-            validator = new();
+            validator = new(sharedLocalizer);
             var _validator = new CustomValidator<ProductCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            var _productCategoryService = new ProductCategoryService(dbContext, _validator);
-            productCategoryController = new ProductCategoryController(_productCategoryService, _validator);
+            var _productCategoryService = new ProductCategoryService(dbContext, _validator, sharedLocalizer);
+            productCategoryController = new ProductCategoryController(_productCategoryService, _validator, sharedLocalizer);
             HelpTestCreateFromArrayAsync();
         }
 
@@ -80,7 +82,7 @@ namespace FitnessApp.Tests.Controllers
             var category1 = await productCategoryController.GetByIdAsync(1);
             var category2 = await productCategoryController.GetByIdAsync(2);;
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryController.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryController.GetByIdAsync(null));
             await Assert.ThrowsAnyAsync<Exception>(() => productCategoryController.GetByIdAsync(-3));
             await Assert.ThrowsAnyAsync<Exception>(() => productCategoryController.GetByIdAsync(0));
             Assert.NotNull(category1);
@@ -128,9 +130,9 @@ namespace FitnessApp.Tests.Controllers
             await productCategoryController.DeleteAsync(forDelete?.Id);
 
             await Assert.ThrowsAnyAsync<Exception>(() => productCategoryController.GetByIdAsync(forDelete?.Id));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryController.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryController.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryController.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryController.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryController.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryController.DeleteAsync(0));
         }
 
         [Fact]

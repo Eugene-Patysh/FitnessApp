@@ -1,20 +1,24 @@
 ﻿using FitnessApp.Data;
+using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace FitnessApp.Logic.Services
 {
     public class ProductCategoryService : BaseService, IProductCategoryService
     {
         private readonly ICustomValidator<ProductCategoryDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public ProductCategoryService(ProductContext context, ICustomValidator<ProductCategoryDto> validator) : base(context)
+        public ProductCategoryService(ProductContext context, ICustomValidator<ProductCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer) : base(context)
         {
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all product categories from DB. </summary>
@@ -67,7 +71,7 @@ namespace FitnessApp.Logic.Services
         {
             if (productCategoryId == null)
             {
-                throw new ValidationException("Product Category Id can't be null.");
+                throw new Exception(String.Format(_sharedLocalizer["ObjectIdCantBeNull"])); 
             }
 
             var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryId).ConfigureAwait(false);
@@ -92,9 +96,9 @@ namespace FitnessApp.Logic.Services
             {
                 await _context.SaveChangesAsync().ConfigureAwait(false); 
             }
-            catch (Exception ex) 
+            catch 
             { 
-                throw new Exception($"Product category has not been created. {ex.Message}.");
+                throw new Exception(String.Format(_sharedLocalizer["ObjectNotCreated"])); 
             }
         }
 
@@ -118,14 +122,14 @@ namespace FitnessApp.Logic.Services
                 { 
                     await _context.SaveChangesAsync().ConfigureAwait(false); 
                 }
-                catch (Exception ex) 
+                catch 
                 {
-                    throw new Exception($"Product category has not been updated. {ex.Message}.");
+                    throw new Exception(String.Format(_sharedLocalizer["ObjectNotUpdated"]));
                 }
             }
             else
             {
-                throw new ValidationException($"There is not exist object, that you trying to update.");
+                throw new Exception(String.Format(_sharedLocalizer["NotExistObjectForUpdating"])); 
             }   
         }
 
@@ -138,7 +142,7 @@ namespace FitnessApp.Logic.Services
         {
             if (productCategoryId == null)
             {
-                throw new ValidationException("Invalid product category Id.");
+                throw new Exception(String.Format(_sharedLocalizer["InvalidObjectId"]));  
             }
 
             var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryId).ConfigureAwait(false);
@@ -151,14 +155,14 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw new Exception($"Product category has not been deleted. {ex.Message}.");
+                    throw new Exception(String.Format(_sharedLocalizer["ObjectNotDeleted"])); 
                 }
             }
             else
             {
-                throw new ValidationException($"There is not exist object, that you trying to delete.");
+                throw new Exception(String.Format(_sharedLocalizer["NotExistObjectForDeleting"]));
             }    
         }
     }
