@@ -74,9 +74,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryId)
         {
             if (productCategoryId == null)
-                throw new Exception(String.Format(_sharedLocalizer["ObjectIdCantBeNull"]));
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _productCategoryService.GetByIdAsync(productCategoryId) ?? throw new Exception(String.Format(_sharedLocalizer["NotExistObjectWithThisId"]));
+            return await _productCategoryService.GetByIdAsync(productCategoryId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new product category. </summary>
@@ -133,7 +133,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync (int? productCategoryId)
         {
             if (productCategoryId == null)
-                throw new Exception(String.Format(_sharedLocalizer["ObjectIdCantBeNull"]));
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productCategoryService.DeleteAsync(productCategoryId);
         }

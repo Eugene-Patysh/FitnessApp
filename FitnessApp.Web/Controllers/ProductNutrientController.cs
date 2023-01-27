@@ -1,10 +1,12 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
 using FitnessApp.Web.SwaggerExamples;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace FitnessApp.Web.Controllers
@@ -15,11 +17,13 @@ namespace FitnessApp.Web.Controllers
     {
         private readonly IProductNutrientService _productNutrientService;
         private readonly ICustomValidator<ProductNutrientDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public ProductNutrientController(IProductNutrientService productNutrientService, ICustomValidator<ProductNutrientDto> validator)
+        public ProductNutrientController(IProductNutrientService productNutrientService, ICustomValidator<ProductNutrientDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _productNutrientService = productNutrientService;
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all Product-Nutrients from DB. </summary>
@@ -49,7 +53,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<PaginationResponse<ProductNutrientDto>> GetPaginationAsync([FromBody] PaginationRequest request)
         {
-            return await _productNutrientService.GetPaginationAsync(request) ?? throw new Exception($"There are not objects of Product-Nutrients."); ;
+            return await _productNutrientService.GetPaginationAsync(request);
         }
 
         /// <summary> Gets Product-Nutrient from DB by Id. </summary>
@@ -68,9 +72,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<ProductNutrientDto> GetByIdAsync(int? productNutrientId)
         {
             if (productNutrientId == null)
-                throw new ValidationException($"Product-Nutrient Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _productNutrientService.GetByIdAsync(productNutrientId) ?? throw new Exception($"Object Product-Nutrient with this Id not exist.");
+            return await _productNutrientService.GetByIdAsync(productNutrientId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new Product-Nutrient. </summary>
@@ -126,7 +130,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync(int? productNutrientId)
         {
             if (productNutrientId == null)
-                throw new ValidationException($"Product-Nutrient Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productNutrientService.DeleteAsync(productNutrientId);
         }

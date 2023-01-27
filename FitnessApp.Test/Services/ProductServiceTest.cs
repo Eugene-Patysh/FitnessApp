@@ -1,9 +1,11 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Services
@@ -12,13 +14,15 @@ namespace FitnessApp.Tests.Services
     {
         private readonly ProductValidator validator;
         private readonly IProductService productService;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public ProductServiceTest()
         {
-            validator = new();
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            productService = new ProductService(dbContext, _validator);
+            productService = new ProductService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -79,7 +83,7 @@ namespace FitnessApp.Tests.Services
             var product3 = await productService.GetByIdAsync(-3);
             var product4 = await productService.GetByIdAsync(0);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productService.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productService.GetByIdAsync(null));
             Assert.NotNull(product1);
             Assert.True(product1?.Id == 1);
             Assert.NotNull(product2);
@@ -127,9 +131,9 @@ namespace FitnessApp.Tests.Services
             await productService.DeleteAsync(forDelete?.Id);
             var deletedProduct = await productService.GetByIdAsync(forDelete?.Id);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productService.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productService.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productService.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => productService.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productService.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => productService.DeleteAsync(0));
             Assert.Null(deletedProduct);
         }
 

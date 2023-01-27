@@ -1,28 +1,30 @@
-﻿using FitnessApp.Logic.Models;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.Models;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace FitnessApp.Logic.Validators
 {
     public class TreatingTypeValidator : AbstractValidator<TreatingTypeDto>
     {
-        public TreatingTypeValidator()
+        public TreatingTypeValidator(IStringLocalizer<SharedResource> sharedLocalizer)
         {
             ClassLevelCascadeMode = CascadeMode.Stop;
 
-            RuleFor(o => o).NotNull().WithMessage("Treating type can't be null.");
+            RuleFor(o => o).NotNull().WithMessage(x => sharedLocalizer["ObjectIdCantBeNull"]);
 
             RuleFor(o => o.Title)
-                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage("Treating type title can't be null and must contains only letters.")
-                .MaximumLength(30).WithMessage("Length of treating type title can't be more than 30 symbols.");
+                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage(x => sharedLocalizer["TitleNotNullOnlyLetters"])
+                .MaximumLength(30).WithMessage(x => sharedLocalizer["LenghtNoMore30Symbols"]);
 
             RuleSet("AddTreatingType", () =>
             {
-                RuleFor(o => o.Id).Null().WithMessage("Treating type Id must be null.");
+                RuleFor(o => o.Id).Null().WithMessage(x => sharedLocalizer["WhenCreatingIdMustBeNull"]);
             });
 
             RuleSet("UpdateTreatingType", () =>
             {
-                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage("Treating type Id can't be null and must be greather than zero.");
+                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage(x => sharedLocalizer["WhenUpdatingIdNotNullGreatherZero"]);
             });
         }
     }

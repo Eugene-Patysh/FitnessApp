@@ -5,6 +5,7 @@ using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
 using FluentValidation.TestHelper;
 using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Services
@@ -13,14 +14,15 @@ namespace FitnessApp.Tests.Services
     {
         private readonly ProductCategoryValidator validator;
         private readonly IProductCategoryService productCategoryService;
-        private readonly IStringLocalizer<SharedResource> sharedLocalizer;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public ProductCategoryServiceTests()
         {
-            validator = new(sharedLocalizer);
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            productCategoryService = new ProductCategoryService(dbContext, _validator, sharedLocalizer);
+            productCategoryService = new ProductCategoryService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -31,7 +33,7 @@ namespace FitnessApp.Tests.Services
                     new ProductCategoryDto() { Title = "Meat" },
                     new ProductCategoryDto() { Title = "Vegetables" },
                     new ProductCategoryDto() { Title = "Fruits" }
-                };
+            };
 
             foreach (var o in productCategories)
             {

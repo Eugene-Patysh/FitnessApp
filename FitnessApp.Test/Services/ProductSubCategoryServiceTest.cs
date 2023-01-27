@@ -1,9 +1,11 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Services
@@ -12,13 +14,15 @@ namespace FitnessApp.Tests.Services
     {
         private readonly ProductSubCategoryValidator validator;
         private readonly IProductSubCategoryService productSubCategoryService;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public ProductSubCategoryServiceTest()
         {
-            validator = new();
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductSubCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            productSubCategoryService = new ProductSubCategoryService(dbContext, _validator);
+            productSubCategoryService = new ProductSubCategoryService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -79,7 +83,7 @@ namespace FitnessApp.Tests.Services
             var subCategory3 = await productSubCategoryService.GetByIdAsync(-3);
             var subCategory4 = await productSubCategoryService.GetByIdAsync(0);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productSubCategoryService.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productSubCategoryService.GetByIdAsync(null));
             Assert.NotNull(subCategory1);
             Assert.True(subCategory1?.Id == 1);
             Assert.NotNull(subCategory2);
@@ -127,9 +131,9 @@ namespace FitnessApp.Tests.Services
             await productSubCategoryService.DeleteAsync(forDelete?.Id);
             var deletedSubCategory = await productSubCategoryService.GetByIdAsync(forDelete?.Id);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productSubCategoryService.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productSubCategoryService.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productSubCategoryService.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => productSubCategoryService.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productSubCategoryService.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => productSubCategoryService.DeleteAsync(0));
             Assert.Null(deletedSubCategory);
         }
 

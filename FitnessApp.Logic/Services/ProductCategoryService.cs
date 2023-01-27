@@ -71,7 +71,7 @@ namespace FitnessApp.Logic.Services
         {
             if (productCategoryId == null)
             {
-                throw new Exception(String.Format(_sharedLocalizer["ObjectIdCantBeNull"])); 
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]); 
             }
 
             var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryId).ConfigureAwait(false);
@@ -98,7 +98,7 @@ namespace FitnessApp.Logic.Services
             }
             catch 
             { 
-                throw new Exception(String.Format(_sharedLocalizer["ObjectNotCreated"])); 
+                throw new Exception(_sharedLocalizer["ObjectNotCreated"]); 
             }
         }
 
@@ -124,12 +124,12 @@ namespace FitnessApp.Logic.Services
                 }
                 catch 
                 {
-                    throw new Exception(String.Format(_sharedLocalizer["ObjectNotUpdated"]));
+                    throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
             else
             {
-                throw new Exception(String.Format(_sharedLocalizer["NotExistObjectForUpdating"])); 
+                throw new ValidationException(_sharedLocalizer["NotExistObjectForUpdating"]); 
             }   
         }
 
@@ -142,7 +142,7 @@ namespace FitnessApp.Logic.Services
         {
             if (productCategoryId == null)
             {
-                throw new Exception(String.Format(_sharedLocalizer["InvalidObjectId"]));  
+                throw new ValidationException(_sharedLocalizer["InvalidObjectId"]);  
             }
 
             var categoryDb = await _context.ProductCategories.SingleOrDefaultAsync(_ => _.Id == productCategoryId).ConfigureAwait(false);
@@ -157,12 +157,12 @@ namespace FitnessApp.Logic.Services
                 }
                 catch
                 {
-                    throw new Exception(String.Format(_sharedLocalizer["ObjectNotDeleted"])); 
+                    throw new Exception(_sharedLocalizer["ObjectNotDeleted"]); 
                 }
             }
             else
             {
-                throw new Exception(String.Format(_sharedLocalizer["NotExistObjectForDeleting"]));
+                throw new ValidationException(_sharedLocalizer["NotExistObjectForDeleting"]);
             }    
         }
     }

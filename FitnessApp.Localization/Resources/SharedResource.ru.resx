@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IdDependentObjectNotNullGreatherZero" xml:space="preserve">
+    <value>Id объекта, от которого зависит наш объект, не может быть null и должен быть больше нуля.</value>
+  </data>
   <data name="InvalidObjectId" xml:space="preserve">
-    <value>Неверный Id объекта</value>
+    <value>Неверный Id объекта.</value>
   </data>
   <data name="LenghtNoMore30Symbols" xml:space="preserve">
     <value>Длина названия объекта не может превышать 30-ти символов.</value>
@@ -130,10 +133,10 @@
     <value>Не существует объекта, который Вы пытаетесь обновить.</value>
   </data>
   <data name="NotExistObjectWithThisId" xml:space="preserve">
-    <value>Объекта с таким Id не существует.</value>
+    <value>Объекта с данным Id не существует.</value>
   </data>
   <data name="ObjectCantBeBull" xml:space="preserve">
-    <value>Объект не может иметь значение равное null</value>
+    <value>Объект не может иметь значение равное null.</value>
   </data>
   <data name="ObjectIdCantBeNull" xml:space="preserve">
     <value>Id объекта не может иметь значение равное null.</value>
@@ -149,6 +152,12 @@
   </data>
   <data name="TitleNotNullOnlyLetters" xml:space="preserve">
     <value>Название объекта не может иметь значение null и должно состоять только из букв.</value>
+  </data>
+  <data name="ValueEqualsOrGreatherZero" xml:space="preserve">
+    <value>Значение должно быть равно нулю или больше.</value>
+  </data>
+  <data name="ValueGreatherZero" xml:space="preserve">
+    <value>Значение должно быть больше нуля.</value>
   </data>
   <data name="WhenCreatingIdMustBeNull" xml:space="preserve">
     <value>При создании объекта Id должен иметь значение равное null.</value>

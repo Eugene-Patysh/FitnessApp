@@ -1,20 +1,24 @@
 ﻿using FitnessApp.Data;
+using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace FitnessApp.Logic.Services
 {
     public class ProductNutrientService : BaseService, IProductNutrientService
     {
         private readonly ICustomValidator<ProductNutrientDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public ProductNutrientService(ProductContext context, ICustomValidator<ProductNutrientDto> validator) : base(context)
+        public ProductNutrientService(ProductContext context, ICustomValidator<ProductNutrientDto> validator, IStringLocalizer<SharedResource> sharedLocalizer) : base(context)
         {
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all Product-Nutrients from DB. </summary>
@@ -73,7 +77,7 @@ namespace FitnessApp.Logic.Services
         {
             if (productNutrientId == null)
             {
-                throw new ValidationException("Product-Nutrient Id can't be null.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
             }
 
             var productNutrientDb = await _context.ProductNutrients.SingleOrDefaultAsync(_ => _.Id == productNutrientId).ConfigureAwait(false);
@@ -98,9 +102,9 @@ namespace FitnessApp.Logic.Services
             {
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception($"Product-Nutrient has not been created. {ex.Message}.");
+                throw new Exception(_sharedLocalizer["ObjectNotCreated"]);
             }
         }
 
@@ -127,14 +131,14 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw new Exception($"Product-Nutrient has not been updated. {ex.Message}.");
+                    throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
             else
             {
-                throw new ValidationException($"There is not exist object, that you trying to update.");
+                throw new ValidationException(_sharedLocalizer["NotExistObjectForUpdating"]);
             }
         }
 
@@ -147,7 +151,7 @@ namespace FitnessApp.Logic.Services
         {
             if (productNutrientId == null)
             {
-                throw new ValidationException("Invalid Product-Nutrient Id.");
+                throw new ValidationException(_sharedLocalizer["InvalidObjectId"]);
             }
 
             var productNutrientDb = await _context.ProductNutrients.SingleOrDefaultAsync(_ => _.Id == productNutrientId).ConfigureAwait(false);
@@ -160,14 +164,14 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw new Exception($"Product-Nutrient has not been deleted. {ex.Message}.");
+                    throw new Exception(_sharedLocalizer["ObjectNotDeleted"]);
                 }
             }
             else
             {
-                throw new ValidationException($"There is not exist object, that you trying to delete.");
+                throw new ValidationException(_sharedLocalizer["NotExistObjectForDeleting"]);
             }
         }
     }

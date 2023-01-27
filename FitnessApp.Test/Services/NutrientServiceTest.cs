@@ -1,10 +1,11 @@
-﻿using FitnessApp.Data.Models;
+﻿using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Services
@@ -13,13 +14,15 @@ namespace FitnessApp.Tests.Services
     {
         private readonly NutrientValidator validator;
         private readonly INutrientService nutrientService;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public NutrientServiceTest()
         {
-            validator = new();
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<NutrientDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            nutrientService = new NutrientService(dbContext, _validator);
+            nutrientService = new NutrientService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -101,9 +104,9 @@ namespace FitnessApp.Tests.Services
             await nutrientService.DeleteAsync(forDelete?.Id);
             var deletedNutrient = await nutrientService.GetByIdAsync(forDelete?.Id);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientService.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientService.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientService.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientService.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientService.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientService.DeleteAsync(0));
             Assert.Null(deletedNutrient);
         }
 

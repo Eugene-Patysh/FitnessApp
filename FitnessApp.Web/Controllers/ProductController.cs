@@ -5,7 +5,9 @@ using FitnessApp.Logic.Validators;
 using FitnessApp.Web.SwaggerExamples;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
+using FitnessApp.Localization;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -15,11 +17,13 @@ namespace FitnessApp.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICustomValidator<ProductDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public ProductController(IProductService productService, ICustomValidator<ProductDto> validator)
+        public ProductController(IProductService productService, ICustomValidator<ProductDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _productService = productService;
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all products from DB. </summary>
@@ -50,7 +54,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<PaginationResponse<ProductDto>> GetPaginationAsync([FromBody] PaginationRequest request)
         {
-            return await _productService.GetPaginationAsync(request) ?? throw new Exception($"There are not objects of products."); ;
+            return await _productService.GetPaginationAsync(request);
         }
 
         /// <summary> Gets product from DB by Id. </summary>
@@ -69,9 +73,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<ProductDto> GetByIdAsync(int? productId)
         {
             if (productId == null)
-                throw new ValidationException($"Product Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _productService.GetByIdAsync(productId) ?? throw new Exception($"Object of product with this Id not exist.");
+            return await _productService.GetByIdAsync(productId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new product. </summary>
@@ -127,7 +131,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync(int? productId)
         {
             if (productId == null)
-                throw new ValidationException($"Product Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productService.DeleteAsync(productId);
         }

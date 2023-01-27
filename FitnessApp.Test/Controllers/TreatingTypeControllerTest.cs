@@ -1,10 +1,12 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
 using FitnessApp.Web.Controllers;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Controllers
@@ -13,14 +15,16 @@ namespace FitnessApp.Tests.Controllers
     {
         private readonly TreatingTypeValidator validator;
         private readonly TreatingTypeController treatingTypeController;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public TreatingTypeControllerTest()
         {
-            validator = new();
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<TreatingTypeDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            var _treatingTypeService = new TreatingTypeService(dbContext, _validator);
-            treatingTypeController = new TreatingTypeController(_treatingTypeService, _validator);
+            var _treatingTypeService = new TreatingTypeService(dbContext, _validator, sharedLocalizer.Object);
+            treatingTypeController = new TreatingTypeController(_treatingTypeService, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArrayAsync();
         }
 
@@ -79,7 +83,7 @@ namespace FitnessApp.Tests.Controllers
             var treatingType1 = await treatingTypeController.GetByIdAsync(1);
             var treatingType2 = await treatingTypeController.GetByIdAsync(2); ;
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeController.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeController.GetByIdAsync(null));
             await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeController.GetByIdAsync(-3));
             await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeController.GetByIdAsync(0));
             Assert.NotNull(treatingType1);
@@ -127,9 +131,9 @@ namespace FitnessApp.Tests.Controllers
             await treatingTypeController.DeleteAsync(forDelete?.Id);
 
             await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeController.GetByIdAsync(forDelete?.Id));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeController.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeController.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeController.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeController.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeController.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeController.DeleteAsync(0));
         }
 
         [Fact]

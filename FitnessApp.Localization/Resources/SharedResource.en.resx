@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IdDependsObjectNotNullGreatherZero" xml:space="preserve">
+    <value>The Id of the object, that which our object depends, cannot be null and must be greater than zero.</value>
+  </data>
   <data name="InvalidObjectId" xml:space="preserve">
     <value>Invalid object Id.</value>
   </data>
@@ -149,6 +152,12 @@
   </data>
   <data name="TitleNotNullOnlyLetters" xml:space="preserve">
     <value>Object title can't be null and must contains only letters.</value>
+  </data>
+  <data name="ValueEqualsOrGreatherZero" xml:space="preserve">
+    <value>The value must be zero or greater.</value>
+  </data>
+  <data name="ValueGreatherZero" xml:space="preserve">
+    <value>The value must be greather than zero.</value>
   </data>
   <data name="WhenCreatingIdMustBeNull" xml:space="preserve">
     <value>When creating object Id must be null.</value>

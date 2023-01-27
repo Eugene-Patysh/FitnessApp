@@ -1,11 +1,12 @@
-﻿using FitnessApp.Data.Models;
+﻿using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
 using FitnessApp.Web.Controllers;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Controllers
@@ -14,14 +15,16 @@ namespace FitnessApp.Tests.Controllers
     {
         private readonly NutrientValidator validator;
         private readonly NutrientController nutrientController;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public NutrientControlerTest()
         {
-            validator = new();
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<NutrientDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            var _nutrientService = new NutrientService(dbContext, _validator);
-            nutrientController = new NutrientController(_nutrientService, _validator);
+            var _nutrientService = new NutrientService(dbContext, _validator, sharedLocalizer.Object);
+            nutrientController = new NutrientController(_nutrientService, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArrayAsync();
         }
 
@@ -80,7 +83,7 @@ namespace FitnessApp.Tests.Controllers
             var nutrient1 = await nutrientController.GetByIdAsync(1);
             var nutrient2 = await nutrientController.GetByIdAsync(2); ;
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientController.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientController.GetByIdAsync(null));
             await Assert.ThrowsAnyAsync<Exception>(() => nutrientController.GetByIdAsync(-3));
             await Assert.ThrowsAnyAsync<Exception>(() => nutrientController.GetByIdAsync(0));
             Assert.NotNull(nutrient1);
@@ -129,9 +132,9 @@ namespace FitnessApp.Tests.Controllers
             await nutrientController.DeleteAsync(forDelete?.Id);
 
             await Assert.ThrowsAnyAsync<Exception>(() => nutrientController.GetByIdAsync(forDelete?.Id));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientController.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientController.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientController.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientController.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientController.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientController.DeleteAsync(0));
         }
 
         [Fact]
