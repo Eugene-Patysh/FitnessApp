@@ -63,38 +63,6 @@ namespace FitnessApp.Logic.Services
             };
         }
 
-        /// <summary> Outputs paginated nutrients from DB, depending on the selected conditions.</summary>
-        /// <param name="request"></param>
-        /// <returns> Returns a PaginationResponse object containing a sorted collection of nutrients. </returns>
-        public async Task<PaginationResponse<NutrientDto>> GetPaginationAsync(PaginationRequest request)
-        {
-            var query = _context.Nutrients.AsQueryable();
-
-            if (!string.IsNullOrEmpty(request.Query))
-            {
-                query = query.Where(c => c.Title.Contains(request.Query, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (!string.IsNullOrEmpty(request.SortBy))
-            {
-                switch (request.SortBy)
-                {
-                    case "title": query = request.Ascending ? query.OrderBy(c => c.Title) : query.OrderByDescending(c => c.Title); break;
-                }
-            }
-
-            var categoryDbs = await query.ToListAsync().ConfigureAwait(false);
-
-            var total = categoryDbs.Count;
-            var categoryDtos = NutrientBuilder.Build(categoryDbs.Skip(request.Skip ?? 0).Take(request.Take ?? 10)?.ToList());
-
-            return new PaginationResponse<NutrientDto>
-            {
-                Total = total,
-                Values = categoryDtos
-            };
-        }
-
         /// <summary> Gets nutrient from DB by Id. </summary>
         /// <param name="nutrientId"></param>
         /// <returns> Returns object of nutrient with Id: <paramref name="nutrientId"/>. </returns>

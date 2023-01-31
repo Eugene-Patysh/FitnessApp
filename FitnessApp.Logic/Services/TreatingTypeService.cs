@@ -28,11 +28,7 @@ namespace FitnessApp.Logic.Services
         {
             var treatingTypeDbs = await _context.TreatingTypes.ToListAsync().ConfigureAwait(false);
 
-            return new PaginationResponse<TreatingTypeDto>
-            {
-                Total = total,
-                Values = categoryDtos
-            };
+            return TreatingTypeBuilder.Build(treatingTypeDbs);
         }
 
         /// <summary> Outputs paginated treating types from DB, depending on the selected conditions.</summary>
