@@ -28,7 +28,7 @@ namespace FitnessApp.Logic.Services
         {
             var subCategoryDbs = await _context.ProductSubCategories.ToListAsync().ConfigureAwait(false);
 
-            return ProductSubCategoryBuilder.Build(subCategoryDbs) ?? throw new Exception($"There are not objects of product subcategories.");
+            return ProductSubCategoryBuilder.Build(subCategoryDbs);
         }
 
         /// <summary> Outputs paginated product subcategories from DB, depending on the selected conditions.</summary>
