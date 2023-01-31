@@ -6,6 +6,8 @@ using FitnessApp.Web.SwaggerExamples;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
+using FitnessApp.Localization;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -15,11 +17,13 @@ namespace FitnessApp.Web.Controllers
     {
         private readonly IProductCategoryService _productCategoryService;
         private readonly ICustomValidator<ProductCategoryDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public ProductCategoryController (IProductCategoryService productCategoryService, ICustomValidator<ProductCategoryDto> validator)
+        public ProductCategoryController (IProductCategoryService productCategoryService, ICustomValidator<ProductCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _productCategoryService = productCategoryService;
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all product categories from DB. </summary>
@@ -35,7 +39,7 @@ namespace FitnessApp.Web.Controllers
         //[SwaggerResponseExample(StatusCodes.Status200OK), typeof(ProductCategoryCommonExample))]
         public async Task<ICollection<ProductCategoryDto>> GetAllAsync()
         {
-            return await _productCategoryService.GetAllAsync() ?? throw new Exception($"There are not objects of product categories.");
+            return await _productCategoryService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated product categories from DB, depending on the selected conditions.</summary>
@@ -51,7 +55,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<PaginationResponse<ProductCategoryDto>> GetPaginationAsync([FromBody] PaginationRequest request)
         {
-            return await _productCategoryService.GetPaginationAsync(request) ?? throw new Exception($"There are not objects of product categories."); ;
+            return await _productCategoryService.GetPaginationAsync(request);
         }
 
         /// <summary> Gets product category from DB by Id. </summary>
@@ -70,9 +74,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<ProductCategoryDto> GetByIdAsync(int? productCategoryId)
         {
             if (productCategoryId == null)
-                throw new ValidationException($"Product category Id can't be null");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _productCategoryService.GetByIdAsync(productCategoryId) ?? throw new Exception($"Object of product category with this Id not exist.");
+            return await _productCategoryService.GetByIdAsync(productCategoryId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new product category. </summary>
@@ -129,7 +133,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync (int? productCategoryId)
         {
             if (productCategoryId == null)
-                throw new ValidationException($"Product category Id can't be null");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productCategoryService.DeleteAsync(productCategoryId);
         }

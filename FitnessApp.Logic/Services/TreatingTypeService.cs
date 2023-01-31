@@ -1,20 +1,24 @@
 ﻿using FitnessApp.Data;
+using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace FitnessApp.Logic.Services
 {
     public class TreatingTypeService : BaseService, ITreatingTypeService
     {
         private readonly ICustomValidator<TreatingTypeDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public TreatingTypeService(ProductContext context, ICustomValidator<TreatingTypeDto> validator) : base(context)
+        public TreatingTypeService(ProductContext context, ICustomValidator<TreatingTypeDto> validator, IStringLocalizer<SharedResource> sharedLocalizer) : base(context)
         {
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all treating types from DB. </summary>
@@ -24,7 +28,7 @@ namespace FitnessApp.Logic.Services
         {
             var treatingTypeDbs = await _context.TreatingTypes.ToListAsync().ConfigureAwait(false);
 
-            return TreatingTypeBuilder.Build(treatingTypeDbs) ?? throw new Exception($"There are not objects of treating types.");
+            return TreatingTypeBuilder.Build(treatingTypeDbs);
         }
 
         /// <summary> Outputs paginated treating types from DB, depending on the selected conditions.</summary>
@@ -67,7 +71,7 @@ namespace FitnessApp.Logic.Services
         {
             if (treatingTypeId == null)
             {
-                throw new ValidationException("Treating type Id can't be null.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
             }
 
             var treatingTypeDb = await _context.TreatingTypes.SingleOrDefaultAsync(_ => _.Id == treatingTypeId).ConfigureAwait(false);
@@ -92,9 +96,9 @@ namespace FitnessApp.Logic.Services
             {
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception($"Treating type has not been created. {ex.Message}.");
+                throw new Exception(_sharedLocalizer["ObjectNotCreated"]);
             }
         }
 
@@ -118,14 +122,14 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw new Exception($"Treating type has not been updated. {ex.Message}.");
+                    throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
             else
             {
-                throw new ValidationException($"There is not exist object, that you trying to update.");
+                throw new ValidationException(_sharedLocalizer["NotExistObjectForUpdating"]);
             }
         }
 
@@ -138,7 +142,7 @@ namespace FitnessApp.Logic.Services
         {
             if (treatingTypeId == null)
             {
-                throw new ValidationException("Invalid Treating type Id.");
+                throw new ValidationException(_sharedLocalizer["InvalidObjectId"]);
             }
 
             var treatingTypeDb = await _context.TreatingTypes.SingleOrDefaultAsync(_ => _.Id == treatingTypeId).ConfigureAwait(false);
@@ -151,14 +155,14 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw new Exception($"Treating type has not been deleted. {ex.Message}.");
+                    throw new Exception(_sharedLocalizer["ObjectNotDeleted"]);
                 }
             }
             else
             {
-                throw new ValidationException($"There is not exist object, that you trying to delete.");
+                throw new ValidationException(_sharedLocalizer["NotExistObjectForDeleting"]);
             }
         }
     }

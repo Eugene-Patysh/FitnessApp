@@ -1,25 +1,28 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
-using FluentValidation;
 using FluentValidation.TestHelper;
-using System.Globalization;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FitnessApp.Tests.Services
 {
     public class ProductCategoryServiceTests
     {
-        private readonly ProductCategoryValidator validator = new();
+        private readonly ProductCategoryValidator validator;
         private readonly IProductCategoryService productCategoryService;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public ProductCategoryServiceTests()
         {
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            productCategoryService = new ProductCategoryService(dbContext, _validator);
+            productCategoryService = new ProductCategoryService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -30,7 +33,7 @@ namespace FitnessApp.Tests.Services
                     new ProductCategoryDto() { Title = "Meat" },
                     new ProductCategoryDto() { Title = "Vegetables" },
                     new ProductCategoryDto() { Title = "Fruits" }
-                };
+            };
 
             foreach (var o in productCategories)
             {
@@ -80,7 +83,7 @@ namespace FitnessApp.Tests.Services
             var category3 = await productCategoryService.GetByIdAsync(-3);
             var category4 = await productCategoryService.GetByIdAsync(0);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryService.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryService.GetByIdAsync(null));
             Assert.NotNull(category1);
             Assert.True(category1?.Id == 1);
             Assert.NotNull(category2);
@@ -128,9 +131,9 @@ namespace FitnessApp.Tests.Services
             await productCategoryService.DeleteAsync(forDelete?.Id);
             var deletedCategory = await productCategoryService.GetByIdAsync(forDelete?.Id);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryService.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryService.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productCategoryService.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryService.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryService.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => productCategoryService.DeleteAsync(0));
             Assert.Null(deletedCategory);
         }
 

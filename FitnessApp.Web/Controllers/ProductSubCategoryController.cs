@@ -5,7 +5,9 @@ using FitnessApp.Logic.Validators;
 using FitnessApp.Web.SwaggerExamples;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
+using FitnessApp.Localization;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -15,11 +17,13 @@ namespace FitnessApp.Web.Controllers
     {
         private readonly IProductSubCategoryService _productSubCategoryService;
         private readonly ICustomValidator<ProductSubCategoryDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public ProductSubCategoryController(IProductSubCategoryService productSubCategoryService, ICustomValidator<ProductSubCategoryDto> validator)
+        public ProductSubCategoryController(IProductSubCategoryService productSubCategoryService, ICustomValidator<ProductSubCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _productSubCategoryService = productSubCategoryService;
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all product subcategories from DB. </summary>
@@ -33,7 +37,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<ProductSubCategoryDto>> GetAllAsync()
         {
-            return await _productSubCategoryService.GetAllAsync() ?? throw new Exception($"There are not objects of product subcategories.");
+            return await _productSubCategoryService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated product subcategories from DB, depending on the selected conditions.</summary>
@@ -49,7 +53,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<PaginationResponse<ProductSubCategoryDto>> GetPaginationAsync([FromBody] PaginationRequest request)
         {
-            return await _productSubCategoryService.GetPaginationAsync(request) ?? throw new Exception($"There are not objects of product subcategories."); ;
+            return await _productSubCategoryService.GetPaginationAsync(request);
         }
 
         /// <summary> Gets product subcategory from DB by Id. </summary>
@@ -66,9 +70,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<ProductSubCategoryDto> GetByIdAsync(int? productSubCategoryId)
         {
             if (productSubCategoryId == null)
-                throw new ValidationException($"Product subcategory Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _productSubCategoryService.GetByIdAsync(productSubCategoryId) ?? throw new Exception($"Object of product subcategory with this Id not exist.");
+            return await _productSubCategoryService.GetByIdAsync(productSubCategoryId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new product subcategory. </summary>
@@ -124,7 +128,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync(int? productSubCategoryId)
         {
             if (productSubCategoryId == null)
-                throw new ValidationException($"Product subcategory Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productSubCategoryService.DeleteAsync(productSubCategoryId);
         }

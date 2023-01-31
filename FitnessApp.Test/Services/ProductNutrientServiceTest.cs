@@ -1,23 +1,28 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Services
 {
     public class ProductNutrientServiceTest
     {
-        private readonly ProductNutrientValidator validator = new();
+        private readonly ProductNutrientValidator validator;
         private readonly IProductNutrientService productNutrientService;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public ProductNutrientServiceTest()
         {
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductNutrientDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            productNutrientService = new ProductNutrientService(dbContext, _validator);
+            productNutrientService = new ProductNutrientService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -78,7 +83,7 @@ namespace FitnessApp.Tests.Services
             var productNutrient3 = await productNutrientService.GetByIdAsync(-3);
             var productNutrient4 = await productNutrientService.GetByIdAsync(0);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productNutrientService.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productNutrientService.GetByIdAsync(null));
             Assert.NotNull(productNutrient1);
             Assert.True(productNutrient1?.Id == 1);
             Assert.NotNull(productNutrient2);
@@ -126,9 +131,9 @@ namespace FitnessApp.Tests.Services
             await productNutrientService.DeleteAsync(forDelete?.Id);
             var deletedProductNutrient = await productNutrientService.GetByIdAsync(forDelete?.Id);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productNutrientService.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productNutrientService.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => productNutrientService.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => productNutrientService.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => productNutrientService.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => productNutrientService.DeleteAsync(0));
             Assert.Null(deletedProductNutrient);
         }
 

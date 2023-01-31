@@ -8,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Localization: Added localizaton service which will enable using IStringLocalizer in the Controllers/Services
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+//builder.Services.AddControllersWithViews().AddMvcLocalization();
+
 SwaggerConfiguration.Configure(builder);
 
 // Get ConnectionString from appsettings.json
@@ -21,6 +25,16 @@ builder.Services.AddDbContext<ProductContext>(options => {
 ServicesConfiguration.Configure(builder);
 
 var app = builder.Build();
+
+// Localization
+var supportedCultures = new[] { "en-US", "ru-RU" };
+var localizationOptions =
+    new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+// Localization
+app.UseRequestLocalization(localizationOptions);
 
 SwaggerConfiguration.Use(app);
 

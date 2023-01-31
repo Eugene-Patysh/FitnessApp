@@ -1,10 +1,12 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
 using FitnessApp.Web.SwaggerExamples;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace FitnessApp.Web.Controllers
@@ -15,11 +17,13 @@ namespace FitnessApp.Web.Controllers
     {
         private readonly INutrientService _nutrientService;
         private readonly ICustomValidator<NutrientDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public NutrientController(INutrientService nutrientService, ICustomValidator<NutrientDto> validator)
+        public NutrientController(INutrientService nutrientService, ICustomValidator<NutrientDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _nutrientService = nutrientService;
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all nutrients from DB. </summary>
@@ -34,7 +38,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<NutrientDto>> GetAllAsync()
         {
-            return await _nutrientService.GetAllAsync() ?? throw new Exception($"There are not objects of nutrients.");
+            return await _nutrientService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated nutrients from DB, depending on the selected conditions.</summary>
@@ -50,7 +54,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<PaginationResponse<NutrientDto>> GetPaginationAsync([FromBody] PaginationRequest request)
         {
-            return await _nutrientService.GetPaginationAsync(request) ?? throw new Exception($"There are not objects of nutrients."); ;
+            return await _nutrientService.GetPaginationAsync(request);
         }
 
         /// <summary> Gets nutrient from DB by Id. </summary>
@@ -69,9 +73,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<NutrientDto> GetByIdAsync(int? nutrientId)
         {
             if (nutrientId == null)
-                throw new ValidationException($"Nutrient Id can't be null");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _nutrientService.GetByIdAsync(nutrientId) ?? throw new Exception($"Object of nutrient with this Id not exist.");
+            return await _nutrientService.GetByIdAsync(nutrientId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new nutrient. </summary>
@@ -127,7 +131,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync(int? nutrientId)
         {
             if (nutrientId == null)
-                throw new ValidationException($"Nutrient Id can't be null");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _nutrientService.DeleteAsync(nutrientId);
         }

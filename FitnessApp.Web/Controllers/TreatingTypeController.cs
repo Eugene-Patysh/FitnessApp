@@ -1,4 +1,4 @@
-﻿using FitnessApp.Data.Models;
+﻿using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
@@ -6,6 +6,7 @@ using FitnessApp.Logic.Validators;
 using FitnessApp.Web.SwaggerExamples;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace FitnessApp.Web.Controllers
@@ -16,11 +17,13 @@ namespace FitnessApp.Web.Controllers
     {
         private readonly ITreatingTypeService _treatingTypeService;
         private readonly ICustomValidator<TreatingTypeDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public TreatingTypeController(ITreatingTypeService treatingTypeService, ICustomValidator<TreatingTypeDto> validator)
+        public TreatingTypeController(ITreatingTypeService treatingTypeService, ICustomValidator<TreatingTypeDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _treatingTypeService = treatingTypeService;
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all treating types from DB. </summary>
@@ -35,7 +38,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<TreatingTypeDto>> GetAllAsync()
         {
-            return await _treatingTypeService.GetAllAsync() ?? throw new Exception($"There are not objects of treating types.");
+            return await _treatingTypeService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated treating types from DB, depending on the selected conditions.</summary>
@@ -51,7 +54,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<PaginationResponse<TreatingTypeDto>> GetPaginationAsync([FromBody] PaginationRequest request)
         {
-            return await _treatingTypeService.GetPaginationAsync(request) ?? throw new Exception($"There are not objects of  treating types."); ;
+            return await _treatingTypeService.GetPaginationAsync(request);
         }
 
         /// <summary> Gets treating type from DB by Id. </summary>
@@ -70,9 +73,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<TreatingTypeDto> GetByIdAsync(int? treatingTypeId)
         {
             if (treatingTypeId == null)
-                throw new ValidationException($"Treating type Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _treatingTypeService.GetByIdAsync(treatingTypeId) ?? throw new Exception($"Object treating type with this Id not exist.");
+            return await _treatingTypeService.GetByIdAsync(treatingTypeId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new treating type. </summary>
@@ -128,7 +131,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync(int? treatingTypeId)
         {
             if (treatingTypeId == null)
-                throw new ValidationException($"Treating type Id can't be null or equals zero and less.");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _treatingTypeService.DeleteAsync(treatingTypeId);
         }

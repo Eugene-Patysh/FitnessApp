@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FitnessApp.Data\FitnessApp.Data.csproj" />
+    <ProjectReference Include="..\FitnessApp.Localization\FitnessApp.Localization.csproj" />
     <ProjectReference Include="..\FitnessApp.Logic\FitnessApp.Logic.csproj" />
   </ItemGroup>
 

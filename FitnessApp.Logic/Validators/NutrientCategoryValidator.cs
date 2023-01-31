@@ -1,15 +1,21 @@
-﻿using FitnessApp.Logic.Models;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.Models;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace FitnessApp.Logic.Validators
 {
     public class NutrientCategoryValidator : AbstractValidator<NutrientCategoryDto>
     {
-        public NutrientCategoryValidator()
+        public NutrientCategoryValidator(IStringLocalizer<SharedResource> sharedLocalizer)
         {
             ClassLevelCascadeMode = CascadeMode.Stop;
 
-            RuleFor(o => o).NotNull().WithMessage("Nutrient category can't be null.");
+            RuleFor(o => o).NotNull().WithMessage(x => sharedLocalizer["ObjectIdCantBeNull"]);
+
+            RuleFor(o => o.Title)
+                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage(x => sharedLocalizer["TitleNotNullOnlyLetters"])
+                .MaximumLength(30).WithMessage(x => sharedLocalizer["LenghtNoMore30Symbols"]);
 
             RuleFor(o => o.Title)
                 .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage("Nutrient category title can't be null and must contains only letters.")
@@ -17,12 +23,12 @@ namespace FitnessApp.Logic.Validators
 
             RuleSet("AddNutrientCategory", () =>
             {
-                RuleFor(o => o.Id).Null().WithMessage("Nutrient category Id must be null.");
+                RuleFor(o => o.Id).Null().WithMessage(x => sharedLocalizer["WhenCreatingIdMustBeNull"]);
             });
 
             RuleSet("UpdateNutrientCategory", () =>
             {
-                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage("Nutrient category Id can't be null and must be greather than zero.");
+                RuleFor(o => o.Id).NotNull().GreaterThan(0).WithMessage(x => sharedLocalizer["WhenUpdatingIdNotNullGreatherZero"]);
             });
         }
     }

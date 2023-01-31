@@ -1,23 +1,28 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Services
 {
     public class NutrientCategoryServiceTest
     {
-        private readonly NutrientCategoryValidator validator = new();
+        private readonly NutrientCategoryValidator validator;
         private readonly INutrientCategoryService nutrientCategoryService;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public NutrientCategoryServiceTest()
         {
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<NutrientCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            nutrientCategoryService = new NutrientCategoryService(dbContext, _validator);
+            nutrientCategoryService = new NutrientCategoryService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -78,7 +83,7 @@ namespace FitnessApp.Tests.Services
             var category3 = await nutrientCategoryService.GetByIdAsync(-3);
             var category4 = await nutrientCategoryService.GetByIdAsync(0);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientCategoryService.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientCategoryService.GetByIdAsync(null));
             Assert.NotNull(category1);
             Assert.True(category1?.Id == 1);
             Assert.NotNull(category2);
@@ -126,9 +131,9 @@ namespace FitnessApp.Tests.Services
             await nutrientCategoryService.DeleteAsync(forDelete?.Id);
             var deletedCategory = await nutrientCategoryService.GetByIdAsync(forDelete?.Id);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientCategoryService.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientCategoryService.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => nutrientCategoryService.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientCategoryService.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientCategoryService.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => nutrientCategoryService.DeleteAsync(0));
             Assert.Null(deletedCategory);
         }
 

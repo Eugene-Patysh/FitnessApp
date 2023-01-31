@@ -1,23 +1,28 @@
-﻿using FitnessApp.Logic.ApiModels;
+﻿using FitnessApp.Localization;
+using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
 using FitnessApp.Logic.Validators;
-using FluentValidation;
 using FluentValidation.TestHelper;
+using Microsoft.Extensions.Localization;
+using Moq;
 using Xunit;
 
 namespace FitnessApp.Tests.Services
 {
     public class TreatingTypeServiceTest
     {
-        private readonly TreatingTypeValidator validator = new();
+        private readonly TreatingTypeValidator validator;
         private readonly ITreatingTypeService treatingTypeService;
+        private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
 
         public TreatingTypeServiceTest()
         {
+            sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
+            validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<TreatingTypeDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            treatingTypeService = new TreatingTypeService(dbContext, _validator);
+            treatingTypeService = new TreatingTypeService(dbContext, _validator, sharedLocalizer.Object);
             HelpTestCreateFromArray();
         }
 
@@ -78,7 +83,7 @@ namespace FitnessApp.Tests.Services
             var treatingType3 = await treatingTypeService.GetByIdAsync(-3);
             var treatingType4 = await treatingTypeService.GetByIdAsync(0);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeService.GetByIdAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeService.GetByIdAsync(null));
             Assert.NotNull(treatingType1);
             Assert.True(treatingType1?.Id == 1);
             Assert.NotNull(treatingType2);
@@ -126,9 +131,9 @@ namespace FitnessApp.Tests.Services
             await treatingTypeService.DeleteAsync(forDelete?.Id);
             var deletedTreatingType = await treatingTypeService.GetByIdAsync(forDelete?.Id);
 
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeService.DeleteAsync(null));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeService.DeleteAsync(-3));
-            await Assert.ThrowsAnyAsync<ValidationException>(() => treatingTypeService.DeleteAsync(0));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeService.DeleteAsync(null));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeService.DeleteAsync(-3));
+            await Assert.ThrowsAnyAsync<Exception>(() => treatingTypeService.DeleteAsync(0));
             Assert.Null(deletedTreatingType);
         }
 

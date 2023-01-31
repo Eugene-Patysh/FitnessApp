@@ -5,7 +5,9 @@ using FitnessApp.Logic.Validators;
 using FitnessApp.Web.SwaggerExamples;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
+using FitnessApp.Localization;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -15,11 +17,13 @@ namespace FitnessApp.Web.Controllers
     {
         private readonly INutrientCategoryService _nutrientCategoryService;
         private readonly ICustomValidator<NutrientCategoryDto> _validator;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public NutrientCategoryController(INutrientCategoryService nutrientCategoryService, ICustomValidator<NutrientCategoryDto> validator)
+        public NutrientCategoryController(INutrientCategoryService nutrientCategoryService, ICustomValidator<NutrientCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _nutrientCategoryService = nutrientCategoryService;
             _validator = validator;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         /// <summary> Gets all nutirent categories from DB. </summary>
@@ -34,7 +38,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ICollection<NutrientCategoryDto>> GetAllAsync()
         {
-            return await _nutrientCategoryService.GetAllAsync() ?? throw new Exception($"There are not objects of nutrient categories.");
+            return await _nutrientCategoryService.GetAllAsync();
         }
 
         /// <summary> Outputs paginated nutrient categories from DB, depending on the selected conditions.</summary>
@@ -50,7 +54,7 @@ namespace FitnessApp.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<PaginationResponse<NutrientCategoryDto>> GetPaginationAsync([FromBody] PaginationRequest request)
         {
-            return await _nutrientCategoryService.GetPaginationAsync(request) ?? throw new Exception($"There are not objects of nutrient categories."); ;
+            return await _nutrientCategoryService.GetPaginationAsync(request);
         }
 
         /// <summary> Gets nutirent category from DB by Id. </summary>
@@ -69,9 +73,9 @@ namespace FitnessApp.Web.Controllers
         public async Task<NutrientCategoryDto> GetByIdAsync(int? nutrientCategoryId)
         {
             if (nutrientCategoryId == null)
-                throw new ValidationException($"Nutrient category Id can't be null");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
-            return await _nutrientCategoryService.GetByIdAsync(nutrientCategoryId) ?? throw new Exception($"Object of nutrient category with this Id not exist.");
+            return await _nutrientCategoryService.GetByIdAsync(nutrientCategoryId) ?? throw new Exception(_sharedLocalizer["NotExistObjectWithThisId"]);
         }
 
         /// <summary> Creates new nutrient category. </summary>
@@ -127,7 +131,7 @@ namespace FitnessApp.Web.Controllers
         public async Task DeleteAsync(int? nutrientCategoryId)
         {
             if (nutrientCategoryId == null)
-                throw new ValidationException($"Nutrient category Id can't be null");
+                throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _nutrientCategoryService.DeleteAsync(nutrientCategoryId);
         }
