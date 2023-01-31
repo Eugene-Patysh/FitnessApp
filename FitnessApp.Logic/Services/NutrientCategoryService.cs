@@ -28,7 +28,7 @@ namespace FitnessApp.Logic.Services
         {
             var nutrientCategoryDbs = await _context.NutrientCategories.ToListAsync().ConfigureAwait(false);
 
-            return NutrientCategoryBuilder.Build(nutrientCategoryDbs) ?? throw new Exception($"There are not objects of nutrient categories."); ;
+            return NutrientCategoryBuilder.Build(nutrientCategoryDbs);
         }
 
         /// <summary> Outputs paginated nutrient categories from DB, depending on the selected conditions.</summary>
