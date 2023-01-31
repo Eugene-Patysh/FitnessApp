@@ -28,7 +28,39 @@ namespace FitnessApp.Logic.Services
         {
             var subCategoryDbs = await _context.ProductSubCategories.ToListAsync().ConfigureAwait(false);
 
-            return ProductSubCategoryBuilder.Build(subCategoryDbs);
+            return ProductSubCategoryBuilder.Build(subCategoryDbs) ?? throw new Exception($"There are not objects of product subcategories.");
+        }
+
+        /// <summary> Outputs paginated product subcategories from DB, depending on the selected conditions.</summary>
+        /// <param name="request"></param>
+        /// <returns> Returns a PaginationResponse object containing a sorted collection of product subcategories. </returns>
+        public async Task<PaginationResponse<ProductSubCategoryDto>> GetPaginationAsync(PaginationRequest request)
+        {
+            var query = _context.ProductSubCategories.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Query))
+            {
+                query = query.Where(c => c.Title.Contains(request.Query, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                switch (request.SortBy)
+                {
+                    case "title": query = request.Ascending ? query.OrderBy(c => c.Title) : query.OrderByDescending(c => c.Title); break;
+                }
+            }
+
+            var categoryDbs = await query.ToListAsync().ConfigureAwait(false);
+
+            var total = categoryDbs.Count;
+            var categoryDtos = ProductSubCategoryBuilder.Build(categoryDbs.Skip(request.Skip ?? 0).Take(request.Take ?? 10)?.ToList());
+
+            return new PaginationResponse<ProductSubCategoryDto>
+            {
+                Total = total,
+                Values = categoryDtos
+            };
         }
 
         /// <summary> Outputs paginated product subcategories from DB, depending on the selected conditions.</summary>

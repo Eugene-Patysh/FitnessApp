@@ -28,7 +28,11 @@ namespace FitnessApp.Logic.Services
         {
             var productNutrientDbs = await _context.ProductNutrients.ToListAsync().ConfigureAwait(false);
 
-            return ProductNutrientBuilder.Build(productNutrientDbs);
+            return new PaginationResponse<ProductNutrientDto>
+            {
+                Total = total,
+                Values = categoryDtos
+            };
         }
 
         /// <summary> Outputs paginated Product-Nutrients from DB, depending on the selected conditions.</summary>

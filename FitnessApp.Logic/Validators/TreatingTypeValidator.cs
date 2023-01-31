@@ -17,6 +17,10 @@ namespace FitnessApp.Logic.Validators
                 .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage(x => sharedLocalizer["TitleNotNullOnlyLetters"])
                 .MaximumLength(30).WithMessage(x => sharedLocalizer["LenghtNoMore30Symbols"]);
 
+            RuleFor(o => o.Title)
+                .Must(t => !string.IsNullOrEmpty(t) && t.All(char.IsLetter)).WithMessage("Treating type title can't be null and must contains only letters.")
+                .MaximumLength(30).WithMessage("Length of treating type title can't be more than 30 symbols.");
+
             RuleSet("AddTreatingType", () =>
             {
                 RuleFor(o => o.Id).Null().WithMessage(x => sharedLocalizer["WhenCreatingIdMustBeNull"]);
