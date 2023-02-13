@@ -126,6 +126,9 @@
   <data name="LenghtNoMore30Symbols" xml:space="preserve">
     <value>Длина названия объекта не может превышать 30-ти символов.</value>
   </data>
+  <data name="LoggingError" xml:space="preserve">
+    <value>Запись логов не удалась.</value>
+  </data>
   <data name="NotExistObjectForDeleting" xml:space="preserve">
     <value>Не существует объекта, который Вы пытаетесь удалить.</value>
   </data>

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessApp.Data.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20221212092548_Pablo")]
-    partial class Pablo
+    [Migration("20230213103250_DbForApp")]
+    partial class DbForApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,16 +52,16 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4825),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1499),
                             Title = "Macronutrients",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4826)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1500)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4827),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1502),
                             Title = "Minerals",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4828)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1502)
                         });
                 });
 
@@ -100,20 +100,20 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4844),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1519),
                             DailyDose = 0.75,
                             NutrientCategoryId = 1,
                             Title = "Protein",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4845)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1520)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4848),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1522),
                             DailyDose = 0.90000000000000002,
                             NutrientCategoryId = 2,
                             Title = "Сalcium",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4849)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1523)
                         });
                 });
 
@@ -144,16 +144,16 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4594),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1268),
                             Title = "Fruits",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4610)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1281)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4612),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1283),
                             Title = "Vegetables",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4613)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1284)
                         });
                 });
 
@@ -189,18 +189,18 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4803),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1478),
                             ProductSubCategoryId = 1,
                             Title = "Banana",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4804)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1479)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4806),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1481),
                             ProductSubCategoryId = 2,
                             Title = "Potato",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4806)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1482)
                         });
                 });
 
@@ -244,22 +244,22 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4890),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1558),
                             NutrientId = 1,
                             ProductId = 1,
                             Quality = 0.80000000000000004,
                             TreatingTypeId = 1,
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4891)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1559)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4894),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1562),
                             NutrientId = 2,
                             ProductId = 2,
                             Quality = 0.90000000000000002,
                             TreatingTypeId = 2,
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4895)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1562)
                         });
                 });
 
@@ -295,18 +295,18 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4781),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1460),
                             ProductCategoryId = 1,
                             Title = "Exotic",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4782)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1461)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4784),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1463),
                             ProductCategoryId = 2,
                             Title = "Tuberous",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4785)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1464)
                         });
                 });
 
@@ -337,16 +337,16 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4870),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1538),
                             Title = "Fresh",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4871)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1539)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4873),
+                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1541),
                             Title = "Fried",
-                            Updated = new DateTime(2022, 12, 12, 12, 25, 39, 243, DateTimeKind.Local).AddTicks(4874)
+                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1542)
                         });
                 });
 
@@ -354,7 +354,8 @@ namespace FitnessApp.Data.Migrations
                 {
                     b.HasOne("FitnessApp.Data.Models.NutrientCategoryDb", "NutrientCategory")
                         .WithMany("Nutrients")
-                        .HasForeignKey("NutrientCategoryId");
+                        .HasForeignKey("NutrientCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("NutrientCategory");
                 });
@@ -363,7 +364,8 @@ namespace FitnessApp.Data.Migrations
                 {
                     b.HasOne("FitnessApp.Data.Models.ProductSubCategoryDb", "ProductSubCategory")
                         .WithMany("Products")
-                        .HasForeignKey("ProductSubCategoryId");
+                        .HasForeignKey("ProductSubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ProductSubCategory");
                 });
@@ -372,15 +374,18 @@ namespace FitnessApp.Data.Migrations
                 {
                     b.HasOne("FitnessApp.Data.Models.NutrientDb", "Nutrient")
                         .WithMany("ProductNutrients")
-                        .HasForeignKey("NutrientId");
+                        .HasForeignKey("NutrientId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FitnessApp.Data.Models.ProductDb", "Product")
                         .WithMany("ProductNutrients")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FitnessApp.Data.Models.TreatingTypeDb", "TreatingType")
                         .WithMany("ProductNutrients")
-                        .HasForeignKey("TreatingTypeId");
+                        .HasForeignKey("TreatingTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Nutrient");
 
@@ -393,7 +398,8 @@ namespace FitnessApp.Data.Migrations
                 {
                     b.HasOne("FitnessApp.Data.Models.ProductCategoryDb", "ProductCategory")
                         .WithMany("ProductSubCategories")
-                        .HasForeignKey("ProductCategoryId");
+                        .HasForeignKey("ProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ProductCategory");
                 });

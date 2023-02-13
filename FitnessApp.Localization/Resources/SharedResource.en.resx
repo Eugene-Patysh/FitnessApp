@@ -126,6 +126,9 @@
   <data name="LenghtNoMore30Symbols" xml:space="preserve">
     <value>Length of object title can't be more than 30 symbols.</value>
   </data>
+  <data name="LoggingError" xml:space="preserve">
+    <value>Log recording was failed.</value>
+  </data>
   <data name="NotExistObjectForDeleting" xml:space="preserve">
     <value>There is not exist object, that You trying to delete.</value>
   </data>

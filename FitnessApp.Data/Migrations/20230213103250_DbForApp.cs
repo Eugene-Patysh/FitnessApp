@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class DbForApp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,7 +67,7 @@ namespace FitnessApp.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     DailyDose = table.Column<double>(type: "double precision", nullable: false),
-                    NutrientCategoryId = table.Column<int>(type: "integer", nullable: false),
+                    NutrientCategoryId = table.Column<int>(type: "integer", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -89,7 +89,7 @@ namespace FitnessApp.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    ProductCategoryId = table.Column<int>(type: "integer", nullable: false),
+                    ProductCategoryId = table.Column<int>(type: "integer", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -111,7 +111,7 @@ namespace FitnessApp.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    ProductSubCategoryId = table.Column<int>(type: "integer", nullable: false),
+                    ProductSubCategoryId = table.Column<int>(type: "integer", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -133,9 +133,9 @@ namespace FitnessApp.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Quality = table.Column<double>(type: "double precision", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    NutrientId = table.Column<int>(type: "integer", nullable: false),
-                    TreatingTypeId = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    NutrientId = table.Column<int>(type: "integer", nullable: true),
+                    TreatingTypeId = table.Column<int>(type: "integer", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -167,8 +167,8 @@ namespace FitnessApp.Data.Migrations
                 columns: new[] { "Id", "Created", "Title", "Updated" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4668), "Macronutrients", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4669) },
-                    { 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4670), "Minerals", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4671) }
+                    { 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1499), "Macronutrients", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1500) },
+                    { 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1502), "Minerals", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1502) }
                 });
 
             migrationBuilder.InsertData(
@@ -176,8 +176,8 @@ namespace FitnessApp.Data.Migrations
                 columns: new[] { "Id", "Created", "Title", "Updated" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4449), "Fruits", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4459) },
-                    { 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4461), "Vegetables", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4462) }
+                    { 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1268), "Fruits", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1281) },
+                    { 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1283), "Vegetables", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1284) }
                 });
 
             migrationBuilder.InsertData(
@@ -185,8 +185,8 @@ namespace FitnessApp.Data.Migrations
                 columns: new[] { "Id", "Created", "Title", "Updated" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4704), "Fresh", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4704) },
-                    { 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4707), "Fried", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4708) }
+                    { 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1538), "Fresh", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1539) },
+                    { 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1541), "Fried", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1542) }
                 });
 
             migrationBuilder.InsertData(
@@ -194,8 +194,8 @@ namespace FitnessApp.Data.Migrations
                 columns: new[] { "Id", "Created", "DailyDose", "NutrientCategoryId", "Title", "Updated" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4686), 0.75, 1, "Protein", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4687) },
-                    { 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4689), 0.90000000000000002, 2, "Сalcium", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4689) }
+                    { 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1519), 0.75, 1, "Protein", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1520) },
+                    { 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1522), 0.90000000000000002, 2, "Сalcium", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1523) }
                 });
 
             migrationBuilder.InsertData(
@@ -203,8 +203,8 @@ namespace FitnessApp.Data.Migrations
                 columns: new[] { "Id", "Created", "ProductCategoryId", "Title", "Updated" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4626), 1, "Exotic", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4627) },
-                    { 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4629), 2, "Tuberous", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4629) }
+                    { 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1460), 1, "Exotic", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1461) },
+                    { 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1463), 2, "Tuberous", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1464) }
                 });
 
             migrationBuilder.InsertData(
@@ -212,8 +212,8 @@ namespace FitnessApp.Data.Migrations
                 columns: new[] { "Id", "Created", "ProductSubCategoryId", "Title", "Updated" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4648), 1, "Banana", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4649) },
-                    { 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4651), 2, "Potato", new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4652) }
+                    { 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1478), 1, "Banana", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1479) },
+                    { 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1481), 2, "Potato", new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1482) }
                 });
 
             migrationBuilder.InsertData(
@@ -221,8 +221,8 @@ namespace FitnessApp.Data.Migrations
                 columns: new[] { "Id", "Created", "NutrientId", "ProductId", "Quality", "TreatingTypeId", "Updated" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4780), 1, 1, 0.80000000000000004, 1, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4781) },
-                    { 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4783), 2, 2, 0.90000000000000002, 2, new DateTime(2022, 11, 23, 15, 10, 36, 983, DateTimeKind.Local).AddTicks(4784) }
+                    { 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1558), 1, 1, 0.80000000000000004, 1, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1559) },
+                    { 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1562), 2, 2, 0.90000000000000002, 2, new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1562) }
                 });
 
             migrationBuilder.CreateIndex(

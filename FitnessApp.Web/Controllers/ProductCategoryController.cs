@@ -8,6 +8,8 @@ using Swashbuckle.AspNetCore.Filters;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using FitnessApp.Localization;
+using EventBus.Base.Standard;
+using FitnessApp.Logging.Events;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -18,12 +20,15 @@ namespace FitnessApp.Web.Controllers
         private readonly IProductCategoryService _productCategoryService;
         private readonly ICustomValidator<ProductCategoryDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public ProductCategoryController (IProductCategoryService productCategoryService, ICustomValidator<ProductCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
+        public ProductCategoryController (IProductCategoryService productCategoryService, ICustomValidator<ProductCategoryDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus)
         {
             _productCategoryService = productCategoryService;
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all product categories from DB. </summary>
@@ -96,6 +101,12 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productCategoryDto, "AddProductCategory");
 
             await _productCategoryService.CreateAsync(productCategoryDto);
+            _eventBus.Publish(new LogEvent() 
+            { 
+                Action = DictionaryForEvent.ActionVariations["Creating"],
+                Status = DictionaryForEvent.StatusVariations["Success"],
+                TitleDto = productCategoryDto.Title
+            });
         }
 
         /// <summary> Updates product category in DB. </summary>

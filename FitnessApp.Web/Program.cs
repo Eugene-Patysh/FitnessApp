@@ -1,3 +1,5 @@
+using EventBus.RabbitMQ.Standard.Configuration;
+using EventBus.RabbitMQ.Standard.Options;
 using FitnessApp.Data;
 using FitnessApp.Web.Configurations;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,9 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+// RabbitMQ
+var rabbitMqOptions = builder.Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
 
 // Localization: Added localizaton service which will enable using IStringLocalizer in the Controllers/Services
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -23,6 +28,9 @@ builder.Services.AddDbContext<ProductContext>(options => {
 });
 
 ServicesConfiguration.Configure(builder);
+
+builder.Services.AddRabbitMqConnection(rabbitMqOptions);
+builder.Services.AddRabbitMqRegistration(rabbitMqOptions);
 
 var app = builder.Build();
 

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EventBus.RabbitMQ.Standard" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FitnessApp.Data\FitnessApp.Data.csproj" />
     <ProjectReference Include="..\FitnessApp.Localization\FitnessApp.Localization.csproj" />
+    <ProjectReference Include="..\FitnessApp.Logging\FitnessApp.Logging.csproj" />
     <ProjectReference Include="..\FitnessApp.Logic\FitnessApp.Logic.csproj" />
   </ItemGroup>
 
