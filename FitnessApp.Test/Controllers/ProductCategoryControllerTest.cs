@@ -26,7 +26,7 @@ namespace FitnessApp.Tests.Controllers
             validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductCategoryDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            var _productCategoryService = new ProductCategoryService(dbContext, _validator, sharedLocalizer.Object);
+            var _productCategoryService = new ProductCategoryService(dbContext, _validator, sharedLocalizer.Object, eventBus.Object);
             productCategoryController = new ProductCategoryController(_productCategoryService, _validator, sharedLocalizer.Object, eventBus.Object);
             HelpTestCreateFromArrayAsync();
         }

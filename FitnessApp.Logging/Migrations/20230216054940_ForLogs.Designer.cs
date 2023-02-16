@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessApp.Logging.Migrations
 {
     [DbContext(typeof(LoggingContext))]
-    [Migration("20230213103014_DbForLogs")]
-    partial class DbForLogs
+    [Migration("20230216054940_ForLogs")]
+    partial class ForLogs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,12 +35,19 @@ namespace FitnessApp.Logging.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LoggingTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

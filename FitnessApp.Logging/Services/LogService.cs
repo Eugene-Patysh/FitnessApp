@@ -1,56 +1,32 @@
 ﻿using EventBus.Base.Standard;
-using FitnessApp.Localization;
 using FitnessApp.Logging.Events;
 using FitnessApp.Logging.Models;
-using Microsoft.Extensions.Localization;
 
 namespace FitnessApp.Logging.Services
 {
     public class LogService : IIntegrationEventHandler<LogEvent>
     {
         private readonly LoggingContext _context;
-        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public LogService(LoggingContext context, IStringLocalizer<SharedResource> sharedLocalizer)
+        public LogService(LoggingContext context)
         {
             _context = context;
-            _sharedLocalizer = sharedLocalizer;
         }
 
         public async Task Handle(LogEvent @event)
         {
-            if (!string.IsNullOrEmpty(@event.Action) && !string.IsNullOrEmpty(@event.Status))
-            {
-                var logGood = new Log() 
-                { 
-                    Action = $"{@event.Action} '{@event.TitleDto}'", 
-                    Status = @event.Status, 
-                    LoggingTime = DateTime.UtcNow 
-                };
-
-                await _context.Logs.AddAsync(logGood).ConfigureAwait(false);
-            }
-            
-            else
-            {
-                var logBad = new Log()
+                var log = new Log() 
                 {
-                    Action = DictionaryForEvent.ActionVariations["Logging"],
-                    Status = DictionaryForEvent.StatusVariations["Fail"],
-                    LoggingTime = DateTime.UtcNow
+                    Action = @event.Action,
+                    EntityType = @event.EntityType,
+                    Body = @event.Body,
+                    Status = @event.Status,
+                    Date = DateTime.UtcNow
                 };
 
-                await _context.Logs.AddAsync(logBad).ConfigureAwait(false);
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync().ConfigureAwait(false);
-            }
-            catch
-            {
-                throw new Exception(_sharedLocalizer["LoggingError"]);
-            }
+            await _context.Logs.AddAsync(log).ConfigureAwait(false);
+                
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }

@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
 using FitnessApp.Localization;
+using EventBus.Base.Standard;
+using FitnessApp.Logging.Events;
+using FitnessApp.Logging.Models;
+using System.Text.Json;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -18,12 +22,14 @@ namespace FitnessApp.Web.Controllers
         private readonly IProductSubCategoryService _productSubCategoryService;
         private readonly ICustomValidator<ProductSubCategoryDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public ProductSubCategoryController(IProductSubCategoryService productSubCategoryService, ICustomValidator<ProductSubCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
+        public ProductSubCategoryController(IProductSubCategoryService productSubCategoryService, ICustomValidator<ProductSubCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus)
         {
             _productSubCategoryService = productSubCategoryService;
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all product subcategories from DB. </summary>
@@ -92,6 +98,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productSubCategoryDto, "AddProductSubCategory");
 
             await _productSubCategoryService.CreateAsync(productSubCategoryDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", productSubCategoryDto.GetType().Name.Replace("Dto", ""), JsonSerializer.Serialize(productSubCategoryDto)));
         }
 
         /// <summary> Updates product subcategory in DB. </summary>
@@ -111,6 +118,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productSubCategoryDto, "UpdateProductSubCategory");
 
             await _productSubCategoryService.UpdateAsync(productSubCategoryDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", productSubCategoryDto.GetType().Name.Replace("Dto", ""), JsonSerializer.Serialize(productSubCategoryDto)));
         }
 
         /// <summary> Deletes product subcategory from DB. </summary>
@@ -131,6 +139,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productSubCategoryService.DeleteAsync(productSubCategoryId);
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", GetType().Name.Replace("Controller", ""), $"with ID: {productSubCategoryId}"));
         }
     }
 }

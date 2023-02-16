@@ -11,6 +11,8 @@ namespace FitnessApp.Logging.Configurations
             builder.ToTable("logs").HasKey(t => t.Id); 
             builder.Property(_ => _.Id).ValueGeneratedOnAdd();
             builder.Property(_ => _.Action).IsRequired();
+            builder.Property(_ => _.EntityType).IsRequired();
+            builder.Property(_ => _.Body).IsRequired();
             builder.Property(_ => _.Status).IsRequired();
         }
     }

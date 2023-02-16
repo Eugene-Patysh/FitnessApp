@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessApp.Data.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20230213103250_DbForApp")]
-    partial class DbForApp
+    [Migration("20230216054811_DbApp")]
+    partial class DbApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,16 +52,16 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1499),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3478),
                             Title = "Macronutrients",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1500)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3479)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1502),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3481),
                             Title = "Minerals",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1502)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3482)
                         });
                 });
 
@@ -100,20 +100,20 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1519),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3499),
                             DailyDose = 0.75,
                             NutrientCategoryId = 1,
                             Title = "Protein",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1520)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3501)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1522),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3503),
                             DailyDose = 0.90000000000000002,
                             NutrientCategoryId = 2,
                             Title = "Сalcium",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1523)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3504)
                         });
                 });
 
@@ -144,16 +144,16 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1268),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3250),
                             Title = "Fruits",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1281)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3262)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1283),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3264),
                             Title = "Vegetables",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1284)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3264)
                         });
                 });
 
@@ -189,18 +189,18 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1478),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3457),
                             ProductSubCategoryId = 1,
                             Title = "Banana",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1479)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3458)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1481),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3459),
                             ProductSubCategoryId = 2,
                             Title = "Potato",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1482)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3460)
                         });
                 });
 
@@ -244,22 +244,22 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1558),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3539),
                             NutrientId = 1,
                             ProductId = 1,
                             Quality = 0.80000000000000004,
                             TreatingTypeId = 1,
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1559)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3540)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1562),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3542),
                             NutrientId = 2,
                             ProductId = 2,
                             Quality = 0.90000000000000002,
                             TreatingTypeId = 2,
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1562)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3543)
                         });
                 });
 
@@ -295,18 +295,18 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1460),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3435),
                             ProductCategoryId = 1,
                             Title = "Exotic",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1461)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3436)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1463),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3439),
                             ProductCategoryId = 2,
                             Title = "Tuberous",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1464)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3440)
                         });
                 });
 
@@ -337,16 +337,16 @@ namespace FitnessApp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1538),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3520),
                             Title = "Fresh",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1539)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3521)
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1541),
+                            Created = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3522),
                             Title = "Fried",
-                            Updated = new DateTime(2023, 2, 13, 13, 32, 47, 224, DateTimeKind.Local).AddTicks(1542)
+                            Updated = new DateTime(2023, 2, 16, 8, 48, 7, 717, DateTimeKind.Local).AddTicks(3523)
                         });
                 });
 

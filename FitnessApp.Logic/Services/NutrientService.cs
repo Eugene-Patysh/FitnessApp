@@ -1,5 +1,8 @@
-﻿using FitnessApp.Data;
+﻿using EventBus.Base.Standard;
+using FitnessApp.Data;
 using FitnessApp.Localization;
+using FitnessApp.Logging.Events;
+using FitnessApp.Logging.Models;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
@@ -8,17 +11,21 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
+
 namespace FitnessApp.Logic.Services
 {
     public class NutrientService : BaseService, INutrientService
     {
         private readonly ICustomValidator<NutrientDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public NutrientService(ProductContext context, ICustomValidator<NutrientDto> validator, IStringLocalizer<SharedResource> sharedLocalizer) : base(context)
+        public NutrientService(ProductContext context, ICustomValidator<NutrientDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus) : base(context)
         {
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all nutrients from DB. </summary>
@@ -98,6 +105,7 @@ namespace FitnessApp.Logic.Services
             }
             catch
             {
+                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", nutrientDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
                 throw new Exception(_sharedLocalizer["ObjectNotCreated"]);
             }
         }
@@ -126,6 +134,7 @@ namespace FitnessApp.Logic.Services
                 }
                 catch
                 {
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", nutrientDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
                     throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
@@ -159,6 +168,7 @@ namespace FitnessApp.Logic.Services
                 }
                 catch
                 {
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", GetType().Name.Replace("Service", ""), "Changes was not saved in data base"));
                     throw new Exception(_sharedLocalizer["ObjectNotDeleted"]);
                 }
             }

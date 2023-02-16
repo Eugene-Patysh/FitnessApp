@@ -1,5 +1,8 @@
-﻿using FitnessApp.Data;
+﻿using EventBus.Base.Standard;
+using FitnessApp.Data;
 using FitnessApp.Localization;
+using FitnessApp.Logging.Events;
+using FitnessApp.Logging.Models;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
@@ -14,11 +17,14 @@ namespace FitnessApp.Logic.Services
     {
         private readonly ICustomValidator<ProductNutrientDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public ProductNutrientService(ProductContext context, ICustomValidator<ProductNutrientDto> validator, IStringLocalizer<SharedResource> sharedLocalizer) : base(context)
+        public ProductNutrientService(ProductContext context, ICustomValidator<ProductNutrientDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus) : base(context)
         {
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all Product-Nutrients from DB. </summary>
@@ -104,6 +110,7 @@ namespace FitnessApp.Logic.Services
             }
             catch
             {
+                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", productNutrientDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
                 throw new Exception(_sharedLocalizer["ObjectNotCreated"]);
             }
         }
@@ -133,6 +140,7 @@ namespace FitnessApp.Logic.Services
                 }
                 catch
                 {
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", productNutrientDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
                     throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
@@ -166,6 +174,7 @@ namespace FitnessApp.Logic.Services
                 }
                 catch
                 {
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", GetType().Name.Replace("Service", ""), "Changes was not saved in data base"));
                     throw new Exception(_sharedLocalizer["ObjectNotDeleted"]);
                 }
             }
