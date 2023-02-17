@@ -1,5 +1,6 @@
 ﻿using EventBus.Base.Standard;
 using FitnessApp.Data;
+using FitnessApp.Data.Models;
 using FitnessApp.Localization;
 using FitnessApp.Logging.Events;
 using FitnessApp.Logging.Models;
@@ -108,9 +109,10 @@ namespace FitnessApp.Logic.Services
             {
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
-            catch
+            catch (Exception ex)
             {
-                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", productNutrientDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
+                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", ProductNutrientDto.ENTITY_TYPE,
+                    $"Changes was not saved in data base: {ex.Message}"));
                 throw new Exception(_sharedLocalizer["ObjectNotCreated"]);
             }
         }
@@ -138,9 +140,10 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", productNutrientDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", ProductNutrientDto.ENTITY_TYPE, 
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
@@ -172,9 +175,10 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", GetType().Name.Replace("Service", ""), "Changes was not saved in data base"));
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", ProductNutrientDto.ENTITY_TYPE, 
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotDeleted"]);
                 }
             }

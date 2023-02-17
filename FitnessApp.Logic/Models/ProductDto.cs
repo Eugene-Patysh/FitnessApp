@@ -2,6 +2,7 @@
 {
     public class ProductDto
     {
+        public const string ENTITY_TYPE = "Product";
         public int? Id { get; set; }
         public string Title { get; set; }
         public ProductSubCategoryDto ProductSubCategory { get; set; }

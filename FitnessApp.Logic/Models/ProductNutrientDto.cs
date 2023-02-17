@@ -2,6 +2,7 @@
 {
     public class ProductNutrientDto
     {
+        public const string ENTITY_TYPE = "ProductNutrient";
         public int? Id { get; set; }
         public double Quality { get; set; }
         public ProductDto Product { get; set; }

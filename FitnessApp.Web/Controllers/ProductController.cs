@@ -11,7 +11,6 @@ using FitnessApp.Localization;
 using EventBus.Base.Standard;
 using FitnessApp.Logging.Events;
 using FitnessApp.Logging.Models;
-using System.Text.Json;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -102,7 +101,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productDto, "AddProduct");
 
             await _productService.CreateAsync(productDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", productDto.GetType().Name.Replace("Dto", ""), JsonSerializer.Serialize(productDto)));
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", ProductDto.ENTITY_TYPE, productDto));
         }
 
         /// <summary> Updates product in DB. </summary>
@@ -122,7 +121,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productDto, "UpdateProduct");
 
             await _productService.UpdateAsync(productDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", productDto.GetType().Name.Replace("Dto", ""), JsonSerializer.Serialize(productDto)));
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", ProductDto.ENTITY_TYPE, productDto));
         }
 
         /// <summary> Deletes product from DB. </summary>
@@ -143,7 +142,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productService.DeleteAsync(productId);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", GetType().Name.Replace("Controller", ""), $"with ID: {productId}"));
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", ProductDto.ENTITY_TYPE, $"with ID: {productId}"));
         }
     }
 }

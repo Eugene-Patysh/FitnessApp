@@ -100,11 +100,12 @@ namespace FitnessApp.Logic.Services
 
             try
             {
-                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", treatingTypeDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
-            catch
+            catch (Exception ex)
             {
+                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", TreatingTypeDto.ENTITY_TYPE,
+                    $"Changes was not saved in data base: {ex.Message}"));
                 throw new Exception(_sharedLocalizer["ObjectNotCreated"]);
             }
         }
@@ -129,9 +130,10 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", treatingTypeDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", TreatingTypeDto.ENTITY_TYPE, 
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
@@ -163,9 +165,10 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", GetType().Name.Replace("Service", ""), "Changes was not saved in data base"));
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", TreatingTypeDto.ENTITY_TYPE, 
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotDeleted"]);
                 }
             }

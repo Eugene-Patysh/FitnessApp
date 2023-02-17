@@ -1,5 +1,6 @@
 ﻿using EventBus.Base.Standard;
 using FitnessApp.Logging.Models;
+using System.Text.Json;
 
 namespace FitnessApp.Logging.Events
 {
@@ -10,12 +11,12 @@ namespace FitnessApp.Logging.Events
         public string EntityType { get; set; }
         public string Body { get; set; }
 
-        public LogEvent(Statuses status, string action, string entityType, string body)
+        public LogEvent(Statuses status, string action, string entityType, object obj)
         {
             Status = status;
             Action = action;
             EntityType = entityType;
-            Body = body;
+            Body =  JsonSerializer.Serialize(obj);
         }
     }
 }

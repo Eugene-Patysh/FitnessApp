@@ -11,7 +11,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
-using System.Text.Json;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -101,7 +100,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productNutrientDto, "AddproductNutrient");
 
             await _productNutrientService.CreateAsync(productNutrientDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", productNutrientDto.GetType().Name.Replace("Dto", ""), JsonSerializer.Serialize(productNutrientDto)));
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", ProductNutrientDto.ENTITY_TYPE, productNutrientDto));
         }
 
         /// <summary> Updates Product-Nutrient in DB. </summary>
@@ -121,7 +120,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productNutrientDto, "UpdateproductNutrient");
 
             await _productNutrientService.UpdateAsync(productNutrientDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", productNutrientDto.GetType().Name.Replace("Dto", ""), JsonSerializer.Serialize(productNutrientDto)));
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", ProductNutrientDto.ENTITY_TYPE, productNutrientDto));
         }
 
         /// <summary> Deletes Product-Nutrient from DB. </summary>
@@ -142,7 +141,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productNutrientService.DeleteAsync(productNutrientId);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", GetType().Name.Replace("Controller", ""), $"with ID: {productNutrientId}"));
+            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", ProductNutrientDto.ENTITY_TYPE, $"with ID: {productNutrientId}"));
         }
     }
 }

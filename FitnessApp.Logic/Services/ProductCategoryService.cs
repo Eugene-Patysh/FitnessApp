@@ -102,9 +102,10 @@ namespace FitnessApp.Logic.Services
             {
                 await _context.SaveChangesAsync().ConfigureAwait(false); 
             }
-            catch 
+            catch (Exception ex)
             {
-                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", productCategoryDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
+                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", ProductCategoryDto.ENTITY_TYPE,
+                    $"Changes was not saved in data base: {ex.Message}"));
                 throw new Exception(_sharedLocalizer["ObjectNotCreated"]); 
             }
         }
@@ -129,9 +130,10 @@ namespace FitnessApp.Logic.Services
                 { 
                     await _context.SaveChangesAsync().ConfigureAwait(false); 
                 }
-                catch 
+                catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", productCategoryDto.GetType().Name.Replace("Dto", ""), "Changes was not saved in data base"));
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", ProductCategoryDto.ENTITY_TYPE, 
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
@@ -163,9 +165,10 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", GetType().Name.Replace("Service", ""), "Changes was not saved in data base"));
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", NutrientDto.ENTITY_TYPE, 
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotDeleted"]); 
                 }
             }

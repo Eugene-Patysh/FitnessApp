@@ -261,3 +261,6 @@ paket-files/
 __pycache__/
 *.pyc
 /nuget.exe
+
+FitnessApp\FitnessApp.Data\Migrations\
+FitnessApp\FitnessApp.Logging\Migrations\
