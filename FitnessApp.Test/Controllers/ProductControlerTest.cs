@@ -1,4 +1,5 @@
-﻿using FitnessApp.Localization;
+﻿using EventBus.Base.Standard;
+using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
@@ -16,15 +17,17 @@ namespace FitnessApp.Tests.Controllers
         private readonly ProductValidator validator;
         private readonly ProductController productController;
         private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
+        private readonly Mock<IEventBus> eventBus;
 
         public ProductControlerTest()
         {
+            eventBus = new Mock<IEventBus>();
             sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
             validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            var _productService = new ProductService(dbContext, _validator, sharedLocalizer.Object);
-            productController = new ProductController(_productService, _validator, sharedLocalizer.Object);
+            var _productService = new ProductService(dbContext, _validator, sharedLocalizer.Object, eventBus.Object);
+            productController = new ProductController(_productService, _validator, sharedLocalizer.Object, eventBus.Object);
             HelpTestCreateFromArrayAsync();
         }
 

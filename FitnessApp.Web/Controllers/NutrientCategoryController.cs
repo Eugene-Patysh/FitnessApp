@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
 using FitnessApp.Localization;
+using EventBus.Base.Standard;
+using FitnessApp.Logging.Events;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -18,12 +20,15 @@ namespace FitnessApp.Web.Controllers
         private readonly INutrientCategoryService _nutrientCategoryService;
         private readonly ICustomValidator<NutrientCategoryDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public NutrientCategoryController(INutrientCategoryService nutrientCategoryService, ICustomValidator<NutrientCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
+        public NutrientCategoryController(INutrientCategoryService nutrientCategoryService, ICustomValidator<NutrientCategoryDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus)
         {
             _nutrientCategoryService = nutrientCategoryService;
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all nutirent categories from DB. </summary>
@@ -95,6 +100,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(nutrientCategoryDto, "AddNutrientCategory");
 
             await _nutrientCategoryService.CreateAsync(nutrientCategoryDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.NutrientCategory, nutrientCategoryDto));
         }
 
         /// <summary> Updates nutrient category in DB. </summary>
@@ -114,6 +120,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(nutrientCategoryDto, "UpdateNutrientCategory");
 
             await _nutrientCategoryService.UpdateAsync(nutrientCategoryDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.NutrientCategory, nutrientCategoryDto));
         }
 
         /// <summary> Deletes nutrient category from DB. </summary>
@@ -134,6 +141,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _nutrientCategoryService.DeleteAsync(nutrientCategoryId);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.NutrientCategory, $"with ID: {nutrientCategoryId}"));
         }
     }
 }

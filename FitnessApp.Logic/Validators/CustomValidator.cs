@@ -15,5 +15,12 @@ namespace FitnessApp.Logic.Validators
             if (!validationResult.IsValid)
                 throw new Exception(validationResult.ToString());
         }
+
+        public bool IsValid(T objectDto, string ruleSetName, out string message)
+        {
+            var validationResult = _validator.Validate(objectDto, v => v.IncludeRulesNotInRuleSet().IncludeRuleSets(ruleSetName));
+            message = validationResult.ToString();
+            return validationResult.IsValid;
+        }
     }
 }

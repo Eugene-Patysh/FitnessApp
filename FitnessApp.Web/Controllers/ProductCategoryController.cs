@@ -8,6 +8,8 @@ using Swashbuckle.AspNetCore.Filters;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using FitnessApp.Localization;
+using EventBus.Base.Standard;
+using FitnessApp.Logging.Events;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -18,12 +20,15 @@ namespace FitnessApp.Web.Controllers
         private readonly IProductCategoryService _productCategoryService;
         private readonly ICustomValidator<ProductCategoryDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public ProductCategoryController (IProductCategoryService productCategoryService, ICustomValidator<ProductCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
+        public ProductCategoryController (IProductCategoryService productCategoryService, ICustomValidator<ProductCategoryDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus)
         {
             _productCategoryService = productCategoryService;
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all product categories from DB. </summary>
@@ -93,9 +98,17 @@ namespace FitnessApp.Web.Controllers
         [SwaggerRequestExample(typeof(ProductCategoryDto), typeof(ProductCategoryCreateExample))]
         public async Task CreateAsync ([FromBody] ProductCategoryDto productCategoryDto)
         {
+        //Example: Recording of validation fails
+        //    if (!_validator.IsValid(productCategoryDto, "AddProductCategory", out string message))
+        //    {
+        //        _eventBus.Publish(new LogEvent(Statuses.IsNotValid, Actions.Creation, EntityTypes.ProductCategory, productCategoryDto));
+        //        throw new ValidationException(message);
+        //    }
+
             _validator.Validate(productCategoryDto, "AddProductCategory");
 
             await _productCategoryService.CreateAsync(productCategoryDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.ProductCategory, productCategoryDto));
         }
 
         /// <summary> Updates product category in DB. </summary>
@@ -115,6 +128,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productCategoryDto, "UpdateProductCategory");
 
             await _productCategoryService.UpdateAsync(productCategoryDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.ProductCategory, productCategoryDto));
         }
 
 
@@ -136,6 +150,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productCategoryService.DeleteAsync(productCategoryId);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.ProductCategory, $"with ID: {productCategoryId}"));
         }
     }
 }

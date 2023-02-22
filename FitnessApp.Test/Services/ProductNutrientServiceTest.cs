@@ -1,4 +1,5 @@
-﻿using FitnessApp.Localization;
+﻿using EventBus.Base.Standard;
+using FitnessApp.Localization;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
@@ -15,14 +16,16 @@ namespace FitnessApp.Tests.Services
         private readonly ProductNutrientValidator validator;
         private readonly IProductNutrientService productNutrientService;
         private readonly Mock<IStringLocalizer<SharedResource>> sharedLocalizer;
+        private readonly Mock<IEventBus> eventBus;
 
         public ProductNutrientServiceTest()
         {
+            eventBus = new Mock<IEventBus>();
             sharedLocalizer = new Mock<IStringLocalizer<SharedResource>>();
             validator = new(sharedLocalizer.Object);
             var _validator = new CustomValidator<ProductNutrientDto>(validator);
             var dbContext = DatabaseInMemory.CreateDbContext();
-            productNutrientService = new ProductNutrientService(dbContext, _validator, sharedLocalizer.Object);
+            productNutrientService = new ProductNutrientService(dbContext, _validator, sharedLocalizer.Object, eventBus.Object);
             HelpTestCreateFromArray();
         }
 

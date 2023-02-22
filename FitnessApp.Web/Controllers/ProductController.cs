@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Filters;
 using FitnessApp.Localization;
+using EventBus.Base.Standard;
+using FitnessApp.Logging.Events;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -18,12 +20,15 @@ namespace FitnessApp.Web.Controllers
         private readonly IProductService _productService;
         private readonly ICustomValidator<ProductDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public ProductController(IProductService productService, ICustomValidator<ProductDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
+        public ProductController(IProductService productService, ICustomValidator<ProductDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus)
         {
             _productService = productService;
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all products from DB. </summary>
@@ -95,6 +100,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productDto, "AddProduct");
 
             await _productService.CreateAsync(productDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.Product, productDto));
         }
 
         /// <summary> Updates product in DB. </summary>
@@ -114,6 +120,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productDto, "UpdateProduct");
 
             await _productService.UpdateAsync(productDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.Product, productDto));
         }
 
         /// <summary> Deletes product from DB. </summary>
@@ -134,6 +141,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productService.DeleteAsync(productId);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.Product, $"with ID: {productId}"));
         }
     }
 }

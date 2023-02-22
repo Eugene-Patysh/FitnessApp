@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EventBus.RabbitMQ.Standard" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -17,11 +18,13 @@
 	  <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.4.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
+	  <PackageReference Include="System.Text.Json" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FitnessApp.Data\FitnessApp.Data.csproj" />
     <ProjectReference Include="..\FitnessApp.Localization\FitnessApp.Localization.csproj" />
+    <ProjectReference Include="..\FitnessApp.Logging\FitnessApp.Logging.csproj" />
     <ProjectReference Include="..\FitnessApp.Logic\FitnessApp.Logic.csproj" />
   </ItemGroup>
 

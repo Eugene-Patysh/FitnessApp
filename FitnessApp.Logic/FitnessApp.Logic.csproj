@@ -9,9 +9,11 @@
   <ItemGroup>
     <ProjectReference Include="..\FitnessApp.Data\FitnessApp.Data.csproj" />
     <ProjectReference Include="..\FitnessApp.Localization\FitnessApp.Localization.csproj" />
+    <ProjectReference Include="..\FitnessApp.Logging\FitnessApp.Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="EventBus.RabbitMQ.Standard" Version="3.1.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
   </ItemGroup>
 

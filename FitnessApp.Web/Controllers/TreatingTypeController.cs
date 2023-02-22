@@ -1,4 +1,6 @@
-﻿using FitnessApp.Localization;
+﻿using EventBus.Base.Standard;
+using FitnessApp.Localization;
+using FitnessApp.Logging.Events;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
@@ -18,12 +20,15 @@ namespace FitnessApp.Web.Controllers
         private readonly ITreatingTypeService _treatingTypeService;
         private readonly ICustomValidator<TreatingTypeDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public TreatingTypeController(ITreatingTypeService treatingTypeService, ICustomValidator<TreatingTypeDto> validator, IStringLocalizer<SharedResource> sharedLocalizer)
+        public TreatingTypeController(ITreatingTypeService treatingTypeService, ICustomValidator<TreatingTypeDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus)
         {
             _treatingTypeService = treatingTypeService;
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all treating types from DB. </summary>
@@ -95,6 +100,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(treatingTypeDto, "AddTreatingType");
 
             await _treatingTypeService.CreateAsync(treatingTypeDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.TreatingType, treatingTypeDto));
         }
 
         /// <summary> Updates treating type in DB. </summary>
@@ -114,6 +120,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(treatingTypeDto, "UpdateTreatingType");
 
             await _treatingTypeService.UpdateAsync(treatingTypeDto);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.TreatingType, treatingTypeDto));
         }
 
         /// <summary> Deletes treating type from DB. </summary>
@@ -134,6 +141,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _treatingTypeService.DeleteAsync(treatingTypeId);
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.TreatingType, $"with ID: {treatingTypeId}"));
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using FitnessApp.Data;
+﻿using EventBus.Base.Standard;
+using FitnessApp.Data;
 using FitnessApp.Localization;
+using FitnessApp.Logging.Events;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
@@ -14,11 +16,14 @@ namespace FitnessApp.Logic.Services
     {
         private readonly ICustomValidator<NutrientCategoryDto> _validator;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IEventBus _eventBus;
 
-        public NutrientCategoryService(ProductContext context, ICustomValidator<NutrientCategoryDto> validator, IStringLocalizer<SharedResource> sharedLocalizer) : base(context)
+        public NutrientCategoryService(ProductContext context, ICustomValidator<NutrientCategoryDto> validator, 
+            IStringLocalizer<SharedResource> sharedLocalizer, IEventBus eventBus) : base(context)
         {
             _validator = validator;
             _sharedLocalizer = sharedLocalizer;
+            _eventBus = eventBus;
         }
 
         /// <summary> Gets all nutirent categories from DB. </summary>
@@ -97,8 +102,10 @@ namespace FitnessApp.Logic.Services
             {
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
-            catch
+            catch (Exception ex)
             {
+                _eventBus.Publish(new LogEvent(Statuses.Fail, Actions.Creation, EntityTypes.NutrientCategory,
+                    $"Changes was not saved in data base: {ex.Message}"));
                 throw new Exception(_sharedLocalizer["ObjectNotCreated"]);
             }
         }
@@ -123,8 +130,10 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, Actions.Update, EntityTypes.NutrientCategory,
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
             }
@@ -156,8 +165,10 @@ namespace FitnessApp.Logic.Services
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, Actions.Deletion, EntityTypes.NutrientCategory, 
+                        $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotDeleted"]);
                 }
             }
