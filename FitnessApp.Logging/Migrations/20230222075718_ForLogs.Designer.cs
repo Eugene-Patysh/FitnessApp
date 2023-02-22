@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessApp.Logging.Migrations
 {
     [DbContext(typeof(LoggingContext))]
-    [Migration("20230216054940_ForLogs")]
+    [Migration("20230222075718_ForLogs")]
     partial class ForLogs
     {
         /// <inheritdoc />
@@ -46,8 +46,9 @@ namespace FitnessApp.Logging.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

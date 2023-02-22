@@ -2,7 +2,6 @@
 {
     public class NutrientDto
     {
-        public const string ENTITY_TYPE = "Nutrient";
         public int? Id { get; set; }
         public string Title { get; set; }
         public double DailyDose { get; set; }

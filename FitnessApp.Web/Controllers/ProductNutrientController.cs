@@ -1,7 +1,6 @@
 ﻿using EventBus.Base.Standard;
 using FitnessApp.Localization;
 using FitnessApp.Logging.Events;
-using FitnessApp.Logging.Models;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
@@ -97,10 +96,10 @@ namespace FitnessApp.Web.Controllers
         [SwaggerRequestExample(typeof(ProductNutrientDto), typeof(ProductNutrientCreateExample))]
         public async Task CreateAsync([FromBody] ProductNutrientDto productNutrientDto)
         {
-            _validator.Validate(productNutrientDto, "AddproductNutrient");
+            _validator.Validate(productNutrientDto, "AddProductNutrient");
 
             await _productNutrientService.CreateAsync(productNutrientDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", ProductNutrientDto.ENTITY_TYPE, productNutrientDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.ProductNutrient, productNutrientDto));
         }
 
         /// <summary> Updates Product-Nutrient in DB. </summary>
@@ -117,10 +116,10 @@ namespace FitnessApp.Web.Controllers
         [SwaggerRequestExample(typeof(ProductNutrientDto), typeof(ProductNutrientUpdateExample))]
         public async Task UpdateAsync([FromBody] ProductNutrientDto productNutrientDto)
         {
-            _validator.Validate(productNutrientDto, "UpdateproductNutrient");
+            _validator.Validate(productNutrientDto, "UpdateProductNutrient");
 
             await _productNutrientService.UpdateAsync(productNutrientDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", ProductNutrientDto.ENTITY_TYPE, productNutrientDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.ProductNutrient, productNutrientDto));
         }
 
         /// <summary> Deletes Product-Nutrient from DB. </summary>
@@ -141,7 +140,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productNutrientService.DeleteAsync(productNutrientId);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", ProductNutrientDto.ENTITY_TYPE, $"with ID: {productNutrientId}"));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.ProductNutrient, $"with ID: {productNutrientId}"));
         }
     }
 }

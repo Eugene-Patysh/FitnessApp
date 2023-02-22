@@ -10,7 +10,6 @@ using Swashbuckle.AspNetCore.Filters;
 using FitnessApp.Localization;
 using EventBus.Base.Standard;
 using FitnessApp.Logging.Events;
-using FitnessApp.Logging.Models;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -101,7 +100,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(nutrientCategoryDto, "AddNutrientCategory");
 
             await _nutrientCategoryService.CreateAsync(nutrientCategoryDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", NutrientCategoryDto.ENTITY_TYPE, nutrientCategoryDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.NutrientCategory, nutrientCategoryDto));
         }
 
         /// <summary> Updates nutrient category in DB. </summary>
@@ -121,7 +120,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(nutrientCategoryDto, "UpdateNutrientCategory");
 
             await _nutrientCategoryService.UpdateAsync(nutrientCategoryDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", NutrientCategoryDto.ENTITY_TYPE, nutrientCategoryDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.NutrientCategory, nutrientCategoryDto));
         }
 
         /// <summary> Deletes nutrient category from DB. </summary>
@@ -142,7 +141,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _nutrientCategoryService.DeleteAsync(nutrientCategoryId);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", NutrientCategoryDto.ENTITY_TYPE, $"with ID: {nutrientCategoryId}"));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.NutrientCategory, $"with ID: {nutrientCategoryId}"));
         }
     }
 }

@@ -10,7 +10,6 @@ using Swashbuckle.AspNetCore.Filters;
 using FitnessApp.Localization;
 using EventBus.Base.Standard;
 using FitnessApp.Logging.Events;
-using FitnessApp.Logging.Models;
 
 namespace FitnessApp.Web.Controllers
 {
@@ -98,7 +97,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productSubCategoryDto, "AddProductSubCategory");
 
             await _productSubCategoryService.CreateAsync(productSubCategoryDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", ProductSubCategoryDto.ENTITY_TYPE, productSubCategoryDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.ProductSubCategory, productSubCategoryDto));
         }
 
         /// <summary> Updates product subcategory in DB. </summary>
@@ -118,7 +117,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(productSubCategoryDto, "UpdateProductSubCategory");
 
             await _productSubCategoryService.UpdateAsync(productSubCategoryDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", ProductSubCategoryDto.ENTITY_TYPE, productSubCategoryDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.ProductSubCategory, productSubCategoryDto));
         }
 
         /// <summary> Deletes product subcategory from DB. </summary>
@@ -139,7 +138,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _productSubCategoryService.DeleteAsync(productSubCategoryId);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", ProductSubCategoryDto.ENTITY_TYPE, $"with ID: {productSubCategoryId}"));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.ProductSubCategory, $"with ID: {productSubCategoryId}"));
         }
     }
 }

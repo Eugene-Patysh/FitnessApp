@@ -101,7 +101,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(nutrientDto, "AddNutrient");
 
             await _nutrientService.CreateAsync(nutrientDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", NutrientDto.ENTITY_TYPE, nutrientDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.Nutrient, nutrientDto));
         }
 
         /// <summary> Updates nutrient in DB. </summary>
@@ -121,7 +121,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(nutrientDto, "UpdateNutrient");
 
             await _nutrientService.UpdateAsync(nutrientDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", NutrientDto.ENTITY_TYPE, nutrientDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.Nutrient, nutrientDto));
         }
 
         /// <summary> Deletes nutrient from DB. </summary>
@@ -142,7 +142,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _nutrientService.DeleteAsync(nutrientId);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", NutrientDto.ENTITY_TYPE, $"with ID: {nutrientId}"));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.Nutrient, $"with ID: {nutrientId}"));
         }
     }
 }

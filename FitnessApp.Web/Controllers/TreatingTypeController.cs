@@ -1,7 +1,6 @@
 ﻿using EventBus.Base.Standard;
 using FitnessApp.Localization;
 using FitnessApp.Logging.Events;
-using FitnessApp.Logging.Models;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Models;
 using FitnessApp.Logic.Services;
@@ -101,7 +100,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(treatingTypeDto, "AddTreatingType");
 
             await _treatingTypeService.CreateAsync(treatingTypeDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Creation", TreatingTypeDto.ENTITY_TYPE, treatingTypeDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Creation, EntityTypes.TreatingType, treatingTypeDto));
         }
 
         /// <summary> Updates treating type in DB. </summary>
@@ -121,7 +120,7 @@ namespace FitnessApp.Web.Controllers
             _validator.Validate(treatingTypeDto, "UpdateTreatingType");
 
             await _treatingTypeService.UpdateAsync(treatingTypeDto);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Update", TreatingTypeDto.ENTITY_TYPE, treatingTypeDto));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Update, EntityTypes.TreatingType, treatingTypeDto));
         }
 
         /// <summary> Deletes treating type from DB. </summary>
@@ -142,7 +141,7 @@ namespace FitnessApp.Web.Controllers
                 throw new ValidationException(_sharedLocalizer["ObjectIdCantBeNull"]);
 
             await _treatingTypeService.DeleteAsync(treatingTypeId);
-            _eventBus.Publish(new LogEvent(Statuses.Success, "Deletion", TreatingTypeDto.ENTITY_TYPE, $"with ID: {treatingTypeId}"));
+            _eventBus.Publish(new LogEvent(Statuses.Success, Actions.Deletion, EntityTypes.TreatingType, $"with ID: {treatingTypeId}"));
         }
     }
 }

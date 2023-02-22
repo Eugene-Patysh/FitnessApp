@@ -2,7 +2,6 @@
 {
     public class ProductCategoryDto
     {
-        public const string ENTITY_TYPE = "ProductCategory";
         public int? Id { get; set; }
         public string Title { get; set; }
         public virtual ICollection<ProductSubCategoryDto> ProductSubCategories { get; set; }

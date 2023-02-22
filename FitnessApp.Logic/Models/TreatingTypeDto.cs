@@ -2,7 +2,6 @@
 {
     public class TreatingTypeDto
     {
-        public const string ENTITY_TYPE = "TreatingType";
         public int? Id { get; set; }
         public string Title { get; set; }
         public virtual ICollection<ProductNutrientDto> ProductNutrients { get; set; }

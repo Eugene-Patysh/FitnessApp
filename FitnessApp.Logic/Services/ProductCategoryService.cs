@@ -2,7 +2,6 @@
 using FitnessApp.Data;
 using FitnessApp.Localization;
 using FitnessApp.Logging.Events;
-using FitnessApp.Logging.Models;
 using FitnessApp.Logic.ApiModels;
 using FitnessApp.Logic.Builders;
 using FitnessApp.Logic.Models;
@@ -104,7 +103,7 @@ namespace FitnessApp.Logic.Services
             }
             catch (Exception ex)
             {
-                _eventBus.Publish(new LogEvent(Statuses.Fail, "Creation", ProductCategoryDto.ENTITY_TYPE,
+                _eventBus.Publish(new LogEvent(Statuses.Fail, Actions.Creation, EntityTypes.ProductCategory,
                     $"Changes was not saved in data base: {ex.Message}"));
                 throw new Exception(_sharedLocalizer["ObjectNotCreated"]); 
             }
@@ -132,7 +131,7 @@ namespace FitnessApp.Logic.Services
                 }
                 catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Update", ProductCategoryDto.ENTITY_TYPE, 
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, Actions.Update, EntityTypes.ProductCategory,
                         $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotUpdated"]);
                 }
@@ -167,7 +166,7 @@ namespace FitnessApp.Logic.Services
                 }
                 catch (Exception ex)
                 {
-                    _eventBus.Publish(new LogEvent(Statuses.Fail, "Deletion", NutrientDto.ENTITY_TYPE, 
+                    _eventBus.Publish(new LogEvent(Statuses.Fail, Actions.Deletion, EntityTypes.ProductCategory,
                         $"Changes was not saved in data base: {ex.Message}"));
                     throw new Exception(_sharedLocalizer["ObjectNotDeleted"]); 
                 }
